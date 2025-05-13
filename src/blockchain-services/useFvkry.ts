@@ -1,17 +1,17 @@
 import { createPublicClient, createWalletClient, custom, http, parseEther, getContract, parseUnits } from "viem";
 import { createConfig } from "wagmi";
-import { CONTRACT_ADDRESSES } from "./core"
-import { liskSepolia, sepolia } from '@wagmi/core/chains'
+import { base, baseSepolia } from '@wagmi/core/chains'
 import { getChainId } from '@wagmi/core'
-import { ApproveTokenParams, TokenVaultParams, Lock, Transaction } from "@/types";
-import { getTokenConfig } from "./tokens";
+import { ApproveTokenParams, TokenVaultParams,  Transaction } from "@/types";
+
+import { LOCKASSET_CONTRACT_ABI, ERC20_ABI } from "./core";
 
 //wagmi config and get chain ID
 const config = createConfig({
-    chains: [liskSepolia, sepolia],
+    chains: [base, baseSepolia],
     transports: {
-        [liskSepolia.id]: http(`${import.meta.env.VITE_LISK_RPC_URL}`),
-        [sepolia.id]: http(`${import.meta.env.VITE_SEP_RPC_URL}`),
+        [base.id]: http(`${import.meta.env.VITE_BASE_RPC_URL}`),
+        [baseSepolia.id]: http(`${import.meta.env.VITE_BASE_SEP_RPC_URL}`),
     },
 })
 
@@ -20,29 +20,20 @@ export const currentChainId = () => {
     return chainId
 }
 
-const useCurrentContract = () => {
-    //get chain id
-    const chainId = getChainId(config)
-    const chainHex = `0x${chainId.toString(16)}`
-
-    //get contract
-    const contractConfig = CONTRACT_ADDRESSES[chainHex as keyof typeof CONTRACT_ADDRESSES]
-
-    return {
-        currentAddress: contractConfig.address,
-        currentABI: contractConfig.abi,
-        chainId
-    }
+//get chain from chainId
+const supportedChains: { [key: number]: {chain: any, rpc:string} } = {
+    8453: {chain: base, rpc: import.meta.env.VITE_BASE_RPC_URL},
+    84532: {chain: baseSepolia, rpc: import.meta.env.VITE_BASE_SEP_RPC_URL},
 }
 
 //set up public cient
 function getPublicClient() {
     const chainId = currentChainId();
-    const isLisk = chainId === 4202;
+    const thisChain = supportedChains[chainId];
     
     return createPublicClient({
-      chain: isLisk ? liskSepolia : sepolia,
-      transport: http(`${isLisk ? import.meta.env.VITE_LISK_RPC_URL : import.meta.env.VITE_SEP_RPC_URL}`)
+      chain: thisChain.chain,
+      transport: http(thisChain.rpc),
     });
 }
 
@@ -53,20 +44,21 @@ export async function getWalletClient() {
     }
 
     const chainId = currentChainId();
-    const isLisk = chainId === 4202;
+    const thisChain = supportedChains[chainId];
 
     const walletClient = createWalletClient({
-        chain: isLisk ? liskSepolia : sepolia,
+        chain: thisChain.chain,
         transport: custom(window.ethereum)
     })
 
     const [address] = await walletClient.requestAddresses(); 
-    console.log('Connected Address: ', address)
+    console.log('Connected Address: ', address, 'ChainID: ', chainId);
 
     return {walletClient, address}
 }
 
 //Write Functions
+
 export async function createETHVault(_amount:string, _vault:number, _lockperiod:number, _title: string) {
     try {
         const { walletClient, address } = await getWalletClient();
@@ -120,11 +112,58 @@ export async function createETHVault(_amount:string, _vault:number, _lockperiod:
 
 }
 
+export async function addToEthVault(_vault:number, _index:number, _amount:string) {
+    try {
+        const { walletClient, address } = await getWalletClient();
+        const { currentAddress, currentABI } = useCurrentContract()
+        const publicClient = getPublicClient()
+
+        //convert amount to wei
+        const ethToWei = parseEther(_amount);
+
+        //call function
+        const { request } = await publicClient.simulateContract({
+            address: currentAddress as `0x${string}`,
+            abi: currentABI,
+            functionName: "addToLockedETH",
+            args: [ _vault, _index],
+            account: address,
+            value: ethToWei
+        });
+
+        const hash = await walletClient.writeContract(request)
+
+        return hash
+
+    } catch (error: any) {
+        // Check for custom contract errors
+        if (error.message.includes('InvalidAssetID')) {
+            throw new Error('This assetID entered is Invalid!');
+        }
+        
+        if (error.message.includes('LockPeriodExpired')) {
+            throw new Error('Lock Period Has Expired!');
+        }
+
+        // Handle other common wallet/network errors
+        if (error.message.includes('user rejected')) {
+            throw new Error('Transaction rejected by user');
+        }
+
+        if (error.message.includes('insufficient funds')) {
+            throw new Error('Insufficient balance for transaction');
+        }
+    }
+}
+
+
 async function approveToken({symbol, amount}: ApproveTokenParams) {
     try {
         const { walletClient, address } = await getWalletClient()
         const { currentAddress, chainId } = useCurrentContract()
         const publicClient = getPublicClient()
+
+        // fetch token address  and decimals from db, pass symbol and network id
 
         //get token
         const token = getTokenConfig(symbol);
@@ -204,50 +243,6 @@ export async function createTokenVault({ symbol, amountT, vault, lockPeriod, tit
 
         // Re-throw other errors
         throw error;
-    }
-}
-
-export async function addToEthVault(_vault:number, _index:number, _amount:string) {
-    try {
-        const { walletClient, address } = await getWalletClient();
-        const { currentAddress, currentABI } = useCurrentContract()
-        const publicClient = getPublicClient()
-
-        //convert amount to wei
-        const ethToWei = parseEther(_amount);
-
-        //call function
-        const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: "addToLockedETH",
-            args: [ _vault, _index],
-            account: address,
-            value: ethToWei
-        });
-
-        const hash = await walletClient.writeContract(request)
-
-        return hash
-
-    } catch (error: any) {
-        // Check for custom contract errors
-        if (error.message.includes('InvalidAssetID')) {
-            throw new Error('This assetID entered is Invalid!');
-        }
-        
-        if (error.message.includes('LockPeriodExpired')) {
-            throw new Error('Lock Period Has Expired!');
-        }
-
-        // Handle other common wallet/network errors
-        if (error.message.includes('user rejected')) {
-            throw new Error('Transaction rejected by user');
-        }
-
-        if (error.message.includes('insufficient funds')) {
-            throw new Error('Insufficient balance for transaction');
-        }
     }
 }
 
@@ -389,71 +384,6 @@ export async function deleteLock(_index:number, _vault:number) {
 }
 
 //Read Functions
-export async function getContractEthBalance() {
-    const publicClient = getPublicClient()
-    const { currentAddress, currentABI } = useCurrentContract()
-
-    try {
-        const balance = await publicClient.readContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: 'getContractETHBalance'
-        });
-    
-        return balance;
-    } catch (error) {
-        throw new Error("Cannot Get Contract ETH Balance!");
-    }
-}
-
-export async function getSubVaults(vault: number): Promise<Lock[]> {
-    const { address } = await getWalletClient();
-    const { currentAddress, currentABI } = useCurrentContract()
-    const publicClient = getPublicClient()
-
-    try {
-      const data = await publicClient.readContract({
-        address: currentAddress as `0x${string}`,
-        abi: currentABI,
-        functionName: 'getUserLocks',
-        args: [vault],
-        account: address
-      }) as Lock[]
-
-      // Ensure the data is properly typed
-      return data.map((lock, index) => ({
-        token: lock.token,
-        amount: BigInt(lock.amount.toString()),
-        lockEndTime: Number(lock.lockEndTime),
-        title: lock.title,
-        withdrawn: lock.withdrawn,
-        isNative: lock.isNative,
-        vaultType: vault,
-        lockIndex: index
-      }))
-    } catch (error) {
-      console.error('Error fetching vault data:', error)
-      throw new Error("Cannot Get Vault Data!")
-    }
-}
-
-export async function getContractTokenBalance(address: string) {
-    const { currentAddress, currentABI } = useCurrentContract()
-    const publicClient = getPublicClient()
-
-    try {
-        const balance = await publicClient.readContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: 'getContractTokenBalance',
-            args:[address]
-        });
-    
-        return balance;
-    } catch (error) {
-        throw new Error("Cannot Get Contract Token Balance!");
-    }
-}
 
 export async function getTransanctions(vault:number): Promise<Transaction[] | []> {
     const { address } = await getWalletClient();

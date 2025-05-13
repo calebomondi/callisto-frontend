@@ -5,7 +5,6 @@ import ConnectedNavbar from "../navbar/connectednavbar"
 import { VaultData } from "@/types"
 import VaultGrid from "./vaultgrid"
 import { mockVaultsData } from "./mockplatformdata"
-import { mergedVaultData } from "./fetchCombinedData"
 import Skeletun from "../skeletons/skeleton"
 
 export default function SubVaultsContainer() {
@@ -27,10 +26,10 @@ export default function SubVaultsContainer() {
             setLoading(false)
           }
           //from db
-          const combinedData = await mergedVaultData()
+          ///const combinedData = []
           
-          setVaultData(combinedData)
-          localStorage.setItem('vault_data', JSON.stringify(combinedData))
+          //setVaultData(combinedData)
+          //localStorage.setItem('vault_data', JSON.stringify(combinedData))
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Failed to fetch vault data')
         } finally {

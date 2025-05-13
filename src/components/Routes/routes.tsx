@@ -4,9 +4,6 @@ import About from '../Documentation/about';
 import Dashboard from '../dashboard/dashboard';
 import SubVaultsContainer from '../dashboard/subvaults';
 import VaultDetails from '../dashboard/vaultdetails';
-import Rewards from '../rewards/rewards';
-import Health from '../financialhealth/health';
-import Transactions from '../transactions/transactions';
 
 export default function MyRoutes() {
   return (
@@ -32,18 +29,6 @@ export default function MyRoutes() {
                 path="/vault"
                 element={ <VaultDetails /> }
             /> 
-            <Route
-                path="/rewards"
-                element={ <Rewards /> }
-            /> 
-            <Route
-                path="/financialHealth"
-                element={ <Health /> }
-            />
-            <Route
-                path="/transactions"
-                element={ <Transactions /> }
-            />
         </Routes>
     </Router>
   )

@@ -6,7 +6,6 @@ import ConnectedNavbar from '../navbar/connectednavbar';
 import { VaultData } from '@/types';
 import { useAccount } from 'wagmi';
 import { useSearchParams } from 'react-router-dom';
-import { getSpecificVaultData } from './fetchCombinedData';
 import { mockSingleVaultData } from './mockplatformdata';
 import AddSchedule from './addSchedule';
 import AddToLock from './addToLock';
@@ -58,11 +57,11 @@ const VaultDetails = () => {
         if (isConnected) {
           try {
             if (address && title && chainId) {
-              const resp = await getSpecificVaultData(address, title, chainId);
-              if(resp) {
-                setVaultData(resp)
-                setIsLockExpired(new Date() >= new Date(resp.end_time))
-              }
+              //const resp = await getSpecificVaultData(address, title, chainId);
+              //if(resp) {
+              //  setVaultData(resp)
+              //  setIsLockExpired(new Date() >= new Date(resp.end_time))
+              //}
             }
           } catch (error) {
             console.error("Error fetching specific vault data:", error);

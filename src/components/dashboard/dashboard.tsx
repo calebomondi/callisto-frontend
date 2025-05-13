@@ -7,6 +7,8 @@ import UserVaultDashboard from './userdashboard';
 import { mockDashboardData } from './mockplatformdata';
 import Skeletun from '../skeletons/skeleton';
 
+import { getWalletClient } from '@/blockchain-services/useFvkry';
+
 interface ErrorResponse {
   error: string;
 }
@@ -40,6 +42,12 @@ export default function Dashboard() {
           } else {
             setDashData(mockDashboardData)
           }
+
+          const walletClient = await getWalletClient()
+          if (walletClient) {
+            console.log("Wallet client initialized successfully");
+          }
+
         } catch (error) {
           console.error("Error fetching wallet data:", error);
         } finally {

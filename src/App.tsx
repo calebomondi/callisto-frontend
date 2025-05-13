@@ -8,7 +8,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  liskSepolia, sepolia
+  base, baseSepolia
 } from 'wagmi/chains';
 import {
   QueryClientProvider,
@@ -16,9 +16,9 @@ import {
 } from "@tanstack/react-query";
 
 const config = getDefaultConfig({
-  appName: 'FVKRY PRVNTA',
+  appName: 'Callisto Finance',
   projectId: import.meta.env.VITE_PROJECT_ID,
-  chains: [liskSepolia, sepolia],
+  chains: [base, baseSepolia],
 });
 
 const queryClient = new QueryClient();

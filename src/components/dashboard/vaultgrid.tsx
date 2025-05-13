@@ -119,7 +119,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
 };
   
  // Main component that renders the grid of vault cards
- const VaultGrid: React.FC<VaultGridProps> = ({ vaultData }) => {
+const VaultGrid: React.FC<VaultGridProps> = ({ vaultData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAsset, setSelectedAsset] = useState('');
   const [selectedLockType, setSelectedLockType] = useState('');
@@ -174,97 +174,98 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
   return (
     <div className="space-y-6">
       {/* Search and Filter Section */}
-      <div className="flex flex-col gap-4 sticky top-20 dark:bg-black/90 bg-white shadow-md p-4 rounded-md">
-        {/* Top Row - Always visible */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full">
-          {/* Search Input */}
-          <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Title or Asset Symbol..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-full h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-transparent"
-            />
+      <div className="flex flex-col gap-1 sticky top-20 dark:bg-black/90 bg-white shadow-md p-2 rounded-md">
+        <div className='flex'>
+          {/* Top Row - Always visible */}
+          <div className="flex flex-col sm:flex-row gap-3 lg:w-1/2 w-full">
+            {/* Search Input */}
+            <div className="relative flex w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Title or Asset Symbol..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 sm:w-full w-1/2 h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-transparent"
+              />
+            </div>
+            
+            {/* Mobile-friendly toggle for filters */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="sm:hidden flex items-center justify-center h-10 px-4 rounded-md border border-gray-300 dark:border-gray-600"
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              Filters 
+            </button>
           </div>
           
-          {/* Mobile-friendly toggle for filters */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="sm:hidden flex items-center justify-center h-10 px-4 rounded-md border border-gray-300 dark:border-gray-600"
-          >
-            <Filter className="w-4 h-4 mr-2" />
-            Filters 
-          </button>
-        </div>
-        
-        {/* Collapsible Filter Section */}
-        <div className={`flex flex-col gap-3 ${showFilters ? 'block' : 'hidden sm:flex sm:flex-row'} sm:flex-wrap`}>
-          {/* Asset Symbol Filter */}
-          <select
-            value={selectedAsset}
-            onChange={(e) => setSelectedAsset(e.target.value)}
-            className="h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-transparent sm:max-w-xs"
-          >
-            <option className='bg-base-300' value="">All Assets</option>
-            {assetSymbols.map(symbol => (
-              <option className='bg-base-300' key={symbol} value={symbol}>{symbol}</option>
-            ))}
-          </select>
+          {/* Collapsible Filter Section */}
+          <div className={`flex flex-6 flex-row ${showFilters ? 'block' : 'hidden sm:flex sm:flex-row'} sm:flex-wrap lg:w-1/2 w-full`}>
+            {/* Asset Symbol Filter */}
+            <div className="flex flex-row gap-3 sm:ml-auto">
+              <select
+                value={selectedAsset}
+                onChange={(e) => setSelectedAsset(e.target.value)}
+                className="h-10 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-transparent sm:max-w-xs"
+              >
+                <option className='bg-base-300' value="">All Assets</option>
+                {assetSymbols.map(symbol => (
+                  <option className='bg-base-300' key={symbol} value={symbol}>{symbol}</option>
+                ))}
+              </select>
 
-          {/* Lock Type Filter */}
-          <select
-            value={selectedLockType}
-            onChange={(e) => setSelectedLockType(e.target.value)}
-            className="h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-transparent sm:max-w-xs"
-          >
-            <option className='bg-base-300' value="">All Lock Types</option>
-            {lockTypes.map(type => (
-              <option className='bg-base-300' key={type} value={type}>{type}</option>
-            ))}
-          </select>
+              {/* Lock Type Filter */}
+              <select
+                value={selectedLockType}
+                onChange={(e) => setSelectedLockType(e.target.value)}
+                className="h-10 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-transparent sm:max-w-xs"
+              >
+                <option className='bg-base-300' value="">All Lock Types</option>
+                {lockTypes.map(type => (
+                  <option className='bg-base-300' key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            
+              {/* Expiring Soon Toggle */}
+              <button
+                onClick={() => {
+                  setShowNearExpiry(!showNearExpiry);
+                  if (showExpired && !showNearExpiry) setShowExpired(false);
+                }}
+                className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
+                  ${showNearExpiry 
+                    ? 'border-amber-600 text-amber-600 bg-amber-600/10' 
+                    : 'border-gray-300 dark:border-gray-600'}`}
+              >
+                <Timer className="w-4 h-4" />
+                <span className="sm:inline text-sm">Expiring Soon</span>
+              </button>
 
-          {/* Filter Buttons Row */}
-          <div className="flex flex-row gap-3 sm:ml-auto">
-            {/* Expiring Soon Toggle */}
-            <button
-              onClick={() => {
-                setShowNearExpiry(!showNearExpiry);
-                if (showExpired && !showNearExpiry) setShowExpired(false);
-              }}
-              className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
-                ${showNearExpiry 
-                  ? 'border-amber-600 text-amber-600 bg-amber-600/10' 
-                  : 'border-gray-300 dark:border-gray-600'}`}
-            >
-              <Timer className="w-4 h-4" />
-              <span className="sm:inline">Expiring Soon</span>
-            </button>
-
-            {/* Expired Toggle */}
-            <button
-              onClick={() => {
-                setShowExpired(!showExpired);
-                if (showNearExpiry && !showExpired) setShowNearExpiry(false);
-              }}
-              className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
-                ${showExpired 
-                  ? 'border-red-600 text-red-600 bg-red-600/10' 
-                  : 'border-gray-300 dark:border-gray-600'}`}
-            >
-              <Lock className="w-4 h-4" />
-              <span className="sm:inline">Expired</span>
-            </button>
+              {/* Expired Toggle */}
+              <button
+                onClick={() => {
+                  setShowExpired(!showExpired);
+                  if (showNearExpiry && !showExpired) setShowNearExpiry(false);
+                }}
+                className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
+                  ${showExpired 
+                    ? 'border-red-600 text-red-600 bg-red-600/10' 
+                    : 'border-gray-300 dark:border-gray-600'}`}
+              >
+                <Lock className="w-4 h-4" />
+                <span className="sm:inline text-sm">Expired</span>
+              </button>
+            </div>
           </div>
-        </div>
+        </div> 
         
         {/* Results Count - Always visible */}
         <div className="text-sm text-gray-500 mt-1">
           Showing {filteredVaults.length} of {vaultData.length} vaults
         </div>
+        
       </div>
-
       {/* Vaults Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {filteredVaults.length > 0 ? (

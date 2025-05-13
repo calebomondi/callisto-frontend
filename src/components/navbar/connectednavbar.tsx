@@ -47,20 +47,7 @@ export default function ConnectedNavbar() {
             <li>
               <Link to="/myvaults/">My Vaults</Link>
             </li>
-            <li>
-              <Link to="/rewards/">Rewards</Link>
-            </li>
-            <li>
-              <a>More</a>
-              <ul className="p-2">
-                <li>
-                  <Link to="/transactions/">Transactions</Link>
-                </li>
-                <li className={path === 'financialHealth' ? 'text-amber-600' : ''}>
-                  <Link to="/financialHealth/">Financial Health</Link>
-                </li>
-              </ul>
-            </li>
+            
           </ul>
         </div>
         <div className="flex items-center">
@@ -81,22 +68,7 @@ export default function ConnectedNavbar() {
           <li className={path === 'myvaults' ? 'text-amber-600' : ''}>
             <Link to="/myvaults/">My Vaults</Link>
           </li>
-          <li className={path === 'rewards' ? 'text-amber-600' : ''}>
-            <Link to="/rewards/">Rewards</Link>
-          </li>
-          <li>
-            <details>
-              <summary>More</summary>
-              <ul className="p-2 dark:bg-black/90 rounded-md">
-                <li className={path === 'transactions' ? 'text-amber-600' : ''}>
-                  <Link to="/transactions/">Transactions</Link>
-                </li>
-                <li className={path === 'financialHealth' ? 'text-amber-600' : ''}>
-                  <Link to="/financialHealth/">Financial Health</Link>
-                </li>
-              </ul>
-            </details>
-          </li>
+          
         </ul>
       </div>
       <div className="navbar-end scale-75">
