@@ -2,7 +2,10 @@ import { createPublicClient, createWalletClient, custom, http, parseEther, getCo
 import { createConfig } from "wagmi";
 import { base, baseSepolia } from '@wagmi/core/chains'
 import { getChainId } from '@wagmi/core'
-import { ApproveTokenParams, TokenVaultParams,  Transaction } from "@/types";
+
+import { ApproveTokenParams, Transaction } from "@/types";
+import { TokenVaultParams } from "@/types/index.types";
+import apiService from "@/backendServices/apiservices";
 
 import { LOCKASSET_CONTRACT_ABI, ERC20_ABI } from "./core";
 
@@ -160,18 +163,15 @@ export async function addToEthVault(_vault:number, _index:number, _amount:string
 async function approveToken({symbol, amount}: ApproveTokenParams) {
     try {
         const { walletClient, address } = await getWalletClient()
-        const { currentAddress, chainId } = useCurrentContract()
         const publicClient = getPublicClient()
 
-        // fetch token address  and decimals from db, pass symbol and network id
-
-        //get token
-        const token = getTokenConfig(symbol);
+        // fetch token address  and decimals from db
+        const token = await apiService.getTokenData(symbol, currentChainId());
 
         //get contract instance
         const contract = getContract({
-            address: chainId === 4202 ? token.addressLSK : token.addressSEP,
-            abi: token.abi,
+            address: token.address,
+            abi: ERC20_ABI,
             client : {
                 public: publicClient,
                 wallet: walletClient
@@ -181,8 +181,11 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
         //convert to proper decimals
         const amountInWei = parseUnits(amount.toString(), token.decimals);
 
+        // get contract address
+        const chainInfo = await apiService.getChainData(currentChainId());
+
         //send approve transaction
-        const hash = await contract.write.approve([currentAddress, amountInWei], { account: address });
+        const hash = await contract.write.approve([chainInfo.lockAsset, amountInWei], { account: address });
 
         // Wait for transaction confirmation
         const receipt = await publicClient.waitForTransactionReceipt({ hash });
@@ -190,8 +193,7 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
         console.log(`receipt => ${receipt}`)
 
         return {
-            receipt,
-            tokenAddress: chainId === 4202 ? token.addressLSK : token.addressSEP,
+            tokenAddress: token.address,
             amount: amountInWei,
             walletClient,
             address
@@ -202,22 +204,21 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
 
 }   
 
-export async function createTokenVault({ symbol, amountT, vault, lockPeriod, title }: TokenVaultParams) {
+export async function createTokenVault({ symbol, title, totalAmount, vaultType, lockPeriod, slip, unLockDuration, unLockAmount, unLockGoal }: TokenVaultParams) {
     try {
         //aprove token
-        const { tokenAddress, amount: approvedAmount, walletClient, address} = await approveToken({symbol: symbol, amount: BigInt(amountT)});
-        const { currentAddress, currentABI } = useCurrentContract()
+        const { tokenAddress, amount: approvedAmount, walletClient, address} = await approveToken({symbol: symbol, amount: BigInt(totalAmount)});
         const publicClient = getPublicClient()
 
-        //convert days to seconds
-        const daysToSeconds = BigInt(lockPeriod * 24 * 60 * 60);
+        //chain data
+        const chainInfo = await apiService.getChainData(currentChainId());
 
         //call function
         const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: "lockToken",
-            args: [ tokenAddress, approvedAmount, vault, daysToSeconds, title],
+            address: chainInfo.lockAsset,
+            abi: LOCKASSET_CONTRACT_ABI,
+            functionName: "createTokenVault",
+            args: [ tokenAddress, title, approvedAmount, lockPeriod, vaultType, slip, unLockDuration, unLockAmount, unLockGoal, chainInfo.poolAddress, chainInfo.dataProvider],
             account: address
         });
 
@@ -225,40 +226,26 @@ export async function createTokenVault({ symbol, amountT, vault, lockPeriod, tit
 
         return hash
     } catch (error) {
-        if (error instanceof Error) {
-            // Check for common contract errors
-            if (error.message.includes('VaultIsFull')) {
-              throw new Error('Vault has reached maximum capacity');
-            }
-            if (error.message.includes('TokenIsBlackListed')) {
-              throw new Error(`Token ${symbol} is blacklisted`);
-            }
-            if (error.message.includes('InadequateTokenBalance')) {
-              throw new Error('Insufficient token balance');
-            }
-            if (error.message.includes('InvalidTokenAddress')) {
-              throw new Error('Invalid token address provided');
-            }
-        }
-
-        // Re-throw other errors
+        console.log('Error in creating token vault', error);
         throw error;
     }
 }
 
-export async function addToTokenVault(_vault:number, _index:number, _symbol:string, _amount:string) {
+export async function addToTokenVault(owner:string, _index:number, _symbol:string, _amount:string) {
     try {
         //aprove token
-        const { tokenAddress, amount: approvedAmount, walletClient, address} = await approveToken({symbol: _symbol, amount: BigInt(_amount)});
-        const { currentAddress, currentABI } = useCurrentContract()
+        const { amount: approvedAmount, walletClient, address} = await approveToken({symbol: _symbol, amount: BigInt(_amount)});
         const publicClient = getPublicClient()
+
+        //chain data
+        const chainInfo = await apiService.getChainData(currentChainId());
 
         //call function
         const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: "addToLockedTokens",
-            args: [ tokenAddress, _index, approvedAmount, _vault],
+            address: chainInfo.lockAsset,
+            abi: LOCKASSET_CONTRACT_ABI,
+            functionName: "depositToken",
+            args: [ owner,  _index, approvedAmount, chainInfo.poolAddress, chainInfo.dataProvider],
             account: address
         });
 
@@ -266,44 +253,28 @@ export async function addToTokenVault(_vault:number, _index:number, _symbol:stri
 
         return hash
     } catch (error) {
-        if (error instanceof Error) {
-            // Check for common contract errors
-            if (error.message.includes('TokenIsBlackListed')) {
-              throw new Error(`Token ${_symbol} is blacklisted`);
-            }
-            if (error.message.includes('InadequateTokenBalance')) {
-              throw new Error('Insufficient token balance');
-            }
-            if (error.message.includes('InvalidTokenAddress')) {
-              throw new Error('Invalid token address provided');
-            }
-        }
-
-        // Re-throw other errors
         throw error;
     }
 }
 
-export async function withdrawAsset(_index:number, _vault:number, _amount:string, _goal:boolean, _decimals:number, _symbol:string) {
+export async function withdrawAsset(_index:number, _vault:number, _amount:string, _goal:boolean, _symbol:string) {
     try {
         const { walletClient, address } = await getWalletClient();
-        const { currentAddress, currentABI } = useCurrentContract()
         const publicClient = getPublicClient()
 
+        //chain data and token data
+        const token = await apiService.getTokenData(_symbol, currentChainId());
+        const chainInfo = await apiService.getChainData(currentChainId());
+
         //parse amount
-        let parsedAmount;
-        if(_symbol === 'ETH') {
-            parsedAmount = parseEther(_amount)
-        } else {
-            parsedAmount = parseUnits(_amount, _decimals)
-        }
+        const parsedAmount = parseUnits(_amount, token.decimals);
 
         //call function
         const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
+            address: chainInfo.lockAsset,
+            abi: LOCKASSET_CONTRACT_ABI,
             functionName: "withdrawAsset",
-            args: [ _index, _vault, parsedAmount, _goal],
+            args: [ _index, parsedAmount, chainInfo.poolAddress, _goal],
             account: address
         });
 
@@ -313,39 +284,7 @@ export async function withdrawAsset(_index:number, _vault:number, _amount:string
 
     } catch (error: any) {
         console.log('Error in Withdrawing', error);
-
-        // Check for custom contract errors
-        if (error.message.includes('InvalidAssetID')) {
-            throw new Error('Invalid Asset ID');
-        }
-        
-        if (error.message.includes('VaultHasBeenFullyWithdrawn')) {
-            throw new Error('Vault has been fully withdrawn');
-        }
-
-        if (error.message.includes('NotEnoughToWithdraw')) {
-            throw new Error('Insufficient balance to withdraw');
-        }
-        
-        if (error.message.includes('LockPeriodNotExpiredAndGoalNotReached')) {
-            throw new Error('Lock period not expired and goal not reached');
-        }
-
-        if (error.message.includes('ETHTransferFailed')) {
-            throw new Error('ETH transfer failed');
-        }
-
-        // Handle other common wallet/network errors
-        if (error.message.includes('user rejected')) {
-            throw new Error('Transaction rejected by user');
-        }
-
-        if (error.message.includes('insufficient funds')) {
-            throw new Error('Insufficient balance for transaction');
-        }
-
-        // For any other error, throw the original message
-        throw new Error(error.message || 'Transaction failed');
+        throw error;
     }
 }
 
@@ -368,17 +307,7 @@ export async function deleteLock(_index:number, _vault:number) {
 
         return hash
     } catch (error) {
-        if (error instanceof Error) {
-            // Check for common contract errors
-            if (error.message.includes('LockPeriodNotExpired')) {
-              throw new Error('Lock Period Has Not Expired!');
-            }
-            if (error.message.includes('VaultHasNotBeenFullyWithdrawn')) {
-              throw new Error(`Vault Has Not Been Fully Withdrawn!`);
-            }
-        }
-
-        // Re-throw other errors
+        console.log('Error in deleting sub vault', error);
         throw error;
     }
 }
@@ -407,7 +336,7 @@ export async function getTransanctions(vault:number): Promise<Transaction[] | []
           return formattedData
           
     } catch (error) {
-      console.error('Error fetching user transanctions!:', error)
-      throw new Error("Cannot Fetch User Transanctions Data!")
+        console.log('Error in fetching transactions', error);
+        throw error;
     }
 }

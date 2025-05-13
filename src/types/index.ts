@@ -61,14 +61,6 @@ export interface ApproveTokenParams {
     amount: bigint;
 }
 
-export interface TokenVaultParams {
-    symbol: string;
-    amountT: string;
-    vault: number;
-    lockPeriod: number;  // in days
-    title: string;
-}
-
 export interface VaultCardProps {
     subvault: VaultData;
 }
