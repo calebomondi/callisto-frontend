@@ -2,13 +2,16 @@ import { motion } from 'framer-motion';
 import AnimatedSection from '../AnimatedSection/animatedsection';
 
 import { LockKeyhole} from 'lucide-react';
-import StatisticsSection from './stats';
+import Solutions from './solutions';
 import FAQ from './faq';
 import Footer from './footer';
 import Navbar from '../navbar/navbar';
 import { useNavigate } from 'react-router-dom';
 import Features from './features';
 import Hero from './hero';
+import TrustedBy from './trustedby';
+import Stats from './stats';
+import Benefits from './benefits';
 
 export default function Home () {
   const navigate = useNavigate()
@@ -24,11 +27,14 @@ export default function Home () {
 
       {/* Hero Section */}
       <Hero />
+      <TrustedBy />
 
       {/* Statistics Section */}
-      <AnimatedSection>
+      {/* <AnimatedSection>
         <StatisticsSection />
-      </AnimatedSection>
+      </AnimatedSection> */}
+      <Stats />
+      <Solutions />
 
       {/* Features Section */}
       <Features />
@@ -37,6 +43,7 @@ export default function Home () {
         <TokensSection />
       </AnimatedSection>
       */}
+      <Benefits />
 
       {/* FAQ Section */}
       <AnimatedSection>
