@@ -10,7 +10,7 @@ const solutions = [
     description: "Lock your assets in a secure, time-locked vault",
     icon: <Lock className="w-6 h-6" />,
     preview: (
-      <div className="bg-white p-6 rounded-xl shadow-lg">
+      <div className="light:bg-white p-6 rounded-xl shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">ETH Vault</h3>
@@ -19,7 +19,7 @@ const solutions = [
           <Lock className="w-8 h-8 text-orange-500" />
         </div>
         <div className="space-y-4">
-          <div className="bg-orange-50 p-4 rounded-lg">
+          <div className="light:bg-orange-50 p-4 rounded-lg">
             <p className="text-sm font-medium">Amount Locked</p>
             <p className="text-2xl font-bold">10.5 ETH</p>
           </div>
@@ -37,7 +37,7 @@ const solutions = [
     description: "Create custom unlock schedules for your assets",
     icon: <Clock className="w-6 h-6" />,
     preview: (
-      <div className="bg-white p-6 rounded-xl shadow-lg">
+      <div className="light:bg-white p-6 rounded-xl shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Unlock Schedule</h3>
@@ -49,7 +49,7 @@ const solutions = [
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="flex items-center justify-between p-3 bg-orange-50 rounded-lg"
+              className="flex items-center justify-between p-3 light:bg-orange-50 rounded-lg"
             >
               <div>
                 <p className="font-medium">Phase {i}</p>
@@ -68,7 +68,7 @@ const solutions = [
     description: "Track your locked assets and upcoming unlocks",
     icon: <ChartBar className="w-6 h-6" />,
     preview: (
-      <div className="bg-white p-6 rounded-xl shadow-lg">
+      <div className="light:bg-white p-6 rounded-xl shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Portfolio Overview</h3>
@@ -77,7 +77,7 @@ const solutions = [
           <ChartBar className="w-8 h-8 text-orange-500" />
         </div>
         <div className="space-y-4">
-          <div className="h-32 bg-orange-50 rounded-lg flex items-end p-4">
+          <div className="h-32 light:bg-orange-50 rounded-lg flex items-end p-4">
             {[40, 65, 45, 80, 55, 70].map((height, i) => (
               <div
                 key={i}
@@ -102,7 +102,7 @@ const solutions = [
     description: "Manage multiple vaults and assets easily",
     icon: <Wallet className="w-6 h-6" />,
     preview: (
-      <div className="bg-white p-6 rounded-xl shadow-lg">
+      <div className="light:bg-white p-6 rounded-xl shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Active Vaults</h3>
@@ -115,7 +115,7 @@ const solutions = [
             (vault) => (
               <div
                 key={vault}
-                className="flex items-center justify-between p-3 bg-orange-50 rounded-lg"
+                className="flex items-center justify-between p-3 light:bg-orange-50 rounded-lg"
               >
                 <span className="font-medium">{vault}</span>
                 <Button variant="ghost" size="sm" className="text-orange-500">
@@ -136,7 +136,7 @@ export default function Solutions() {
   const activeSolution = solutions.find((s) => s.id === activeTab);
 
   return (
-    <section className="py-20 px-24 bg-white">
+    <section className="py-20 px-24 light:bg-white">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -182,7 +182,7 @@ export default function Solutions() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-gray-50 p-6 rounded-xl"
+              className="light:bg-gray-50 p-6 rounded-xl"
             >
               <h3 className="text-2xl font-semibold mb-3">
                 {activeSolution?.title}
