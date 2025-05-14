@@ -31,7 +31,7 @@ const stats = [
 
 export default function Stats() {
   return (
-    <section className="py-20 px-24 bg-gray-50">
+    <section className="py-20 px-24 light:bg-gray-50">
       <div className="text-center mb-16">
         <h2 className="text-2xl font-bold text-navy mb-4">
           Platform Statistics
@@ -59,7 +59,7 @@ export default function Stats() {
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              className="bg-white rounded-xl p-6 shadow-lg"
+              className="light:bg-white rounded-xl p-6 shadow-lg"
               variants={{
                 hidden: { y: 20, opacity: 0 },
                 visible: {
