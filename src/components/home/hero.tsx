@@ -2,8 +2,15 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import vault from '/vault.png'
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
+
+    const navigate = useNavigate()
+
+    const handleDash = () => {
+        navigate("/documentation");
+    }
 
     const words = [
         {
@@ -51,7 +58,7 @@ export default function Hero() {
                   <p className="text-gray-600">Active Users</p>
                 </div>
               </div>
-              <Button className="bg-orange-500 hover:bg-orange-600 text-lg px-8 py-6">
+              <Button onClick={handleDash} className="bg-orange-500 hover:bg-orange-600 text-lg px-8 py-6">
                 Get Started
               </Button>
             </motion.div>
