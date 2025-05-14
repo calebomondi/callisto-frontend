@@ -56,11 +56,6 @@ export interface TokenConfig {
     symbol: string;
 }
 
-export interface ApproveTokenParams {
-    symbol: string;
-    amount: bigint;
-}
-
 export interface VaultCardProps {
     subvault: VaultData;
 }
@@ -187,14 +182,6 @@ export interface DashboardData {
 
 export interface UserVaultDashboardProps {
     data: DashboardData | null;
-}
-
-export interface Transaction {
-    token: `0x${string}`;
-    amount: bigint;
-    title: string;
-    withdrawn: boolean;
-    timestamp: number;
 }
 
 export interface HealthRecord {

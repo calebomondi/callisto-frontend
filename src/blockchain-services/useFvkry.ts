@@ -3,8 +3,7 @@ import { createConfig } from "wagmi";
 import { base, baseSepolia } from '@wagmi/core/chains'
 import { getChainId } from '@wagmi/core'
 
-import { ApproveTokenParams, Transaction } from "@/types";
-import { TokenVaultParams } from "@/types/index.types";
+import { TokenVaultParams, Transaction, ApproveTokenParams } from "@/types/index.types";
 import apiService from "@/backendServices/apiservices";
 
 import { LOCKASSET_CONTRACT_ABI, ERC20_ABI } from "./core";
@@ -61,59 +60,6 @@ export async function getWalletClient() {
 }
 
 //Write Functions
-
-export async function createETHVault(_amount:string, _vault:number, _lockperiod:number, _title: string) {
-    try {
-        const { walletClient, address } = await getWalletClient();
-        const { currentAddress, currentABI } = useCurrentContract()
-        const publicClient = getPublicClient()
-
-        //convert days to seconds
-        const daysToSeconds = BigInt(_lockperiod * 24 * 60 * 60);
-
-        //convert amount to wei
-        const ethToWei = parseEther(_amount);
-
-        //call function
-        const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: "lockETH",
-            args: [ _vault, daysToSeconds, _title],
-            account: address,
-            value: ethToWei
-        });
-
-        const hash = await walletClient.writeContract(request)
-
-        return hash
-
-    } catch (error: any) {
-        console.log('Error in creating ETH sub-vault', error);
-
-        // Check for custom contract errors
-        if (error.message.includes('VaultIsFull')) {
-            throw new Error('This vault has reached maximum capacity');
-        }
-        
-        if (error.message.includes('AmountBeGreaterThan0')) {
-            throw new Error('Amount must be greater than 0');
-        }
-
-        // Handle other common wallet/network errors
-        if (error.message.includes('user rejected')) {
-            throw new Error('Transaction rejected by user');
-        }
-
-        if (error.message.includes('insufficient funds')) {
-            throw new Error('Insufficient balance for transaction');
-        }
-
-        // For any other error, throw the original message
-        throw new Error(error.message || 'Transaction failed');
-    }
-
-}
 
 export async function addToEthVault(_vault:number, _index:number, _amount:string) {
     try {
@@ -288,18 +234,20 @@ export async function withdrawAsset(_index:number, _vault:number, _amount:string
     }
 }
 
-export async function deleteLock(_index:number, _vault:number) {
+export async function deleteLock(_index:number) {
     try {
         const { walletClient, address } = await getWalletClient();
-        const { currentAddress, currentABI } = useCurrentContract()
         const publicClient = getPublicClient()
+
+        //chain data
+        const chainInfo = await apiService.getChainData(currentChainId());
 
         //call function
         const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: "deleteSubVault",
-            args: [ _vault,  _index],
+            address: chainInfo.lockAsset,
+            abi: LOCKASSET_CONTRACT_ABI,
+            functionName: "deleteVault",
+            args: [_index],
             account: address
         });
 
@@ -314,17 +262,19 @@ export async function deleteLock(_index:number, _vault:number) {
 
 //Read Functions
 
-export async function getTransanctions(vault:number): Promise<Transaction[] | []> {
-    const { address } = await getWalletClient();
-    const { currentAddress, currentABI } = useCurrentContract()
+export async function getTransanctions(owner:string, vaultId:number): Promise<Transaction[] | []> {
+    const { address } = await getWalletClient()
     const publicClient = getPublicClient()
+
+    //get chain data
+    const chainInfo = await apiService.getChainData(currentChainId());
     
     try {
         const data = await publicClient.readContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
+            address: chainInfo.lockAsset,
+            abi: LOCKASSET_CONTRACT_ABI,
             functionName: 'getUserTransactions',
-            args: [vault],
+            args: [owner, vaultId],
             account: address,
           }) as Transaction[];
     

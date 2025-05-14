@@ -1,49 +1,59 @@
-import React, { useState } from "react"
-import { LockMyAsset, Send2DB, TokenConfig } from "@/types";
+import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 import apiService from "@/backendServices/apiservices";
-
+import { createTokenVault, currentChainId } from "@/blockchain-services/useFvkry";
+import { useAccount } from 'wagmi';
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
+import { SupportedTokens, FormTokenVault } from "@/types/index.types";
 
-import { createETHVault, createTokenVault, currentChainId } from "@/blockchain-services/useFvkry";
-import { isTokenSupported, getTokenConfig } from "@/blockchain-services/tokens";
-
-import { useNavigate } from "react-router-dom";
 
 export default function LockAsset() {
     const { toast } = useToast()
     const navigate = useNavigate()
+    const { isConnected } = useAccount();
 
     //form
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [formValues, setFormValues] = useState<LockMyAsset>({
-        title: '',
-        amount: '',
-        symbol: '',
-        duration: '',
-        durationType: 'days',
-        lockType: 'fixed',
-        assetType: 'ethereum',
-        goal: ''
+    const [formValues, setFormValues] = useState<FormTokenVault>({
+        symbol: "", 
+        title: "", 
+        totalAmount: "", 
+        vaultType: "Fixed", 
+        lockPeriod: 0, 
+        slip: 0, 
+        unLockDuration: 0, 
+        unLockAmount: 0, 
+        unLockGoal: 0,
+        durationType: 'days'
     })
+    const [supportedTokens, setSupportedTokens] = useState<SupportedTokens[]>([])
+
+    useEffect(() => {
+        try {
+            const fetchSupportedTokens = async () => {
+                if(isConnected) {
+                    const response = await apiService.getSupportedTokens()
+                    if (response && response.length > 0) {
+                        setSupportedTokens(response)
+                    }
+                }
+
+                console.log("Supported Tokens: ", JSON.stringify(supportedTokens));
+            }
+
+            fetchSupportedTokens()
+        } catch (error) {
+            console.error("Error fetching supported tokens:", error);
+
+        }
+    }, []);
 
     const TITLE_WORD_LIMIT = 5;
 
     const countWords = (text: string): number => {
         return text.trim() ? text.trim().split(/\s+/).length : 0;
     };
-
-    const durationTypeToNumber = (period: string): number => {
-        const periodMap: { [key: string]: number } = {
-            'days': 1,
-            'weeks': 2,
-            'months': 3,
-            'years': 4
-        };
-    
-        const normalizedPeriod = period.toLowerCase();
-        return periodMap[normalizedPeriod] || 0; 
-    }
 
     const convertToDays = (durationType: string, duration: number): number => {
         const conversionRates: { [key: string]: number } = {
@@ -77,72 +87,51 @@ export default function LockAsset() {
         setIsLoading(true)
         try {
             //validate input data
-            if (isNaN(Number(formValues.amount)) || Number(formValues.amount) <= 0) {
+            if (isNaN(Number(formValues.totalAmount)) || Number(formValues.totalAmount) <= 0) {
                 throw new Error('Amount to lock must be a value and greater than 0')
             }
-            if (isNaN(Number(formValues.duration)) || Number(formValues.duration) <= 0) {
+            if (isNaN(Number(formValues.lockPeriod)) || Number(formValues.lockPeriod) <= 0) {
                 throw new Error('Lock period must be a value and greater than 0')
             }
-            if (isNaN(Number(formValues.goal)) || Number(formValues.goal) < 0) {
+            if (isNaN(Number(formValues.unLockGoal)) || Number(formValues.unLockGoal) < 0) {
                 throw new Error('Locking Goal must be a value and greater than 0')
             }
-            if (formValues.durationType === 'days' && Number(formValues.duration) > 6) {
+            if (formValues.durationType === 'days' && Number(formValues.lockPeriod) > 6) {
                 throw new Error('Days Cannot Exceed 7')
             }
-            if (formValues.durationType === 'weeks' && Number(formValues.duration) > 3) {
+            if (formValues.durationType === 'weeks' && Number(formValues.lockPeriod) > 3) {
                 throw new Error('Weeks Cannot Exceed 4')
             }
-            if (formValues.durationType === 'months' && Number(formValues.duration) > 11) {
+            if (formValues.durationType === 'months' && Number(formValues.lockPeriod) > 11) {
                 throw new Error('Months Cannot Exceed 11')
             }
-            if (formValues.durationType === 'years' && Number(formValues.duration) > 5) {
+            if (formValues.durationType === 'years' && Number(formValues.lockPeriod) > 5) {
                 throw new Error('Years Cannot Exceed 5')
-            }
-            if ( formValues.assetType !== 'ethereum' && !isTokenSupported(formValues.symbol)) {
-                throw new Error(`${formValues.symbol.toUpperCase()} token Is Not Supported Yet!`)
             }
 
             //get vault and duration in day
-            const vault = durationTypeToNumber(formValues.durationType)
-            const days = convertToDays(formValues.durationType,Number(formValues.duration))
+            const days = convertToDays(formValues.durationType,Number(formValues.lockPeriod))
 
-            //get asset details
-            let token: TokenConfig = {
-                addressLSK: '0x0000000000000000000000000000000000000000', 
-                addressSEP: '0x0000000000000000000000000000000000000000', 
-                abi: [], 
-                decimals: 18, 
-                symbol: ''
-            }
-            if (formValues.assetType !== 'ethereum') {
-                token = getTokenConfig(formValues.symbol);
-            }
-
-            //get chainID
             const chainID = currentChainId()
 
-            const data2DB: Send2DB = {
-                title: formValues.title,
-                amount: formValues.amount,
-                symbol: formValues.assetType === 'ethereum' ? 'ETH' : formValues.symbol.toUpperCase(),
-                duration: String(days),
-                durationType: formValues.durationType,
-                lockType: formValues.lockType,
-                assetType: formValues.assetType,
-                goal: formValues.goal.length === 0 ? '0' : formValues.goal,
-                token: chainID === 4202 ? token.addressLSK : token.addressSEP,
-                decimals: token.decimals,
-                chainId: chainID.toString()
-            }
+            console.log("Forma data: ", JSON.stringify(formValues, null, 2));
+            console.log("Chain ID: ", chainID);
+            console.log("Days: ", days);
 
-            //1. lock asset
-            let tx = "";
-
-            if(formValues.assetType === 'ethereum') {
-                tx = await createETHVault(formValues.amount, vault, days, formValues.title);
-            } else {
-                tx = await createTokenVault({symbol: formValues.symbol, amountT: formValues.amount, vault: vault, lockPeriod: days , title: formValues.title})
-            }        
+            /*/1. lock asset
+            let tx = await createTokenVault(
+                {
+                    symbol: formValues.symbol, 
+                    title: formValues.title, 
+                    totalAmount: formValues.totalAmount, 
+                    vaultType: "", 
+                    lockPeriod: days, 
+                    slip: 0, 
+                    unLockDuration: 0, 
+                    unLockAmount: 0, 
+                    unLockGoal: 0
+                }
+            )
             if(tx) {
                 //toast
                 toast({
@@ -150,31 +139,22 @@ export default function LockAsset() {
                     description: `Lock has been Created Successfully`,
                     action: (
                         <ToastAction 
-                            altText="Goto schedule to undo"
-                            onClick={() => window.open(chainID === 4202 ? `https://sepolia-blockscout.lisk.com/tx/${tx}` : `https://sepolia.etherscan.io/tx/${tx}`, '_blank')}
+                            altText=""
+                            onClick={() => window.open(
+                                chainID === 84532 
+                                ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
+                                : `https://sepolia.etherscan.io/tx/${tx}`, 
+                                '_blank'
+                            )}
                         >
                             View Transaction
                         </ToastAction>
                     )
                 });
-                //clear form
-                setFormValues({
-                    title: '',
-                    amount: '',
-                    symbol: '',
-                    duration: '',
-                    durationType: 'days',
-                    lockType: 'fixed',
-                    assetType: 'ethereum',
-                    goal: ''
-                })
-                setIsLoading(false)
-                //uplaod to db
-                await apiService.lockAsset(data2DB)
 
                 navigate("/myvaults")
             }
-
+            */
         } catch (error:any) {
             console.error("Failed to create campaign:", error.message);
             toast({
@@ -184,6 +164,20 @@ export default function LockAsset() {
                 action: <ToastAction altText="Try again">Try again</ToastAction>,
               })
         } finally {
+            //clear form
+            setFormValues({
+                symbol: "", 
+                title: "", 
+                totalAmount: "", 
+                vaultType: "Fixed", 
+                lockPeriod: 0, 
+                slip: 0, 
+                unLockDuration: 0, 
+                unLockAmount: 0, 
+                unLockGoal: 0,
+                durationType: 'days'
+            })
+            //set loading to false
             setIsLoading(false)
         }
     }
@@ -213,19 +207,28 @@ export default function LockAsset() {
                         </select>
                     </label>
                     <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
-                        Type
-                        <select onChange={handleChange} value={formValues.lockType} name="lockType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="fixed">Fixed Duration</option>
+                        Vault Type
+                        <select onChange={handleChange} value={formValues.vaultType} name="vaultType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
+                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="fixed">Fixed</option>
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="goal">Goal Based</option>
+                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="schedule">Scheduled</option>
                         </select>
                     </label>
                 </div>
                 <div className="p-2 grid place-items-center">
                     <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
-                        Asset
-                        <select onChange={handleChange} value={formValues.assetType} name="assetType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="ethereum">Ethereum</option>
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="token">Token</option>
+                        StableCoin
+                        <select 
+                            onChange={handleChange} value={formValues.symbol} 
+                            name="symbol" id="" 
+                            className="bg-transparent outline-none border-none dark:text-white text-gray-700"
+                        >
+                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="">Select Token</option>
+                            {
+                                supportedTokens.map((token, index) => (
+                                    <option key={index} className="dark:text-white text-gray-700 dark:bg-black/90" value={token.symbol}>{token.symbol}</option>
+                                ))
+                            }
                         </select>
                     </label>
                 </div>
@@ -247,30 +250,16 @@ export default function LockAsset() {
                         {remainingTitleWords} words remaining
                     </div>
                 </div>
-                <label className={`${formValues.assetType === 'ethereum' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
-                    Token
-                    <input 
-                        type="text" 
-                        id="symbol"
-                        name="symbol"
-                        value={formValues.symbol}
-                        onChange={handleChange}
-                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="Symbol"
-                        disabled = {formValues.assetType === 'ethereum'}
-                        required
-                    />
-                </label>
                 <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
                     Amount
                     <input 
                         type="text" 
-                        id="amount"
-                        name="amount"
-                        value={formValues.amount}
+                        id="totalAmount"
+                        name="totalAmount"
+                        value={formValues.totalAmount}
                         onChange={handleChange}
                         className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder={`${formValues.assetType === 'token' ? '100 Token X' : '1 ETH'}`}
+                        placeholder="100"
                         required
                     />
                 </label>
@@ -278,26 +267,51 @@ export default function LockAsset() {
                     Period
                     <input 
                         type="text" 
-                        id="duration"
-                        name="duration"
-                        value={formValues.duration}
+                        id="lockPeriod"
+                        name="lockPeriod"
+                        value={formValues.lockPeriod}
                         onChange={handleChange}
                         className="md:w-5/6 p-2 dark:text-white text-gray-700" 
                         placeholder={durationPlaceholders[formValues.durationType]} 
                         required
                     />
                 </label>
-                <label className={`${formValues.lockType === 'fixed' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
+                <label className={`${formValues.vaultType !== 'goal' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
                     Goal
                     <input 
                         type="text" 
-                        id="goal"
-                        name="goal"
-                        value={formValues.goal}
+                        id="unLockGoal"
+                        name="unLockGoal"
+                        value={formValues.unLockGoal}
                         onChange={handleChange}
                         className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="$2000"
-                        disabled = {formValues.lockType === 'fixed'}
+                        placeholder="2000 (in $)"
+                        required
+                    />
+                </label>
+                <label className={`${formValues.vaultType !== 'schedule' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
+                    UnLock Amount
+                    <input 
+                        type="text" 
+                        id="unLockAmount"
+                        name="unLockAmount"
+                        value={formValues.unLockAmount}
+                        onChange={handleChange}
+                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
+                        placeholder="20 (in $)"
+                        required
+                    />
+                </label>
+                <label className={`${formValues.vaultType !== 'schedule' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
+                    Goal
+                    <input 
+                        type="text" 
+                        id="unLockDuration"
+                        name="unLockDuration"
+                        value={formValues.unLockDuration}
+                        onChange={handleChange}
+                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
+                        placeholder="10 (every 10 days)"
                         required
                     />
                 </label>

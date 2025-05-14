@@ -35,7 +35,7 @@ export default function Dashboard() {
             setLoading(false)
           }
           //from db
-          const response: DashboardData | ErrorResponse = await apiService.analysis()
+          const response: DashboardData | ErrorResponse = {error: ''};
           if (response && !isErrorResponse(response) && Object.keys(response).length > 0) {
             setDashData(response)
             localStorage.setItem('dashboard_data', JSON.stringify(response))

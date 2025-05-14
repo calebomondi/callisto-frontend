@@ -1,9 +1,9 @@
 import axios, {AxiosResponse} from 'axios';
 import { API_URL } from './apiurl';
-import { Send2DB, DashboardData} from '@/types';
+import { Send2DB } from '@/types';
 import { getWalletClient, currentChainId } from '@/blockchain-services/useFvkry';
 
-import { TokenData, ChainData } from '@/types/index.types';
+import { TokenData, ChainData, SupportedTokens } from '@/types/index.types';
 
 const apiService = {
     lockAsset: async (formData:Send2DB): Promise<any> => {
@@ -29,6 +29,7 @@ const apiService = {
           console.error('Asset Locking Failed:', error);
           throw error;
         }
+      
     },
     getChainData: async (chainId: number): Promise<ChainData> => {
 
@@ -71,6 +72,36 @@ const apiService = {
         
       } catch (error) {
         console.error('Getting Token Data Failed:', error);
+        throw error;
+      }
+    },
+    getSupportedTokens: async (): Promise<SupportedTokens[]> => {
+      const chainId = currentChainId();
+      console.log(`Fetching from ${API_URL}/api/tokens/supported-chains with chainId: ${chainId}`);
+    
+      try {
+        const response: AxiosResponse<SupportedTokens[]> = await axios.get(
+          `${API_URL}/api/tokens/supported-tokens`,
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            params: {
+              chainId
+            }
+          }
+        );
+  
+        return response.data;
+        
+      } catch (error) {
+        console.error('Getting Supported Chains Failed:', error);
+        // More detailed error logging
+        if (axios.isAxiosError(error)) {
+          console.error('Response data:', error.response?.data);
+          console.error('Response status:', error.response?.status);
+          console.error('Response headers:', error.response?.headers);
+        }
         throw error;
       }
     }

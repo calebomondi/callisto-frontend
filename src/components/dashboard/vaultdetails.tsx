@@ -7,7 +7,6 @@ import { VaultData } from '@/types';
 import { useAccount } from 'wagmi';
 import { useSearchParams } from 'react-router-dom';
 import { mockSingleVaultData } from './mockplatformdata';
-import AddSchedule from './addSchedule';
 import AddToLock from './addToLock';
 import Withdraw from './withdraw';
 import { deleteLock } from '@/blockchain-services/useFvkry';
@@ -171,7 +170,7 @@ const VaultDetails = () => {
 
     try {
       let tx;
-      tx = await deleteLock(_index, _vault);
+      tx = await deleteLock(_index);
       if(tx) {
         //toast
         toast({
@@ -189,16 +188,6 @@ const VaultDetails = () => {
 
         setIsDeleting(false)
         navigate("/myvaults")
-
-        //remove from db
-        const data2DB = {
-          assetSymbol: vaultData.asset_symbol,
-          title: vaultData.title,
-          vaultType: vaultType(vaultData.vaultType ?? 0),
-          chainId: vaultData.chainId
-        }
-
-        await apiService.deleteLock(data2DB)
 
       }
     } catch (error) {
@@ -307,25 +296,6 @@ const VaultDetails = () => {
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                       </form>
                       <AddToLock vaultData={vaultData}/>            
-                    </div>
-                  </dialog>
-
-                  {/*Unlock Schedule*/}
-                  <Button 
-                    variant="outline" 
-                    className={`flex bg-amber-600 border-none text-gray-900 font-semibold hover:bg-gray-900 hover:border-amber-600 hover:text-amber-600 items-center space-x-2 ${vaultData.lock_type === "goal" || isLockExpired ? 'hidden' : ''}`}
-                    disabled={vaultData.unlock_schedule > 0 || getTotalLockDays() <= 5 || !isConnected}
-                    onClick={() => (document.getElementById('my_modal_13') as HTMLDialogElement).showModal()}
-                  >
-                    <CircleFadingPlus className="w-4 h-4" />
-                    <span> Set Unlock Schedule </span>
-                  </Button>
-                  <dialog id="my_modal_13" className="modal">
-                    <div className="modal-box">
-                      <form method="dialog">
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                      </form>
-                      <AddSchedule vaultData={vaultData}/>            
                     </div>
                   </dialog>
 
