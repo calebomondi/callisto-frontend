@@ -48,7 +48,7 @@ const cardVariants = {
 
 export default function Benefits() {
   return (
-    <section className="py-20 px-24 bg-white">
+    <section className="py-20 px-24 light:bg-white">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -82,9 +82,9 @@ export default function Benefits() {
               className="relative group"
               variants={cardVariants}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-100 to-orange-50 rounded-xl transform group-hover:scale-105 transition-transform duration-300" />
+              <div className="absolute inset-0 rounded-xl transform group-hover:scale-105 transition-transform duration-300" />
 
-              <div className="relative bg-white rounded-xl p-6 shadow-lg border border-orange-100 h-full">
+              <div className="relative light:bg-white rounded-xl p-6 shadow-lg border border-orange-100 h-full">
                 <div className="mb-4">
                   <motion.div
                     className={`w-12 h-12 ${benefit.color} bg-opacity-10 rounded-lg flex items-center justify-center`}
