@@ -1,8 +1,29 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import vault from '/vault.png'
+import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 
 export default function Hero() {
+
+    const words = [
+        {
+        text: "Manage",
+        className: "text-orange-500 dark:text-orange-500"
+        },
+        {
+        text: "Your",
+        className: "text-orange-500"
+        },
+        {
+        text: "Crypto",
+        className: "text-orange-500"
+        },
+        {
+        text: "Assets",
+        className: "text-orange-500"
+        },
+    ];
+
     return (
         <section className="pt-32 pb-20 px-24">
         <div className="container mx-auto px-6">
@@ -12,21 +33,13 @@ export default function Hero() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-5xl font-bold mb-6">
-                Secure your
-                <span className="relative">
-                  <span className="relative z-10"> crypto assets</span>
-                  <motion.span
-                    className="absolute bottom-0 left-0 w-full h-3 bg-orange-300 -z-10"
-                    initial={{ width: 0 }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                  />
-                </span>
-              </h1>
+            <TypewriterEffectSmooth
+                className="font-bold flex justify-center text-5xl hidden md:flex tracking-tight flex-wrap"
+                words={words}
+                cursorClassName="bg-orange-500 my-auto"
+            />
               <p className="text-xl text-gray-600 mb-8">
-                Avoid Impulsive Spending And Trading By Locking Your Crypto
-                Assets
+                Avoid Impulsive Spending And Trading By Locking Your Crypto Assets
               </p>
               <div className="flex gap-6 mb-12">
                 <div>
