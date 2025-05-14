@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function TrustedBy() {
     return (
-        <section className="py-12 bg-gray-50 px-24">
+        <section className="py-12 light:bg-gray-50 px-24">
         <div className="container mx-auto px-6">
           <p className="text-center text-gray-600 mb-8 font-semibold">TRUSTED BY</p>
           <motion.div
