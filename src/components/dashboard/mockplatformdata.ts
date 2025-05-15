@@ -1,25 +1,28 @@
-import { VaultData, DashboardData } from "@/types";
+import { DashboardData } from "@/types";
+import { VaultData } from "@/types/index.types"
 
 export const mockVaultsData: VaultData[] = [
     
 ]
 
 export const mockSingleVaultData: VaultData = {
-    "title": "---",
-    "amount": 0,
-    "start_time": "2025-02-12T07:45:58.174",
-    "end_time": "2026-02-14T07:45:58.174",
-    "unlock_goal_usd": 0,
-    "lock_type": "goal",
-    "withdrawn": false,
-    "asset_address": "0x0000000000000000000000000000000000000000",
-    "asset_symbol": "---",
-    "unlock_schedule": 0,
-    "next_unlock": "2025-02-19T09:00:00.000",
-    "unlock_amount": 0,
+    "vaultId": 0,
+    "owner": "0x0000000000000000000000000000000000000000",
+    "asset": "0x0000000000000000000000000000000000000000",
+    "symbol": "---",
     "decimals": 18,
-    "unlock_type": "linear",
-    "chainId": ""
+    "native": false,
+    "amount": "0",
+    "unLockedTotal": "0",
+    "startDate": "2025-02-12T07:45:58.174",
+    "endDate": "2025-02-12T07:45:58.174",
+    "vaultType": "fixed",
+    "neededSlip": 0,
+    "unLockDuration": 0,
+    "unLockAmount": "0",
+    "unLockGoal": "0",
+    "title": "---",
+    "emergency": false
 }
 
 export const mockDashboardData: DashboardData = {

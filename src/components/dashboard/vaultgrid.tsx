@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { LockKeyholeOpen, Timer, Target, Wallet, ArrowUpRight, Anchor, Search, Lock, Filter } from 'lucide-react';
-import { VaultCardProps, VaultGridProps } from '@/types';
+import { VaultCardProps, VaultGridProps } from '@/types/index.types';
 import { useNavigate } from 'react-router-dom';
   
 const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
@@ -9,7 +9,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-      navigate(`/vault?address=${subvault.asset_address}&title=${subvault.title}&chainId=${subvault.chainId}`)
+      navigate(`/vault?&vaultId=${subvault.vaultId}`)
     }
     
     useEffect(() => {
@@ -21,7 +21,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
         );
     
         // Parse the end time directly (assuming subvault.end_time is in UTC)
-        const endTime = new Date(subvault.end_time);
+        const endTime = new Date(subvault.endDate);
         const difference = endTime.getTime() - utcNow.getTime();
     
         if (difference <= 0) {
@@ -42,7 +42,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
       setTimeLeft(calculateTimeLeft()); // Initial calculation
     
       return () => clearInterval(timer);
-    }, [subvault.end_time]);
+    }, [subvault.endDate]);
   
     const formatDate = (dateString: string): string => {
       return new Date(dateString).toLocaleDateString('en-US', {
@@ -65,7 +65,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
             <div className="flex items-center space-x-2">
               <Wallet className="w-4 h-4" />
               <p className="text-center font-semibold">
-                {subvault.amount.toString()} {subvault.asset_symbol}
+                {subvault.amount.toString()} {subvault.symbol}
               </p>
             </div>
   
@@ -73,7 +73,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
             <div className="flex items-center space-x-2">
               <Lock className="w-4 h-4" />
               <p className="text-center font-semibold capitalize">
-                {subvault.lock_type} Lock
+                {subvault.vaultType}
               </p>
             </div>
   
@@ -84,11 +84,11 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
             </div>
   
             {/* Goal Amount (if applicable) */}
-            {subvault.unlock_goal_usd ? (
+            {subvault.unLockGoal ? (
               <div className="flex items-center space-x-2 text-blue-500">
                 <Target className="w-4 h-4" />
                 <p className="font-semibold">
-                  ${subvault.unlock_goal_usd.toLocaleString()}
+                  ${subvault.unLockGoal.toLocaleString()}
                 </p>
               </div>
             ) : (
@@ -101,10 +101,10 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
             )}
   
             {/* Next Unlock Date (if applicable) */}
-            {subvault.next_unlock && (
+            {subvault.unLockAmount && (
               <div className="flex items-center space-x-2 text-purple-500">
                 <LockKeyholeOpen className="w-4 h-4" />
-                <p className="font-semibold">{formatDate(subvault.next_unlock)}</p>
+                <p className="font-semibold">{formatDate(subvault.endDate)}</p>
               </div>
             )}
           </div>
@@ -129,8 +129,8 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData }) => {
   const [showFilters, setShowFilters] = useState(false);
 
   // Get unique asset symbols and lock types for filter options
-  const assetSymbols = [...new Set(vaultData.map(vault => vault.asset_symbol))];
-  const lockTypes = [...new Set(vaultData.map(vault => vault.lock_type))];
+  const assetSymbols = [...new Set(vaultData.map(vault => vault.symbol))];
+  const lockTypes = [...new Set(vaultData.map(vault => vault.vaultType))];
 
   // Check if a vault is expiring within 7 days
   const isExpiringSoon = (endTime: string) => {
@@ -160,10 +160,10 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData }) => {
     // Apply filters and search
     let filtered = vaultData.filter(vault => {
       const matchesSearch = searchTerm ? matchesSearchTerm(vault, searchTerm) : true;
-      const matchesAsset = selectedAsset ? vault.asset_symbol === selectedAsset : true;
-      const matchesLockType = selectedLockType ? vault.lock_type === selectedLockType : true;
-      const matchesExpiry = showNearExpiry ? isExpiringSoon(vault.end_time) : true;
-      const matchesExpired = showExpired ? isExpired(vault.end_time) : !isExpired(vault.end_time);
+      const matchesAsset = selectedAsset ? vault.symbol === selectedAsset : true;
+      const matchesLockType = selectedLockType ? vault.vaultType === selectedLockType : true;
+      const matchesExpiry = showNearExpiry ? isExpiringSoon(vault.endDate) : true;
+      const matchesExpired = showExpired ? isExpired(vault.endDate) : !isExpired(vault.endDate);
 
       return matchesSearch && matchesAsset && matchesLockType && matchesExpiry && matchesExpired;
     });

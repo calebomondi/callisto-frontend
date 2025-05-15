@@ -1,4 +1,4 @@
-import { createPublicClient, createWalletClient, custom, http, parseEther, getContract, parseUnits } from "viem";
+import { createPublicClient, createWalletClient, custom, http, getContract, parseUnits } from "viem";
 import { createConfig } from "wagmi";
 import { base, baseSepolia } from '@wagmi/core/chains'
 import { getChainId } from '@wagmi/core'
@@ -60,52 +60,6 @@ export async function getWalletClient() {
 }
 
 //Write Functions
-
-export async function addToEthVault(_vault:number, _index:number, _amount:string) {
-    try {
-        const { walletClient, address } = await getWalletClient();
-        const { currentAddress, currentABI } = useCurrentContract()
-        const publicClient = getPublicClient()
-
-        //convert amount to wei
-        const ethToWei = parseEther(_amount);
-
-        //call function
-        const { request } = await publicClient.simulateContract({
-            address: currentAddress as `0x${string}`,
-            abi: currentABI,
-            functionName: "addToLockedETH",
-            args: [ _vault, _index],
-            account: address,
-            value: ethToWei
-        });
-
-        const hash = await walletClient.writeContract(request)
-
-        return hash
-
-    } catch (error: any) {
-        // Check for custom contract errors
-        if (error.message.includes('InvalidAssetID')) {
-            throw new Error('This assetID entered is Invalid!');
-        }
-        
-        if (error.message.includes('LockPeriodExpired')) {
-            throw new Error('Lock Period Has Expired!');
-        }
-
-        // Handle other common wallet/network errors
-        if (error.message.includes('user rejected')) {
-            throw new Error('Transaction rejected by user');
-        }
-
-        if (error.message.includes('insufficient funds')) {
-            throw new Error('Insufficient balance for transaction');
-        }
-    }
-}
-
-
 async function approveToken({symbol, amount}: ApproveTokenParams) {
     try {
         const { walletClient, address } = await getWalletClient()
@@ -259,8 +213,6 @@ export async function deleteLock(_index:number) {
         throw error;
     }
 }
-
-//Read Functions
 
 export async function getTransanctions(owner:string, vaultId:number): Promise<Transaction[] | []> {
     const { address } = await getWalletClient()

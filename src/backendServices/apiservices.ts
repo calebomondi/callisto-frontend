@@ -3,7 +3,7 @@ import { API_URL } from './apiurl';
 import { Send2DB } from '@/types';
 import { getWalletClient, currentChainId } from '@/blockchain-services/useFvkry';
 
-import { TokenData, ChainData, SupportedTokens } from '@/types/index.types';
+import { TokenData, ChainData, SupportedTokens, VaultData, VaultTransactions } from '@/types/index.types';
 
 const apiService = {
     lockAsset: async (formData:Send2DB): Promise<any> => {
@@ -32,14 +32,10 @@ const apiService = {
       
     },
     getChainData: async (chainId: number): Promise<ChainData> => {
-
       try {
         const response: AxiosResponse<ChainData> = await axios.get(
           `${API_URL}/api/tokens/chain-data`,
           {
-            headers: {
-              'Content-Type': 'application/json'
-            },
             params: {
               chainId
             }
@@ -58,9 +54,6 @@ const apiService = {
         const response: AxiosResponse<TokenData> = await axios.get(
           `${API_URL}/api/tokens/token-data`,
           {
-            headers: {
-              'Content-Type': 'application/json'
-            },
             params: {
               symbol,
               chainId
@@ -83,9 +76,6 @@ const apiService = {
         const response: AxiosResponse<SupportedTokens[]> = await axios.get(
           `${API_URL}/api/tokens/supported-tokens`,
           {
-            headers: {
-              'Content-Type': 'application/json'
-            },
             params: {
               chainId
             }
@@ -102,6 +92,47 @@ const apiService = {
           console.error('Response status:', error.response?.status);
           console.error('Response headers:', error.response?.headers);
         }
+        throw error;
+      }
+    },
+    getUserVaults: async (chainId: number, owner: string, contractAddress: string): Promise<VaultData[]> => {
+      try {
+        const response: AxiosResponse<VaultData[]> = await axios.get(
+          `${API_URL}/api/vaults/get-user-vaults`,
+          {
+            params: {
+              owner,
+              chainId,
+              contractAddress
+            }
+          }
+        );
+  
+        return response.data;
+        
+      } catch (error) {
+        console.error('Getting User Vaults Failed:', error);
+        throw error;
+      }
+    },
+    getVaultTransactions: async (chainId: number, contractAddress: string, owner: string, decimals: number): Promise<VaultTransactions> => {
+      try {
+        const response: AxiosResponse<VaultTransactions> = await axios.get(
+          `${API_URL}/api/vaults/get-vault-transactions`,
+          {
+            params: {
+              owner,
+              chainId,
+              contractAddress,
+              decimals
+            }
+          }
+        );
+  
+        return response.data;
+        
+      } catch (error) {
+        console.error('Getting Vault Transactions Failed:', error);
         throw error;
       }
     }

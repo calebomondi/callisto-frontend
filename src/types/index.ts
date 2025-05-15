@@ -183,32 +183,3 @@ export interface DashboardData {
 export interface UserVaultDashboardProps {
     data: DashboardData | null;
 }
-
-export interface HealthRecord {
-    "timestamp": number;
-    "formattedDate": string;
-    "token": {
-      "address": string;
-      "name": string;
-      "symbol": string;
-      "decimals": number;
-    };
-    "priceInfo": {
-      "priceAtTransaction": number;
-      "currency": string;
-      "priceNow": number;
-    };
-    "transfer": {
-      "rawValue": string;
-      "tokenAmount": number;
-      "value_now": number;
-      "value_then": number;
-      "value_diff": number;
-    };
-  }
-
-export interface PointsData {
-    fvkry_points: number; 
-    redeemed: number; 
-    next_check: string;
-}

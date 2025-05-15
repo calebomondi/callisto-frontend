@@ -5,8 +5,7 @@ import { createTokenVault, currentChainId } from "@/blockchain-services/useFvkry
 import { useAccount } from 'wagmi';
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
-import { SupportedTokens, FormTokenVault } from "@/types/index.types";
-
+import { SupportedTokens, FormValues } from "@/types/index.types";
 
 export default function LockAsset() {
     const { toast } = useToast()
@@ -15,16 +14,16 @@ export default function LockAsset() {
 
     //form
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [formValues, setFormValues] = useState<FormTokenVault>({
+    const [formValues, setFormValues] = useState<FormValues>({
         symbol: "", 
         title: "", 
         totalAmount: "", 
         vaultType: "Fixed", 
-        lockPeriod: 0, 
-        slip: 0, 
-        unLockDuration: 0, 
-        unLockAmount: 0, 
-        unLockGoal: 0,
+        lockPeriod: "", 
+        slip: "", 
+        unLockDuration: "", 
+        unLockAmount: "", 
+        unLockGoal: "",
         durationType: 'days'
     })
     const [supportedTokens, setSupportedTokens] = useState<SupportedTokens[]>([])
@@ -38,8 +37,6 @@ export default function LockAsset() {
                         setSupportedTokens(response)
                     }
                 }
-
-                console.log("Supported Tokens: ", JSON.stringify(supportedTokens));
             }
 
             fetchSupportedTokens()
@@ -114,22 +111,18 @@ export default function LockAsset() {
 
             const chainID = currentChainId()
 
-            console.log("Forma data: ", JSON.stringify(formValues, null, 2));
-            console.log("Chain ID: ", chainID);
-            console.log("Days: ", days);
-
-            /*/1. lock asset
+            //lock asset
             let tx = await createTokenVault(
                 {
                     symbol: formValues.symbol, 
                     title: formValues.title, 
                     totalAmount: formValues.totalAmount, 
-                    vaultType: "", 
+                    vaultType: formValues.vaultType, 
                     lockPeriod: days, 
                     slip: 0, 
-                    unLockDuration: 0, 
-                    unLockAmount: 0, 
-                    unLockGoal: 0
+                    unLockDuration: formValues.unLockDuration.length > 0 ? Number(formValues.unLockDuration) : 0,
+                    unLockAmount: formValues.unLockAmount.length > 0 ? Number(formValues.unLockAmount) : 0,
+                    unLockGoal: formValues.unLockGoal.length > 0 ? Number(formValues.unLockGoal) : 0
                 }
             )
             if(tx) {
@@ -154,7 +147,7 @@ export default function LockAsset() {
 
                 navigate("/myvaults")
             }
-            */
+            
         } catch (error:any) {
             console.error("Failed to create campaign:", error.message);
             toast({
@@ -162,7 +155,7 @@ export default function LockAsset() {
                 title: "ERROR",
                 description: error.message,
                 action: <ToastAction altText="Try again">Try again</ToastAction>,
-              })
+            })
         } finally {
             //clear form
             setFormValues({
@@ -170,11 +163,11 @@ export default function LockAsset() {
                 title: "", 
                 totalAmount: "", 
                 vaultType: "Fixed", 
-                lockPeriod: 0, 
-                slip: 0, 
-                unLockDuration: 0, 
-                unLockAmount: 0, 
-                unLockGoal: 0,
+                lockPeriod: "", 
+                slip: "", 
+                unLockDuration: "", 
+                unLockAmount: "", 
+                unLockGoal: "",
                 durationType: 'days'
             })
             //set loading to false
@@ -191,6 +184,10 @@ export default function LockAsset() {
 
     const remainingTitleWords = TITLE_WORD_LIMIT - countWords(formValues.title);
 
+    let toUnlockTotal = 0;
+    if(formValues.vaultType === 'schedule') 
+        toUnlockTotal = Number(formValues.unLockAmount) * Math.floor(Number(formValues.lockPeriod) / Number(formValues.unLockDuration))
+    
   return (
     <div className="flex justify-center items-center">
         <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
@@ -199,7 +196,7 @@ export default function LockAsset() {
                 <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
                     <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
                         Duration
-                        <select onChange={handleChange} value={formValues.durationType} name="durationType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
+                        <select onChange={handleChange} required value={formValues.durationType} name="durationType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="days">Day(s)</option>
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="weeks">Week(s)</option>
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="months">Month(s)</option>
@@ -208,7 +205,7 @@ export default function LockAsset() {
                     </label>
                     <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
                         Vault Type
-                        <select onChange={handleChange} value={formValues.vaultType} name="vaultType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
+                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="fixed">Fixed</option>
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="goal">Goal Based</option>
                             <option className="dark:text-white text-gray-700 dark:bg-black/90" value="schedule">Scheduled</option>
@@ -259,7 +256,7 @@ export default function LockAsset() {
                         value={formValues.totalAmount}
                         onChange={handleChange}
                         className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="100"
+                        placeholder="e.g 100"
                         required
                     />
                 </label>
@@ -285,12 +282,13 @@ export default function LockAsset() {
                         value={formValues.unLockGoal}
                         onChange={handleChange}
                         className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="2000 (in $)"
+                        placeholder="target amount"
+                        disabled={formValues.vaultType !== 'goal'}
                         required
                     />
                 </label>
                 <label className={`${formValues.vaultType !== 'schedule' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
-                    UnLock Amount
+                    Unlock
                     <input 
                         type="text" 
                         id="unLockAmount"
@@ -298,12 +296,13 @@ export default function LockAsset() {
                         value={formValues.unLockAmount}
                         onChange={handleChange}
                         className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="20 (in $)"
+                        placeholder="amount"
+                        disabled={formValues.vaultType !== 'schedule'}
                         required
                     />
                 </label>
                 <label className={`${formValues.vaultType !== 'schedule' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
-                    Goal
+                    Every
                     <input 
                         type="text" 
                         id="unLockDuration"
@@ -311,17 +310,27 @@ export default function LockAsset() {
                         value={formValues.unLockDuration}
                         onChange={handleChange}
                         className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="10 (every 10 days)"
+                        placeholder="days"
+                        disabled={formValues.vaultType !== 'schedule'}
                         required
                     />
                 </label>
+                <span className={`text-sm text-gray-400 my-2 ${toUnlockTotal > Number(formValues.totalAmount) ? 'text-red-600' : 'hidden'}`}>
+                    {`Scheduled Unlock Amount: ${toUnlockTotal}`}
+                </span>
                 <div className="p-1 flex justify-center mt-2">
                     <button 
                         type="submit" 
                         className="btn bg-amber-500 w-1/2 text-white text-base border border-amber-500 hover:bg-amber-600"
+                        disabled={formValues.vaultType === 'schedule' && toUnlockTotal > Number(formValues.totalAmount)}
                     >
                         {
-                            isLoading ? (<span className="loading loading-ring loading-xs"></span>) : 'Lock'
+                            isLoading ? (
+                                <>
+                                    <span className="loading loading-ring loading-xs"></span>
+                                    <span>Creating ...</span>
+                                </>
+                            ) : 'Create Vault'
                         }
                     </button>
                 </div>
