@@ -1,129 +1,118 @@
-import {motion} from 'framer-motion';
-import { Lock, Activity, Coins, Users } from 'lucide-react';
+import { motion } from "framer-motion";
+import { DollarSign, Users, Lock, Activity } from "lucide-react";
 
-// First, enhance the Statistic component
-const Statistic = ({ value, label, description, icon, trend }:{ value:string, label:string, description:string, icon:any, trend: { type: string, value: number } }) => (
-    <div className="p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
-      <div className="flex items-center justify-between mb-4">
-        <div className="p-2 bg-navy/5 rounded-lg">
-          {icon}
-        </div>
-        {trend && (
-          <div className={`flex items-center ${trend.type === 'up' ? 'text-green-500' : 'text-red-500'}`}>
-            {trend.type === 'up' ? '↑' : '↓'} {trend.value}%
-          </div>
-        )}
+const stats = [
+  {
+    title: "Total Value Locked",
+    value: "$12.5M+",
+    description: "Total assets secured in our smart contracts",
+    icon: <DollarSign className="w-6 h-6" />,
+    prefix: "$",
+  },
+  {
+    title: "Active Users",
+    value: "15,000+",
+    description: "Trusted by thousands of crypto savers worldwide",
+    icon: <Users className="w-6 h-6" />,
+  },
+  {
+    title: "Successful Locks",
+    value: "45,000+",
+    description: "Successfully completed savings goals",
+    icon: <Lock className="w-6 h-6" />,
+  },
+  {
+    title: "Uptime",
+    value: "99.99%",
+    description: "Reliable platform performance and availability",
+    icon: <Activity className="w-6 h-6 text-amber-500" />,
+  },
+];
+
+export default function Stats() {
+  return (
+    <section className="py-20 px-24 light:bg-gray-50">
+      <div className="text-center mb-16">
+        <h2 className="text-2xl font-bold text-navy mb-4">
+          Platform Statistics
+        </h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Our platform's growth and performance metrics showcase our commitment to providing a secure and reliable savings solution for the crypto community.
+        </p>
       </div>
-      <div className="text-3xl font-bold text-navy mb-2">{value}</div>
-      <div className="text-gray-600 font-medium mb-2">{label}</div>
-      <p className="text-sm text-gray-500">{description}</p>
-    </div>
+      <div className="container mx-auto">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+              },
+            },
+          }}
+        >
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              className="light:bg-white rounded-xl p-6 shadow-lg"
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                visible: {
+                  y: 0,
+                  opacity: 1,
+                },
+              }}
+              whileHover={{
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300 },
+              }}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <div className="text-orange-500">{stat.icon}</div>
+                </div>
+                <h3 className="text-lg font-semibold">{stat.title}</h3>
+              </div>
+
+              <div className="space-y-2">
+                <motion.p
+                  className="text-4xl font-bold text-orange-500"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    delay: index * 0.1,
+                  }}
+                >
+                  {stat.value}
+                </motion.p>
+                <p className="text-gray-600">{stat.description}</p>
+              </div>
+
+              <motion.div
+                className="mt-4 h-1 bg-orange-100 rounded-full overflow-hidden"
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                transition={{ duration: 1, delay: index * 0.2 }}
+              >
+                <div
+                  className="h-full bg-orange-500 rounded-full"
+                  style={{ width: "70%" }}
+                />
+              </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   );
-  
-  // Enhanced Statistics Section
-  const StatisticsSection = () => {
-    const stats = [
-      {
-        value: "$12.5M",
-        label: "Total Value Locked",
-        description: "Total assets secured in our smart contracts",
-        icon: <Coins className="w-6 h-6 text-amber-500" />,
-        trend: { type: 'up', value: 23 }
-      },
-      {
-        value: "15,000+",
-        label: "Active Users",
-        description: "Trusted by thousands of crypto savers worldwide",
-        icon: <Users className="w-6 h-6 text-amber-500" />,
-        trend: { type: 'up', value: 12 }
-      },
-      {
-        value: "99.99%",
-        label: "Uptime",
-        description: "Reliable platform performance and availability",
-        icon: <Activity className="w-6 h-6 text-amber-500" />,
-        trend: { type: 'up', value: 0.01 }
-      },
-      {
-        value: "45,000+",
-        label: "Successful Locks",
-        description: "Successfully completed savings goals",
-        icon: <Lock className="w-6 h-6 text-amber-500" />,
-        trend: { type: 'up', value: 15 }
-      }
-    ];
-  
-    return (
-      <section id="stats" className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-2xl font-bold text-navy mb-4">
-              Platform Statistics
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Our platform's growth and performance metrics showcase our commitment to providing a secure and reliable savings solution for the crypto community.
-            </p>
-          </div>
-  
-          {/* Stats Grid */}
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
-            {stats.map((stat, index) => (
-              <Statistic key={index} {...stat} />
-            ))}
-          </motion.div>
-  
-          {/* Additional Info Cards */}
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay:  0.6 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-navy p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">Security First</h3>
-              <p className="">
-                Multiple security audits and continuous monitoring ensure your assets remain safe.
-              </p>
-            </div>
-            <div className="bg-golden text-navy p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">Growing Community</h3>
-              <p>
-                Join our rapidly expanding community of smart crypto savers.
-              </p>
-            </div>
-            <div className="bg-navy p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">Transparent Operations</h3>
-              <p className="">
-                Real-time statistics and open-source code for complete transparency.
-              </p>
-            </div>
-          </motion.div>
-  
-          {/* Call to Action */}
-          <motion.div 
-            className="text-center mt-10"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            viewport={{ once: true }}>
-            <button className="bg-navy px-8 py-3 rounded-lg hover:text-amber-600 transition-all">
-              View Detailed Analytics
-            </button>
-            <p className="text-sm text-gray-500 mt-4">
-              Statistics updated every 24 hours. Last updated: {new Date().toLocaleDateString()}
-            </p>
-          </motion.div>
-        </div>
-      </section>
-    );
-  };
-  
-  export default StatisticsSection;
+}
+
+

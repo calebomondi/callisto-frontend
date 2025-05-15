@@ -11,7 +11,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-20 px-24 bg-gray-50">
+    <section className="py-20 px-24 light:bg-gray-50">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -58,7 +58,7 @@ export default function FAQ() {
             >
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between cursor-pointer border border-orange-100"
+                className="w-full light:bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between cursor-pointer border border-orange-100"
               >
                 <h3 className="text-xl font-semibold text-left">
                   {faq.question}
@@ -79,8 +79,8 @@ export default function FAQ() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-orange-50 p-6 rounded-b-xl border-x border-b border-orange-100">
-                      <p className="text-gray-600">{faq.answer}</p>
+                    <div className="light:bg-orange-50 p-6 rounded-b-xl border-x border-b border-orange-100">
+                      <p className="text-gray-400">{faq.answer}</p>
                     </div>
                   </motion.div>
                 )}

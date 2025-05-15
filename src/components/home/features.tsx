@@ -15,17 +15,17 @@ const features = [
     description: "Lock your ETH and ERC20 tokens in secure smart contracts with customizable time periods"
   },
   {
-    icon: <Shield className="w-8 h-8 text-amber-500" />,
+    icon: <Shield className="w-8 h-8 light:text-amber-500" />,
     title: "Audited Security",
     description: "Smart contracts audited by leading security firms ensuring your assets are protected"
   },
   {
-    icon: <Clock className="w-8 h-8 text-amber-500" />,
+    icon: <Clock className="w-8 h-8 light:text-amber-500" />,
     title: "Flexible Time Locks",
     description: "Choose your lock duration from 1 week to 1 year with automatic unlocking"
   },
   {
-  icon: <Wallet className="w-8 h-8 text-amber-500" />,
+  icon: <Wallet className="w-8 h-8 light:text-amber-500" />,
   title: "Multi-Token Support",
   description: "Support for ETH and major ERC20 tokens with more assets coming soon"
   },
@@ -62,7 +62,7 @@ const itemVariants = {
 
 export default function Features() {
   return (
-    <section className="py-20 px-24 bg-gray-50" id="features">
+    <section className="py-20 px-24 light:bg-gray-50" id="features">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <motion.h2
@@ -94,12 +94,12 @@ export default function Features() {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              className="light:bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 light:bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                 <div className="text-orange-500">{feature.icon}</div>
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
