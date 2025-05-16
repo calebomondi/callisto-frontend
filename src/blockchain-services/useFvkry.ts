@@ -68,8 +68,6 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
         // fetch token address  and decimals from db
         const token = await apiService.getTokenData(symbol, currentChainId());
 
-        console.log("Token: ", JSON.stringify(token))
-
         //get contract instance
         const contract = getContract({
             address: token.address as `0x${string}`,
@@ -215,35 +213,6 @@ export async function deleteLock(_index:number) {
         return hash
     } catch (error) {
         console.log('Error in deleting sub vault', error);
-        throw error;
-    }
-}
-
-export async function getTransanctions(owner:string, vaultId:number): Promise<Transaction[] | []> {
-    const { address } = await getWalletClient()
-    const publicClient = getPublicClient()
-
-    //get chain data
-    const chainInfo = await apiService.getChainData(currentChainId());
-    
-    try {
-        const data = await publicClient.readContract({
-            address: chainInfo.lockAsset,
-            abi: LOCKASSET_CONTRACT_ABI,
-            functionName: 'getUserTransactions',
-            args: [owner, vaultId],
-            account: address,
-          }) as Transaction[];
-    
-          const formattedData = data.map((tx) => ({
-            ...tx,
-            amount: BigInt(tx.amount.toString()),
-          }));
-
-          return formattedData
-          
-    } catch (error) {
-        console.log('Error in fetching transactions', error);
         throw error;
     }
 }

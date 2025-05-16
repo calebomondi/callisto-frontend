@@ -27,7 +27,6 @@ export default function Home () {
 
       {/* Hero Section */}
       <Hero />
-      <TrustedBy />
 
       {/* Statistics Section */}
       {/* <AnimatedSection>

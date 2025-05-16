@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { SupportedTokens, FormValues } from "@/types/index.types";
+import { parseUnits } from "viem";
 
 export default function LockAsset() {
     const { toast } = useToast()
@@ -111,19 +112,11 @@ export default function LockAsset() {
 
             const chainID = currentChainId()
 
-            console.log(
-                {
-                    symbol: formValues.symbol, 
-                    title: formValues.title, 
-                    totalAmount: formValues.totalAmount, 
-                    vaultType: formValues.vaultType, 
-                    lockPeriod: days, 
-                    slip: 0, 
-                    unLockDuration: formValues.unLockDuration.length > 0 ? Number(formValues.unLockDuration) : 0,
-                    unLockAmount: formValues.unLockAmount.length > 0 ? Number(formValues.unLockAmount) : 0,
-                    unLockGoal: formValues.unLockGoal.length > 0 ? Number(formValues.unLockGoal) : 0
-                }
-            )
+            //get asset decimals
+            const tokenDecimals = await apiService.getTokenData(formValues.symbol, chainID)
+            if(!tokenDecimals) {
+                throw new Error('Token Decimals Not Retrieved!')
+            }
 
             //lock asset
             let tx = await createTokenVault(
@@ -135,7 +128,7 @@ export default function LockAsset() {
                     lockPeriod: days, 
                     slip: 0, 
                     unLockDuration: formValues.unLockDuration.length > 0 ? Number(formValues.unLockDuration) : 0,
-                    unLockAmount: formValues.unLockAmount.length > 0 ? Number(formValues.unLockAmount) : 0,
+                    unLockAmount: formValues.unLockAmount.length > 0 ? Number(parseUnits(formValues.unLockAmount, tokenDecimals.decimals)) : 0,
                     unLockGoal: formValues.unLockGoal.length > 0 ? Number(formValues.unLockGoal) : 0
                 }
             )
@@ -200,7 +193,7 @@ export default function LockAsset() {
 
     let toUnlockTotal = 0;
     if(formValues.vaultType === 'schedule') 
-        toUnlockTotal = Number(formValues.unLockAmount) * Math.floor(Number(formValues.lockPeriod) / Number(formValues.unLockDuration))
+        toUnlockTotal = Number(formValues.unLockAmount) * Math.floor(convertToDays(formValues.durationType,Number(formValues.lockPeriod)) / Number(formValues.unLockDuration))
     
   return (
     <div className="flex justify-center items-center">

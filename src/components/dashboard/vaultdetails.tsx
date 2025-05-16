@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Timer, TrendingUp, CircleArrowOutDownRight } from 'lucide-react';
+import { Timer, TrendingUp, CircleArrowOutDownRight, ReceiptText, Eye, EyeClosed } from 'lucide-react';
 import ConnectedNavbar from '../navbar/connectednavbar';
 import { VaultData } from '@/types/index.types';
 import { useAccount } from 'wagmi';
@@ -15,17 +15,11 @@ import { ToastAction } from "@/components/ui/toast"
 import apiService from '@/backendServices/apiservices';
 import { useNavigate } from 'react-router-dom';
 import TransactionsTable from './transactions';
-import { VaultTransactions } from '@/types/index.types';
+import { VaultTransactions, UnlockDays, UnlockStatus } from '@/types/index.types';
 
 interface PriceData {
   currentPrice: number;
   lockedPrice: number;
-}
-
-interface TimelineEvent {
-  date: Date;
-  amount: number;
-  isWithdrawn: boolean;
 }
 
 const VaultDetails = () => {
@@ -38,7 +32,11 @@ const VaultDetails = () => {
     currentPrice: 0,
     lockedPrice: 0
   });
-  const [unlockEvents, setUnlockEvents] = useState<TimelineEvent[]>([]);
+  const [unlockDays, setUnlockDays] = useState<UnlockDays[]>([]);
+  const [canUnlockNow, setCanUnlockNow] = useState<UnlockStatus>({
+    canUnlockNow: false,
+    amountToUnlock: 0
+});
   const [isLockExpired, setIsLockExpired] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [transactions, setTransactions] = useState<VaultTransactions[]>([])
@@ -140,39 +138,31 @@ const VaultDetails = () => {
     return () => clearInterval(timer);
   }, [vaultData.endDate]);
 
-  /*/ Calculate unlock schedule timeline
+  // Calculate unlock schedule timeline
   useEffect(() => {
-    if (vaultData.startDate && vaultData.endDate && vaultData.unLockDuration) {
-      const events: TimelineEvent[] = [];
-      const startDate = new Date(vaultData.next_unlock).toISOString();
-      const endDate = new Date(vaultData.endDate);
-      let currentDate = new Date(startDate);
-
-      while (currentDate <= endDate) {
-        events.push({
-          date: new Date(currentDate),
-          amount: Number(vaultData.unLockAmount),
-          isWithdrawn: new Date() > currentDate
-        });
-        currentDate.setDate(currentDate.getDate() + vaultData.unLockDuration);
+    const fetchScheduleData = async () => {
+      if (vaultData.vaultType === 'schedule') {
+        const scheduleData = await apiService.vaultSchedule(vaultData);
+        if (scheduleData) {
+          setCanUnlockNow(scheduleData.checkUnlockStatus);
+          setUnlockDays(scheduleData.unlockDaysStatus);
+        }
       }
-
-      setUnlockEvents(events);
-    }
+    };
+    fetchScheduleData();
   }, [vaultData.unLockDuration]);
-  */
 
   //price data
   useEffect(() => {
     setPriceData({currentPrice: 1, lockedPrice: 0.995})
   }, []);
 
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+  const formatDate = (date: number): string => {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
   };
 
   const formatCurrency = (value: number): string => {
@@ -182,27 +172,7 @@ const VaultDetails = () => {
     }).format(value);
   };
 
-  // Calculate total lock duration in days
-  const getTotalLockDays = () => {
-    const startDate = new Date();
-    const endDate = new Date(vaultData.endDate);
-    return Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-  }
-
-  const vaultType = (vault:number):string => {
-    if(vault === 1)
-      return "days";
-    if(vault === 2)
-      return "weeks";
-    if(vault === 3)
-      return "months";
-    if(vault === 4)
-      return "years";
-
-    return "";
-  }
-
-  const deleteVault = async(_index:number, _vault:number) => {
+  const deleteVault = async(_index:number) => {
     setIsDeleting(true)
 
     try {
@@ -217,7 +187,7 @@ const VaultDetails = () => {
               <ToastAction 
                   altText="Goto schedule to undo"
                   onClick={() => window.open(
-                    chainId === '4202' 
+                    Number(chainId) === 84532 
                     ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
                     : `https://sepolia.ethersan.io/tx/${tx}`, '_blank'
                   )}
@@ -253,7 +223,7 @@ const VaultDetails = () => {
           <Card>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span className="text-2xl text-amber-600">#{vaultData.title}</span>
+                  <span className="text-2xl text-amber-600">{vaultData.title}</span>
                   <p className="text-lg font-mono flex space-x-2"> <Timer /> <span>{timeLeft}</span></p>
                 </CardTitle>
               </CardHeader>
@@ -291,11 +261,11 @@ const VaultDetails = () => {
               <div className="flex flex-col md:flex-row">
                   <div className='md:w-1/3'>
                   <p className="text-center text-gray-400">Start Date</p>
-                  <p className="font-semibold text-center">{formatDate(new Date(vaultData.startDate))}</p>
+                  <p className="font-semibold text-center">{formatDate(new Date(vaultData.startDate).getTime())}</p>
                   </div>
                   <div className='md:w-1/3'>
                   <p className="text-center text-gray-400">End Date</p>
-                  <p className="font-semibold text-center">{formatDate(new Date(vaultData.endDate))}</p>
+                  <p className="font-semibold text-center">{formatDate(new Date(vaultData.endDate).getTime())}</p>
                   </div>
                   <div className='md:w-1/3'>
                   <p className="text-center text-gray-400">Lock Type</p>
@@ -305,7 +275,7 @@ const VaultDetails = () => {
                     vaultData.vaultType === 'schedule' && (
                       <div className='md:w-1/3'>
                         <p className="text-center text-gray-400">Unlock Schedule</p>
-                        <p className="font-semibold text-center">{vaultData.unLockDuration === 0 ? 'None' : `${vaultData.vaultType} ${vaultData.unLockDuration} days`}</p>
+                        <p className="font-semibold text-center">{vaultData.unLockDuration === 0 ? 'None' : `every ${vaultData.unLockDuration} days`}</p>
                       </div>
                     )
                   }
@@ -340,14 +310,14 @@ const VaultDetails = () => {
                       <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                       </form>
-                      <AddToLock vaultData={vaultData}/>            
+                      <AddToLock vaultData={vaultData} chainId={Number(chainId)}/>            
                     </div>
                   </dialog>
 
                   {/*Withdraw*/}
                   <Button 
                     variant="outline"
-                    className={`flex bg-amber-600 border-none text-gray-900 font-semibold hover:bg-gray-900 hover:border-amber-600 hover:text-amber-600 items-center space-x-2 ${isLockExpired ? '' : 'hidden'}`}
+                    className={`flex bg-amber-600 border-none text-gray-900 font-semibold hover:bg-gray-900 hover:border-amber-600 hover:text-amber-600 items-center space-x-2 ${isLockExpired || canUnlockNow.canUnlockNow ? '' : 'hidden'}`}
                     onClick={() => (document.getElementById('my_modal_15') as HTMLDialogElement).showModal()}
                     disabled = {Number(vaultData.amount) === 0}
                   >
@@ -359,7 +329,7 @@ const VaultDetails = () => {
                       <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                       </form>
-                      <Withdraw vaultData={vaultData}/>            
+                      <Withdraw vaultData={vaultData} chainId={Number(chainId)}/>            
                     </div>
                   </dialog>
 
@@ -380,7 +350,7 @@ const VaultDetails = () => {
                         <form method="dialog">
                           <button className="btn btn-sm btn-error m-1" onClick={async () => {
                             if (vaultData.vaultId !== undefined && vaultData.vaultType !== undefined) {
-                              //await deleteVault(vaultData.vaultId, vaultData.vaultType);
+                              await deleteVault(vaultData.vaultId);
                             }
                           }} >Proceed</button>
                           <button className="btn btn-sm btn-success m-1">Cancel</button>
@@ -392,47 +362,48 @@ const VaultDetails = () => {
               </CardContent>
           </Card>
           {/* Timeline of Unlock Events */}
-          <div className={`space-y-4 border border-white shadow-md my-2 rounded-md p-2 ${vaultData.vaultType !== 'schedule' ? 'hidden' : ''}`}>
-          <h3 className="text-xl font-semibold text-amber-600 m-2">Unlock Schedule</h3>
-          <div className="h-auto overflow-x-auto">
-            {
-              vaultData.unLockDuration !== 0 ?
-                <ul className="timeline overflow-x-auto">
-                    {unlockEvents.map((event, index) => (
-                        <li key={index} className="space-x-4 flex flex-col items-center justify-center">                            
-                            <div className="timeline-start timeline-box dark:bg-gray-900">{formatDate(event.date)}</div>
-                            <div className="timeline-middle">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="h-5 w-5">
-                                <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                clipRule="evenodd" />
-                            </svg>
-                            </div>
-                            <hr className='bg-amber-600'/>
-                        </li>
-                    ))}
-                </ul> :
-                <div className='grid place-items-center '>
-                  {
-                    vaultData.vaultType !== 'schedule' ? 'Cannot Set Unlock Schedule For Goal Based Locks' : 'No Unlock Schedule Have Been Set, SetUp One.'}
-                </div>
-            }
-          </div>
+          <div className={`space-y-4 border border-white shadow-md my-4 rounded-md p-2 ${vaultData.vaultType !== 'schedule' && 'hidden'}`}>
+            <h3 className="text-xl font-semibold text-amber-600 m-2">Unlock Schedule</h3>
+            <div className="h-auto overflow-x-auto flex justify-center">
+              {
+                vaultData.unLockDuration !== 0 ?
+                  <ul className="timeline overflow-x-auto">
+                      {unlockDays.map((event, index) => (
+                          <li key={index} className="space-x-4 flex flex-col items-center justify-center">                            
+                              <div className="timeline-start timeline-box dark:bg-gray-900">{formatDate(event.date * 1000)}</div>
+                              <div className="timeline-middle">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    className={`h-5 w-5 rounded-full ${event.status === 'past' ? 'bg-red-500' : event.status === 'current' ? 'bg-green-500' : event.status === 'future' ? 'bg-blue-500' : ''}`}
+                              >  
+                                    <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                    clipRule="evenodd" />
+                                </svg>
+                              </div>
+                              <hr className='bg-amber-600'/>
+                          </li>
+                      ))}
+                  </ul> :
+                  <div className='grid place-items-center '>
+                    {
+                      vaultData.vaultType !== 'schedule' ? 'Cannot Set Unlock Schedule For Goal Based Locks' : 'No Unlock Schedule Have Been Set, SetUp One.'}
+                  </div>
+              }
+            </div>
           </div>
           {/* Show Transactions */}
           <div className='flex items-center justify-center my-2'>
             <button 
               type="button" 
               onClick={() => {setViewTransactions(!viewTransactions)}}
-              className="bg-orange-400 dark:text-black text-white py-2 px-2 rounded"
+              className="flex bg-amber-600 border-none text-gray-900 font-semibold hover:bg-gray-900 hover:border-amber-600 hover:text-amber-600 items-center space-2 rounded p-2 gap-1"
             >
-            {viewTransactions ? 'Hide Transactions' : 'View Transactions'}
-          </button>
+              {viewTransactions ? (<Eye />) : (<EyeClosed />)} <ReceiptText />
+            </button>
           </div>
           {
             viewTransactions && (

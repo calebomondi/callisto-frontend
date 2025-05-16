@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import vault from '/vault.png'
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 import { useNavigate } from "react-router-dom";
+import { LockKeyhole } from "lucide-react";
 
 export default function Hero() {
 
@@ -15,20 +16,29 @@ export default function Hero() {
     const words = [
         {
         text: "Manage",
-        className: "text-orange-500 dark:text-orange-500"
+        className: "text-amber-500 dark:text-amber-500"
         },
         {
         text: "Your",
-        className: "text-orange-500"
+        className: "text-amber-500"
         },
         {
         text: "Crypto",
-        className: "text-orange-500"
+        className: "text-amber-500"
         },
         {
-        text: "Assets",
-        className: "text-orange-500"
+        text: "Assets, ",
+        className: "text-amber-500"
         },
+        {
+        text: "Build",
+        className: "text-amber-500"
+        },
+        {
+        text: "Your Future",
+        className: "text-amber-500"
+        },
+        
     ];
 
     return (
@@ -41,26 +51,22 @@ export default function Hero() {
               transition={{ duration: 0.5 }}
             >
             <TypewriterEffectSmooth
-                className="font-bold flex justify-center text-5xl hidden md:flex tracking-tight flex-wrap"
+                className="font-bold flex justify-center my-2 text-4xl hidden md:flex tracking-tight flex-wrap w-full"
                 words={words}
-                cursorClassName="bg-orange-500 my-auto"
+                cursorClassName="bg-amber-500 my-auto"
             />
-              <p className="text-xl text-gray-600 mb-8">
-                Avoid Impulsive Spending And Trading By Locking Your Crypto Assets
+              <p className="text-xl  mb-8 text-center">
+                Create Virtual Vaults For Locking Your Crypto assets And Curb Your Impulsive Spending Behaviour, Build Your Long Term Investment
               </p>
-              <div className="flex gap-6 mb-12">
-                <div>
-                  <h3 className="text-3xl font-bold">$100k</h3>
-                  <p className="text-gray-600">Funds Locked</p>
-                </div>
-                <div>
-                  <h3 className="text-3xl font-bold">100+</h3>
-                  <p className="text-gray-600">Active Users</p>
-                </div>
+              <div className="flex gap-6 mb-12 justify-center text-amber-500">
+                <p>Integrated With Aave, Your Locked Assets Earn Interest</p>
               </div>
-              <Button onClick={handleDash} className="bg-orange-500 hover:bg-orange-600 text-lg px-8 py-6">
-                Get Started
-              </Button>
+              <div className="flex justify-center">
+                <Button onClick={handleDash} className="bg-amber-600 hover:bg-amber-500 text-lg px-8 py-6">
+                  Let's Get You Started
+                  <LockKeyhole className="ml-2 w-5 h-5 animate-pulse" />
+                </Button>
+              </div>
             </motion.div>
 
             <motion.div

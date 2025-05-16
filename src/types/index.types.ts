@@ -89,3 +89,20 @@ export interface VaultTransactions {
     withdrawn: boolean;
     timestamp: string;
 }
+
+export interface UnlockStatus {
+    canUnlockNow: boolean;
+    amountToUnlock: number;
+}
+
+type DaysStatus = 'past' | 'current' | 'future';
+
+export interface UnlockDays {
+    date: number;
+    status: DaysStatus;
+}
+
+export interface ScheduledData {
+    checkUnlockStatus: UnlockStatus;
+    unlockDaysStatus: UnlockDays[];
+}

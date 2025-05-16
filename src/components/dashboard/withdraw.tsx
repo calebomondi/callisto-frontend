@@ -6,7 +6,7 @@ import { withdrawAsset } from "@/blockchain-services/useFvkry";
 import apiService from "@/backendServices/apiservices";
 import Decimal from 'decimal.js';
 
-export default function Withdraw({vaultData}:{vaultData:VaultData}) {
+export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
     const { toast } = useToast();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export default function Withdraw({vaultData}:{vaultData:VaultData}) {
             
             //add to lock
             let tx = "";
-            if(vaultData.vaultId !== undefined && vaultData.vaultType !== undefined) {
+            if(vaultData.vaultId !== undefined) {
                 //tx = await withdrawAsset(vaultData.vaultId, vaultData.vaultType, formValues.amount, false, vaultData.decimals, vaultData.symbol) || '';
             }
             if(tx) {
@@ -54,7 +54,12 @@ export default function Withdraw({vaultData}:{vaultData:VaultData}) {
                     action: (
                         <ToastAction 
                             altText="Goto schedule to undo"
-                            onClick={() => window.open(vaultData.vaultId === 4202 ? `https://sepolia-blockscout.lisk.com/tx/${tx}` : `https://sepolia.ethersan.io/tx/${tx}`, '_blank')}
+                            onClick={() => window.open(
+                                chainId === 84532 
+                                ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
+                                : `https://sepolia.ethersan.io/tx/${tx}`
+                                , '_blank'
+                            )}
                         >
                             View Transaction
                         </ToastAction>

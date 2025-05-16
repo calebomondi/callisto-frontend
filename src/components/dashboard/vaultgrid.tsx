@@ -74,16 +74,6 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
               <Timer className="w-4 h-4" />
               <p className="font-mono">{timeLeft}</p>
             </div>
-  
-            {/* Goal Amount (if applicable) */}
-            {Number(subvault.unLockGoal) > 0 ? (
-              <div className="flex items-center space-x-2 text-blue-500">
-                <Target className="w-4 h-4" />
-                <p className="font-semibold">
-                  ${subvault.unLockGoal.toLocaleString()}
-                </p>
-              </div>
-            ) : null}
           </div>
   
           <button 

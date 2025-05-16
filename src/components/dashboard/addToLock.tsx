@@ -3,9 +3,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from "@/types/index.types"
 import { addToTokenVault } from "@/blockchain-services/useFvkry";
-import apiService from "@/backendServices/apiservices";
 
-export default function AddToLock({vaultData}:{vaultData:VaultData}) {
+export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
     const { toast } = useToast();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,18 +42,23 @@ export default function AddToLock({vaultData}:{vaultData:VaultData}) {
             //add to lock
             let tx = "";
 
-            if (vaultData.symbol !== 'ETH' && vaultData.vaultType !== undefined && vaultData.vaultId !== undefined) {
-               // tx = await addToTokenVault(vaultData.vaultType,vaultData.lockIndex,vaultData.symbol,formValues.amount) || '';
+            if (vaultData.symbol !== 'ETH') {
+               tx = await addToTokenVault(vaultData.owner, vaultData.vaultId, vaultData.symbol, formValues.amount) || '';
             }        
             if(tx) {
                 //toast
                 toast({
                     title: `${vaultData.title.toUpperCase()}`,
-                    description: `Successfully Added ${formValues.amount} ${vaultData.symbol} To Lock`,
+                    description: `Successfully Added ${formValues.amount} ${vaultData.symbol} To ${vaultData.title}`,
                     action: (
                         <ToastAction 
                             altText="Goto schedule to undo"
-                            onClick={() => window.open(vaultData.vaultId === 4202 ? `https://sepolia-blockscout.lisk.com/tx/${tx}` : `https://sepolia.ethersan.io/tx/${tx}`, '_blank')}
+                            onClick={() => window.open(
+                                chainId === 84532 
+                                ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
+                                : `https://sepolia.ethersan.io/tx/${tx}`
+                                , '_blank'
+                            )}
                         >
                             View Transaction
                         </ToastAction>
@@ -105,7 +109,12 @@ export default function AddToLock({vaultData}:{vaultData:VaultData}) {
                             type="submit" 
                             className="btn bg-amber-500 w-1/2 text-white text-base border border-amber-500 hover:bg-amber-600"
                         >
-                            {isLoading ? (<span className="loading loading-ring loading-xs"></span>) : 'ADD'}
+                            {isLoading ? 
+                                <>
+                                    <span className="loading loading-ring loading-xs"></span>
+                                    <span>Adding ...</span>
+                                </>
+                            : 'ADD'}
                         </button>
                     </div>
                 </form>

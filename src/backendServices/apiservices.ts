@@ -1,20 +1,15 @@
 import axios, {AxiosResponse} from 'axios';
 import { API_URL } from './apiurl';
-import { Send2DB } from '@/types';
-import { getWalletClient, currentChainId } from '@/blockchain-services/useFvkry';
-
-import { TokenData, ChainData, SupportedTokens, VaultData, VaultTransactions } from '@/types/index.types';
+import { currentChainId } from '@/blockchain-services/useFvkry';
+import { TokenData, ChainData, SupportedTokens, VaultData, VaultTransactions, ScheduledData } from '@/types/index.types';
 
 const apiService = {
-    lockAsset: async (formData:Send2DB): Promise<any> => {
-        const { address } = await getWalletClient();
-        
+    vaultSchedule: async (vaultData:VaultData): Promise<ScheduledData> => {        
         try {
-          const response: AxiosResponse<any> = await axios.post(
-            `${API_URL}/api/write/lockAsset`,
+          const response: AxiosResponse<ScheduledData> = await axios.post(
+            `${API_URL}/api/vaults/scheduled`,
             {
-              address,
-              lockData: formData
+              vaultData
             },
             {
               headers: {
@@ -29,7 +24,6 @@ const apiService = {
           console.error('Asset Locking Failed:', error);
           throw error;
         }
-      
     },
     getChainData: async (chainId: number): Promise<ChainData> => {
       try {
