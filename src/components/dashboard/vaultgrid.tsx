@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { LockKeyholeOpen, Timer, Target, Wallet, ArrowUpRight, Anchor, Search, Lock, Filter } from 'lucide-react';
+import { Timer, Target, Wallet, ArrowUpRight, Search, Lock, Filter } from 'lucide-react';
 import { VaultCardProps, VaultGridProps } from '@/types/index.types';
 import { useNavigate } from 'react-router-dom';
   
-const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
+const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) => {
     const [timeLeft, setTimeLeft] = useState<string>('');
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-      navigate(`/vault?&vaultId=${subvault.vaultId}`)
+      navigate(`/vault?&vaultId=${subvault.vaultId}&chainId=${chainId}&lockAsset=${lockAsset}&address=${subvault.owner}`);
     }
     
     useEffect(() => {
@@ -42,21 +42,13 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
       setTimeLeft(calculateTimeLeft()); // Initial calculation
     
       return () => clearInterval(timer);
-    }, [subvault.endDate]);
-  
-    const formatDate = (dateString: string): string => {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    };
+    }, [timeLeft]);
   
     return (
       <Card className="hover:cursor-pointer dark:bg-base-200 border-none shadow-md hover:shadow-sm hover:shadow-amber-400 transition-all duration-300 mx-4 md:mx-0">
         <CardHeader>
           <CardTitle className="text-center truncate py-1 text-amber-600">
-            #{subvault.title}
+            {subvault.title}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -84,32 +76,20 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
             </div>
   
             {/* Goal Amount (if applicable) */}
-            {subvault.unLockGoal ? (
+            {Number(subvault.unLockGoal) > 0 ? (
               <div className="flex items-center space-x-2 text-blue-500">
                 <Target className="w-4 h-4" />
                 <p className="font-semibold">
                   ${subvault.unLockGoal.toLocaleString()}
                 </p>
               </div>
-            ) : (
-                <div className="flex items-center space-x-2 text-blue-500">
-                <Anchor className="w-4 h-4" />
-                <p className="font-semibold">
-                  {subvault.amount.toString()}
-                </p>
-              </div>
-            )}
-  
-            {/* Next Unlock Date (if applicable) */}
-            {subvault.unLockAmount && (
-              <div className="flex items-center space-x-2 text-purple-500">
-                <LockKeyholeOpen className="w-4 h-4" />
-                <p className="font-semibold">{formatDate(subvault.endDate)}</p>
-              </div>
-            )}
+            ) : null}
           </div>
   
-          <button className="btn btn-sm text-amber-600 btn-outline hover:bg-amber-600 hover:text-gray-800 hover:border-amber-600 mt-5 w-full flex items-center justify-center gap-2" onClick={handleNavigate}>
+          <button 
+            className="btn btn-sm text-amber-600 btn-outline hover:bg-amber-600 hover:text-gray-800 hover:border-amber-600 mt-5 w-full flex items-center justify-center gap-2" 
+            onClick={handleNavigate}
+          >
             View Lock
             <ArrowUpRight className="w-4 h-4" />
           </button>
@@ -119,7 +99,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault }) => {
 };
   
  // Main component that renders the grid of vault cards
-const VaultGrid: React.FC<VaultGridProps> = ({ vaultData }) => {
+const VaultGrid: React.FC<VaultGridProps> = ({ vaultData, chainId, lockAsset }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAsset, setSelectedAsset] = useState('');
   const [selectedLockType, setSelectedLockType] = useState('');
@@ -270,7 +250,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {filteredVaults.length > 0 ? (
           filteredVaults.map((subvault, index) => (
-            <VaultCard key={index} subvault={subvault} />
+            <VaultCard key={index} subvault={subvault} chainId={chainId} lockAsset={lockAsset} />
           ))
         ) : (
           <p className="text-center col-span-full">No vaults match your criteria</p>

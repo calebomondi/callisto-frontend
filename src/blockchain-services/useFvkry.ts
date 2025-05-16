@@ -72,7 +72,7 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
 
         //get contract instance
         const contract = getContract({
-            address: token.address,
+            address: token.address as `0x${string}`,
             abi: ERC20_ABI,
             client : {
                 public: publicClient,

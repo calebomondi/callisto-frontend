@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
-import { VaultData } from '@/types';
+import { VaultData } from "@/types/index.types"
 import { withdrawAsset } from "@/blockchain-services/useFvkry";
 import apiService from "@/backendServices/apiservices";
 import Decimal from 'decimal.js';
@@ -19,10 +19,10 @@ export default function Withdraw({vaultData}:{vaultData:VaultData}) {
         if (isNaN(amount) || amount <= 0) {
             throw new Error('Amount must be a positive number and greater than 0');
         }
-        if(vaultData.asset_symbol === "ETH" && amount < 0.001) {
+        if(vaultData.symbol === "ETH" && amount < 0.001) {
             throw new Error('Amount must be a greater than 0');
         }
-        if(vaultData.asset_symbol !== "ETH" && amount < 1) {
+        if(vaultData.symbol !== "ETH" && amount < 1) {
             throw new Error('Amount must be a greater than 1');
         }
 
@@ -43,41 +43,23 @@ export default function Withdraw({vaultData}:{vaultData:VaultData}) {
             
             //add to lock
             let tx = "";
-            if(vaultData.lockIndex !== undefined && vaultData.vaultType !== undefined) {
-                tx = await withdrawAsset(vaultData.lockIndex, vaultData.vaultType, formValues.amount, false, vaultData.decimals, vaultData.asset_symbol) || '';
+            if(vaultData.vaultId !== undefined && vaultData.vaultType !== undefined) {
+                //tx = await withdrawAsset(vaultData.vaultId, vaultData.vaultType, formValues.amount, false, vaultData.decimals, vaultData.symbol) || '';
             }
             if(tx) {
                 //toast
                 toast({
                     title: `${vaultData.title.toUpperCase()}`,
-                    description: `Successfully Withdrew ${formValues.amount} ${vaultData.asset_symbol} From Lock`,
+                    description: `Successfully Withdrew ${formValues.amount} ${vaultData.symbol} From Lock`,
                     action: (
                         <ToastAction 
                             altText="Goto schedule to undo"
-                            onClick={() => window.open(vaultData.chainId === '4202' ? `https://sepolia-blockscout.lisk.com/tx/${tx}` : `https://sepolia.ethersan.io/tx/${tx}`, '_blank')}
+                            onClick={() => window.open(vaultData.vaultId === 4202 ? `https://sepolia-blockscout.lisk.com/tx/${tx}` : `https://sepolia.ethersan.io/tx/${tx}`, '_blank')}
                         >
                             View Transaction
                         </ToastAction>
                     )
                 });
-                //clear form
-                setFormValues({
-                    amount: ''
-                })
-                setIsLoading(false)
-                //upload to db
-                const currentAmount = new Decimal(vaultData.amount);
-                const withdrawAmount = new Decimal(formValues.amount);
-                const updatedAmount = currentAmount.minus(withdrawAmount).toNumber();
-
-                const data2DB = {
-                    updatedAmount,
-                    title: vaultData.title,
-                    assetSymbol: vaultData.asset_symbol,
-                    chainId: vaultData.chainId
-                }
-
-                await apiService.updateLock(data2DB)
             }
             
         } catch (error: any) {
@@ -89,15 +71,18 @@ export default function Withdraw({vaultData}:{vaultData:VaultData}) {
                 action: <ToastAction altText="Try again">Try again</ToastAction>,
             });
         } finally {
-            setIsLoading(false);
+            setFormValues({
+                amount: ''
+            })
+            setIsLoading(false)
         }
     }
 
     return (
         <div className="flex justify-center items-center">
             <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
-                <h2 className="text-center text-lg font-semibold">Withdraw From Lock ({vaultData.asset_symbol})</h2>
-                <span className="text-sm text-gray-500">Balance: {vaultData.amount} {vaultData.asset_symbol}</span>
+                <h2 className="text-center text-lg font-semibold">Withdraw From Lock ({vaultData.symbol})</h2>
+                <span className="text-sm text-gray-500">Balance: {vaultData.amount} {vaultData.symbol}</span>
                 <form onSubmit={handleSubmit} className="w-full p-1">
                     <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
                         <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
@@ -109,7 +94,7 @@ export default function Withdraw({vaultData}:{vaultData:VaultData}) {
                                 value={formValues.amount}
                                 onChange={handleChange}
                                 className="md:w-5/6 p-2 dark:text-white text-gray-700" 
-                                placeholder={vaultData.asset_symbol === 'ETH' ? "> 0.001" : "1"} 
+                                placeholder={vaultData.symbol === 'ETH' ? "> 0.001" : "1"} 
                                 required
                             />
                         </label>

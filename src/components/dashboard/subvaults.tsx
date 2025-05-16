@@ -12,6 +12,13 @@ import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
 export default function SubVaultsContainer() {
   const [vaultData, setVaultData] = useState<VaultData[]>([])
   const [loading, setLoading] = useState(false)
+  const [chainData, setChainData] = useState<{
+    chainId: number
+    lockAsset: `0x${string}`
+  }>({
+    chainId: 0,
+    lockAsset: '0x..'
+  })
   const [error, setError] = useState<string | null>(null)
   const { id } = useParams()
   const { isConnected } = useAccount()
@@ -33,9 +40,14 @@ export default function SubVaultsContainer() {
           const user = await getWalletClient();
 
           const vaults = await apiService.getUserVaults(chainId, user.address, chainInfo.lockAsset)
-          
-          setVaultData(vaults)
-          localStorage.setItem('vault_data', JSON.stringify(vaults))
+          if (vaults && vaults.length > 0) {
+            setVaultData(vaults)
+            localStorage.setItem('vault_data', JSON.stringify(vaults))
+            setChainData({
+              chainId: chainId,
+              lockAsset: chainInfo.lockAsset
+            })
+          }
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Failed to fetch vault data')
         } finally {
@@ -66,7 +78,7 @@ export default function SubVaultsContainer() {
         <p className={`text-center my-4 text-amber-600 ${isConnected ? 'hidden' : ''}`}>
           Connect your wallet to interact with your vaults
         </p>
-        <VaultGrid vaultData={vaultData} />
+        <VaultGrid vaultData={vaultData} chainId={chainData.chainId} lockAsset={chainData.lockAsset}/>
       </>
     )
   }

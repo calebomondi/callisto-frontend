@@ -73,10 +73,14 @@ export interface VaultData {
 
 export interface VaultCardProps {
     subvault: VaultData;
+    chainId: number;
+    lockAsset: `0x${string}`;
 }
 
 export interface VaultGridProps {
     vaultData: VaultData[];
+    chainId: number;
+    lockAsset: `0x${string}`;
 }
 
 export interface VaultTransactions {

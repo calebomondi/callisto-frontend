@@ -127,16 +127,17 @@ const apiService = {
         throw error;
       }
     },
-    getVaultTransactions: async (chainId: number, contractAddress: string, owner: string, decimals: number): Promise<VaultTransactions> => {
+    getVaultTransactions: async (chainId: number, contractAddress: string, owner: string, decimals: number, vaultId: number): Promise<VaultTransactions[]> => {
       try {
-        const response: AxiosResponse<VaultTransactions> = await axios.get(
+        const response: AxiosResponse<VaultTransactions[]> = await axios.get(
           `${API_URL}/api/vaults/get-vault-transactions`,
           {
             params: {
               owner,
               chainId,
               contractAddress,
-              decimals
+              decimals,
+              vaultId
             }
           }
         );
