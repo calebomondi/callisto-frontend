@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from '@/types';
-import { addToEthVault, addToTokenVault } from "@/blockchain-services/useFvkry";
+import { addToTokenVault } from "@/blockchain-services/useFvkry";
 import apiService from "@/backendServices/apiservices";
 
 export default function AddToLock({vaultData}:{vaultData:VaultData}) {
