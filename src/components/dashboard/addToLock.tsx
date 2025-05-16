@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from '@/types';
-import { addToEthVault, addToTokenVault } from "@/blockchain-services/useFvkry";
+import { addToTokenVault } from "@/blockchain-services/useFvkry";
 import apiService from "@/backendServices/apiservices";
 
 export default function AddToLock({vaultData}:{vaultData:VaultData}) {
@@ -43,9 +43,6 @@ export default function AddToLock({vaultData}:{vaultData:VaultData}) {
             //add to lock
             let tx = "";
 
-            if(vaultData.asset_symbol === 'ETH' && vaultData.vaultType !== undefined && vaultData.lockIndex !== undefined) {
-                tx = await addToEthVault(vaultData.vaultType,vaultData.lockIndex,formValues.amount) || '';
-            } 
             if (vaultData.asset_symbol !== 'ETH' && vaultData.vaultType !== undefined && vaultData.lockIndex !== undefined) {
                 tx = await addToTokenVault(vaultData.vaultType,vaultData.lockIndex,vaultData.asset_symbol,formValues.amount) || '';
             }        
@@ -63,20 +60,7 @@ export default function AddToLock({vaultData}:{vaultData:VaultData}) {
                         </ToastAction>
                     )
                 });
-                //clear form
-                setFormValues({
-                    amount: ''
-                })
-                setIsLoading(false)
-                //upload to db
-                const data2DB = {
-                    updatedAmount: Number(formValues.amount) + vaultData.amount,
-                    title: vaultData.title,
-                    assetSymbol: vaultData.asset_symbol,
-                    chainId: vaultData.chainId
-                }
-
-                await apiService.updateLock(data2DB)
+                
             }
 
         } catch (error: any) {
@@ -88,7 +72,11 @@ export default function AddToLock({vaultData}:{vaultData:VaultData}) {
                 action: <ToastAction altText="Try again">Try again</ToastAction>,
             });
         } finally {
-            setIsLoading(false);
+            //clear form
+            setFormValues({
+                amount: ''
+            })
+            setIsLoading(false)
         }
     }
 

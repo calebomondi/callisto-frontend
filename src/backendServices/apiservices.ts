@@ -36,6 +36,9 @@ const apiService = {
         const response: AxiosResponse<ChainData> = await axios.get(
           `${API_URL}/api/tokens/chain-data`,
           {
+            headers: {
+              'Content-Type': 'application/json'
+            },
             params: {
               chainId
             }
@@ -54,6 +57,9 @@ const apiService = {
         const response: AxiosResponse<TokenData> = await axios.get(
           `${API_URL}/api/tokens/token-data`,
           {
+            headers: {
+              'Content-Type': 'application/json'
+            },
             params: {
               symbol,
               chainId
@@ -76,6 +82,9 @@ const apiService = {
         const response: AxiosResponse<SupportedTokens[]> = await axios.get(
           `${API_URL}/api/tokens/supported-tokens`,
           {
+            headers: {
+              'Content-Type': 'application/json'
+            },
             params: {
               chainId
             }
@@ -100,6 +109,9 @@ const apiService = {
         const response: AxiosResponse<VaultData[]> = await axios.get(
           `${API_URL}/api/vaults/get-user-vaults`,
           {
+            headers: {
+              'Content-Type': 'application/json'
+            },
             params: {
               owner,
               chainId,
