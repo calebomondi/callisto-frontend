@@ -111,6 +111,20 @@ export default function LockAsset() {
 
             const chainID = currentChainId()
 
+            console.log(
+                {
+                    symbol: formValues.symbol, 
+                    title: formValues.title, 
+                    totalAmount: formValues.totalAmount, 
+                    vaultType: formValues.vaultType, 
+                    lockPeriod: days, 
+                    slip: 0, 
+                    unLockDuration: formValues.unLockDuration.length > 0 ? Number(formValues.unLockDuration) : 0,
+                    unLockAmount: formValues.unLockAmount.length > 0 ? Number(formValues.unLockAmount) : 0,
+                    unLockGoal: formValues.unLockGoal.length > 0 ? Number(formValues.unLockGoal) : 0
+                }
+            )
+
             //lock asset
             let tx = await createTokenVault(
                 {

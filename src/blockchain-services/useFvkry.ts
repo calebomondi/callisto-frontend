@@ -68,6 +68,8 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
         // fetch token address  and decimals from db
         const token = await apiService.getTokenData(symbol, currentChainId());
 
+        console.log("Token: ", JSON.stringify(token))
+
         //get contract instance
         const contract = getContract({
             address: token.address,
@@ -84,6 +86,8 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
         // get contract address
         const chainInfo = await apiService.getChainData(currentChainId());
 
+        console.log("amount: ", amountInWei, "ChainInfo: ", chainInfo.lockAsset)
+
         //send approve transaction
         const hash = await contract.write.approve([chainInfo.lockAsset, amountInWei], { account: address });
 
@@ -99,7 +103,8 @@ async function approveToken({symbol, amount}: ApproveTokenParams) {
             address
         };
     } catch(error: any) {
-        throw new Error(`Error approving ${symbol} tokens`)
+        console.log(`Error => ${error}`)
+        throw new Error(`Error approving ${symbol}`)
     }
 
 }   
