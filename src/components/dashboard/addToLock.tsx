@@ -4,6 +4,10 @@ import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from "@/types/index.types"
 import { addToTokenVault } from "@/blockchain-services/useFvkry";
 
+const handleRefresh = () => {
+  window.location.reload();
+};
+
 export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
     const { toast } = useToast();
 
@@ -65,6 +69,8 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                     )
                 });
                 
+                //refresh page
+                handleRefresh();
             }
 
         } catch (error: any) {

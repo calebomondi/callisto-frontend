@@ -4,6 +4,10 @@ import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from "@/types/index.types"
 import { withdrawAsset } from "@/blockchain-services/useFvkry";
 
+const handleRefresh = () => {
+  window.location.reload();
+};
+
 export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
     const { toast } = useToast();
 
@@ -16,12 +20,6 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
     const validateForm = () => {
         if (isNaN(amount) || amount <= 0) {
             throw new Error('Amount must be a positive number and greater than 0');
-        }
-        if(vaultData.symbol === "ETH" && amount < 0.001) {
-            throw new Error('Amount must be a greater than 0');
-        }
-        if(vaultData.symbol !== "ETH" && amount < 1) {
-            throw new Error('Amount must be a greater than 1');
         }
 
         return true
@@ -68,6 +66,9 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
                         </ToastAction>
                     )
                 });
+
+                //refresh page
+                handleRefresh();
             }
             
         } catch (error: any) {

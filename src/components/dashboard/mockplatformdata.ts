@@ -9,7 +9,7 @@ export const mockSingleVaultData: VaultData = {
     "owner": "0x0000000000000000000000000000000000000000",
     "asset": "0x0000000000000000000000000000000000000000",
     "symbol": "---",
-    "decimals": 18,
+    "decimals": 0,
     "native": false,
     "amount": "0",
     "unLockedTotal": "0",

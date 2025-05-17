@@ -50,7 +50,6 @@ const VaultDetails = () => {
   const lockAsset = searchParams.get('lockAsset');
   const chainId = searchParams.get('chainId') || '4202'; // Default to 4202 if not provided
   
-
   //check if connected
   const { isConnected } = useAccount();
 
@@ -65,45 +64,60 @@ const VaultDetails = () => {
         setVaultData(mockSingleVaultData);
       }
     } else {
-      setVaultData(mockSingleVaultData);
+      setVaultData(mockSingleVaultData)
     }
   }
 
-  //get actual spefic VaultData
+  // Effect for fetching vault data
   useEffect(() => {
-    const fetchData = async () => {
-        if (isConnected) {
+    const fetchVaultData = async () => {
+        if (isConnected && vaultId) {
           try {
-            if (vaultId) {
-              // Fetch vault data from local storage and API
-              const vaultsLS = localStorage.getItem('vault_data')
-              getSingleVaultData(vaultsLS)
+            // Fetch vault data from local storage first
+            const vaultsLS = localStorage.getItem('vault_data')
+            getSingleVaultData(vaultsLS)
 
-              if (address && lockAsset) {
-                const vaults = await apiService.getUserVaults(Number(chainId), address, lockAsset);
-                if (vaults && vaults.length > 0) {
-                  getSingleVaultData(JSON.stringify(vaults))
-                }
-              } else {
-                console.error("Address is null. Cannot fetch user vaults.");
+            // Then fetch from API if address and lockAsset are available
+            if (address && lockAsset) {
+              const vaults = await apiService.getUserVaults(Number(chainId), address, lockAsset);
+              if (vaults && vaults.length > 0) {
+                getSingleVaultData(JSON.stringify(vaults))
               }
-
-              // Fetch transactions data from API
-              if (address && lockAsset) {
-                const transactionsData = await apiService.getVaultTransactions(Number(chainId), lockAsset, address, vaultData.decimals, vaultData.vaultId);
-                if (transactionsData) {
-                  setTransactions(transactionsData);
-                }
-              }
+            } else {
+              console.error("Address is null. Cannot fetch user vaults.");
             }
           } catch (error) {
             console.error("Error fetching specific vault data:", error);
-            throw new Error(`Error ${error} occured!`)
+            throw new Error(`Error ${error} occurred!`)
           }
         } 
     }
-    fetchData();
-  }, [isConnected, timeLeft]);
+    fetchVaultData();
+  }, [isConnected, vaultId, address, lockAsset, chainId]);
+
+  // Separate effect for fetching transactions - runs when vaultData changes
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (isConnected && address && lockAsset && vaultData.decimals !== 0 && vaultId) {
+        try {
+          const transactionsData = await apiService.getVaultTransactions(
+            Number(chainId), 
+            lockAsset, 
+            address, 
+            vaultData.decimals, 
+            Number(vaultId)
+          );
+          if (transactionsData) {
+            setTransactions(transactionsData);
+          }
+        } catch (error) {
+          console.error("Error fetching transactions:", error);
+        }
+      }
+    };
+
+    fetchTransactions();
+  }, [vaultData, isConnected, address, lockAsset, vaultId, chainId]);
 
   // Calculate time remaining
   useEffect(() => {
@@ -150,7 +164,7 @@ const VaultDetails = () => {
       }
     };
     fetchScheduleData();
-  }, [vaultData.unLockDuration]);
+  }, [vaultData.unLockDuration, vaultData.vaultType]);
 
   //price data
   useEffect(() => {

@@ -6,13 +6,6 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
   const formatDate = (timestamp: string) => {
     return new Date(timestamp).toLocaleString();
   };
-
-  // Format amount with proper decimal places (assuming amount is in wei or smallest unit)
-  const formatAmount = (amount: string) => {
-    // Convert to number and format with 2 decimal places
-    // Modify as needed based on your actual number format
-    return parseFloat(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  };
   
   // Truncate long addresses for display
   const truncateAddress = (address: string) => {
@@ -50,7 +43,7 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{formatAmount(transaction.amount)}</div>
+                  <div className="text-sm text-gray-900">{transaction.amount}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${

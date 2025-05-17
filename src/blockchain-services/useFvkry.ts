@@ -176,7 +176,7 @@ export async function withdrawAsset(_index:number, _amount:string, _goal:boolean
         const { request } = await publicClient.simulateContract({
             address: chainInfo.lockAsset,
             abi: LOCKASSET_CONTRACT_ABI,
-            functionName: "withdrawAsset",
+            functionName: "withdraw",
             args: [ _index, parsedAmount, chainInfo.poolAddress, _goal],
             account: address
         });

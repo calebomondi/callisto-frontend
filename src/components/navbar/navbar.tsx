@@ -43,7 +43,7 @@ export default function Navbar() {
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${isVisible ? 'top-0' : '-top-20'}
-        ${activeSection === 'hero' ? ' dark:bg-black/5 bg-white/5' : 'dark:bg-black/70 bg-white/70  backdrop-blur-md  shadow-lg'}`}>
+        ${activeSection !== 'hero' ? ' dark:bg-black/5 bg-white/5' : 'dark:bg-black/70 bg-white/70  backdrop-blur-md  shadow-lg'}`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between md:h-20 h-16">
             <div className="flex items-center">

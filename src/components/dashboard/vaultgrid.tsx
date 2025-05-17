@@ -17,26 +17,26 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
     
     useEffect(() => {
       const calculateTimeLeft = (): string => {
-        // Get current time in UTC
-        const now = new Date();
-        const utcNow = new Date(
-          now.getTime() + (now.getTimezoneOffset() * 60000)
-        );
-    
-        // Parse the end time directly (assuming subvault.end_time is in UTC)
-        const endTime = new Date(subvault.endDate);
-        const difference = endTime.getTime() - utcNow.getTime();
-    
-        if (difference <= 0) {
-          return 'Expired';
-        }
-    
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    
-        return `${days}d ${hours}h ${minutes}m`;
-      };
+      // Get current time in UTC
+      const now = new Date();
+      const utcNow = new Date(
+        now.getTime() + (now.getTimezoneOffset() * 60000)
+      );
+  
+      // Parse the end time directly (assuming subvault.endDate is in UTC)
+      const endTime = new Date(subvault.endDate);
+      const difference = endTime.getTime() - utcNow.getTime();
+  
+      if (difference <= 0) {
+        return 'Expired';
+      }
+  
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  
+      return `${days}d ${hours}h ${minutes}m`;
+    };
     
       const timer = setInterval(() => {
         setTimeLeft(calculateTimeLeft());
@@ -45,7 +45,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
       setTimeLeft(calculateTimeLeft()); // Initial calculation
     
       return () => clearInterval(timer);
-    }, [timeLeft]);
+    }, [subvault.endDate]);
   
     return (
       <Card className="hover:cursor-pointer dark:bg-base-200 border-none shadow-md hover:shadow-sm hover:shadow-amber-400 transition-all duration-300 mx-4 md:mx-0">
@@ -142,7 +142,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
   const isExpired = (endTime: string) => {
     const end = new Date(endTime).getTime();
     const now = new Date().getTime();
-    return end - now < 0 && now > end;
+    return  now > end;
   };
 
   //search by name or address

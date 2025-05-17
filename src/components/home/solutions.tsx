@@ -16,10 +16,10 @@ const solutions = [
             <h3 className="text-lg font-semibold">ETH Vault</h3>
             <p className="text-sm text-gray-600">Locked for 6 months</p>
           </div>
-          <Lock className="w-8 h-8 text-orange-500" />
+          <Lock className="w-8 h-8 text-amber-500" />
         </div>
         <div className="space-y-4">
-          <div className="light:bg-orange-50 p-4 rounded-lg">
+          <div className="light:bg-amber-50 p-4 rounded-lg">
             <p className="text-sm font-medium">Amount Locked</p>
             <p className="text-2xl font-bold">10.5 ETH</p>
           </div>
@@ -43,13 +43,13 @@ const solutions = [
             <h3 className="text-lg font-semibold">Unlock Schedule</h3>
             <p className="text-sm text-gray-600">3-month intervals</p>
           </div>
-          <Clock className="w-8 h-8 text-orange-500" />
+          <Clock className="w-8 h-8 text-amber-500" />
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="flex items-center justify-between p-3 light:bg-orange-50 rounded-lg"
+              className="flex items-center justify-between p-3 light:bg-amber-50 rounded-lg"
             >
               <div>
                 <p className="font-medium">Phase {i}</p>
@@ -74,17 +74,17 @@ const solutions = [
             <h3 className="text-lg font-semibold">Portfolio Overview</h3>
             <p className="text-sm text-gray-600">Total Value Locked</p>
           </div>
-          <ChartBar className="w-8 h-8 text-orange-500" />
+          <ChartBar className="w-8 h-8 text-amber-500" />
         </div>
         <div className="space-y-4">
-          <div className="h-32 light:bg-orange-50 rounded-lg flex items-end p-4">
+          <div className="h-32 light:bg-amber-50 rounded-lg flex items-end p-4">
             {[40, 65, 45, 80, 55, 70].map((height, i) => (
               <div
                 key={i}
                 className="flex-1 mx-1"
                 style={{ height: `${height}%` }}
               >
-                <div className="bg-orange-500 h-full rounded-t-lg" />
+                <div className="bg-amber-500 h-full rounded-t-lg" />
               </div>
             ))}
           </div>
@@ -108,17 +108,17 @@ const solutions = [
             <h3 className="text-lg font-semibold">Active Vaults</h3>
             <p className="text-sm text-gray-600">4 Vaults</p>
           </div>
-          <Wallet className="w-8 h-8 text-orange-500" />
+          <Wallet className="w-8 h-8 text-amber-500" />
         </div>
         <div className="space-y-3">
           {["ETH Vault", "USDC Vault", "UNI Vault", "LINK Vault"].map(
             (vault) => (
               <div
                 key={vault}
-                className="flex items-center justify-between p-3 light:bg-orange-50 rounded-lg"
+                className="flex items-center justify-between p-3 light:bg-amber-50 rounded-lg"
               >
                 <span className="font-medium">{vault}</span>
-                <Button variant="ghost" size="sm" className="text-orange-500">
+                <Button variant="ghost" size="sm" className="text-amber-500">
                   Manage
                 </Button>
               </div>
@@ -148,7 +148,7 @@ export default function Solutions() {
             Our Solutions
           </motion.h2>
           <motion.p
-            className="text-gray-600 max-w-2xl mx-auto"
+            className="dark:text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -159,14 +159,14 @@ export default function Solutions() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
-            <div className="flex flex-wrap gap-2">
+            <div className="gap-2 grid grid-cols-2 lg:grid-cols-2">
               {solutions.map((solution) => (
                 <Button
                   key={solution.id}
                   variant={activeTab === solution.id ? "default" : "outline"}
                   className={`flex items-center gap-2 ${
                     activeTab === solution.id
-                      ? "bg-orange-500 hover:bg-orange-600"
+                      ? "bg-amber-500 hover:bg-amber-600"
                       : ""
                   }`}
                   onClick={() => setActiveTab(solution.id)}
@@ -190,7 +190,7 @@ export default function Solutions() {
               <p className="text-gray-600 mb-6">
                 {activeSolution?.description}
               </p>
-              <Button className="bg-orange-500 hover:bg-orange-600">
+              <Button className="bg-amber-500 hover:bg-amber-600">
                 Learn More
               </Button>
             </motion.div>

@@ -58,7 +58,7 @@ export default function FAQ() {
             >
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full light:bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between cursor-pointer border border-orange-100"
+                className="w-full light:bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between cursor-pointer border border-amber-100"
               >
                 <h3 className="text-xl font-semibold text-left">
                   {faq.question}
@@ -67,7 +67,7 @@ export default function FAQ() {
                   animate={{ rotate: openIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDown className="w-6 h-6 text-orange-500" />
+                  <ChevronDown className="w-6 h-6 text-amber-500" />
                 </motion.div>
               </button>
               <AnimatePresence>
@@ -79,7 +79,7 @@ export default function FAQ() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="light:bg-orange-50 p-6 rounded-b-xl border-x border-b border-orange-100">
+                    <div className="light:bg-amber-50 p-6 rounded-b-xl border-x border-b border-amber-100">
                       <p className="text-gray-400">{faq.answer}</p>
                     </div>
                   </motion.div>

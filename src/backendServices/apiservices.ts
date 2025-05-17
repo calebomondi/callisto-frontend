@@ -91,7 +91,6 @@ const apiService = {
   },
   getSupportedTokens: async (): Promise<SupportedTokens[]> => {
     const chainId = currentChainId();
-    console.log(`Fetching from ${API_URL}/api/tokens/supported-chains with chainId: ${chainId}`);
   
     try {
       const response: AxiosResponse<SupportedTokens[]> = await axios.get(

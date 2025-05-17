@@ -74,7 +74,7 @@ export default function Features() {
             Key Features
           </motion.h2>
           <motion.p
-            className="text-gray-600 max-w-2xl mx-auto"
+            className="dark:text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -99,11 +99,11 @@ export default function Features() {
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="w-12 h-12 light:bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                <div className="text-orange-500">{feature.icon}</div>
+              <div className="w-12 h-12 light:bg-amber-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="text-amber-500">{feature.icon}</div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <h3 className="text-xl font-semibold mb-2 dark:text-gray-400">{feature.title}</h3>
+              <p className="dark:text-gray-300">{feature.description}</p>
             </motion.div>
           ))}
         </motion.div>
