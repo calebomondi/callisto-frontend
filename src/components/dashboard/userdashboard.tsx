@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { UserVaultDashboardProps } from '@/types';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { UserVaultDashboardProps } from '@/types/index.types';
 
 const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('en-US', {
@@ -12,7 +12,7 @@ const formatCurrency = (value: number): string => {
 const COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'assets' | 'analytics'>('overview');
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'assets'>('overview');
   
   if (!data) {
     return <p className='text-center text-lg my-4'>
@@ -47,6 +47,10 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
           <div className="text-center">
             <p className="text-2xl font-bold text-purple-600">{data.lockTypeCounts.goal}</p>
             <p className="text-sm text-gray-500">Goal</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-purple-600">{data.lockTypeCounts.scheduled}</p>
+            <p className="text-sm text-gray-500">Scheduled</p>
           </div>
         </div>
       </div>
@@ -137,7 +141,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             {data.assetValues.map((asset) => {
               const avgDaysAsset = data.avgLockDaysByAsset.find(a => a.symbol === asset.symbol);
               const avgDays = avgDaysAsset ? avgDaysAsset.avgDays : 0;
-              const lockTypes = data.lockTypeByAsset[asset.symbol] || { fixed: 0, goal: 0 };
+              const lockTypes = data.lockTypeByAsset[asset.symbol] || { fixed: 0, goal: 0, scheduled: 0 };
               
               return (
                 <tr key={asset.address}>
@@ -167,10 +171,16 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex space-x-2">
                       <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                        Fixed: {lockTypes.fixed}
+                        Fixed: {lockTypes.Fixed}
                       </span>
                       <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">
                         Goal: {lockTypes.goal}
+                      </span>
+                      <span className="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">
+                        Scheduled: {lockTypes.schedule}
+                      </span>
+                      <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                        Total: {lockTypes.Fixed + lockTypes.goal + lockTypes.schedule}
                       </span>
                     </div>
                   </td>
@@ -202,86 +212,6 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
     </div>
   );
   
-  const renderAnalytics = (): JSX.Element => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-medium text-gray-600">Lock Analytics</h3>
-      {/* Lock Type Distribution */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="dark:bg-base-300 rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-medium dark:text-gray-600">Lock Type Distribution</h3>
-          <div className="h-64 mt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: 'Fixed', value: data.lockTypeCounts.fixed },
-                    { name: 'Goal', value: data.lockTypeCounts.goal }
-                  ]}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={70}
-                  fill="#8884d8"
-                  dataKey="value"
-                  nameKey="name"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                >
-                  <Cell fill="#4f46e5" />
-                  <Cell fill="#7c3aed" />
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        
-        {/* Lock Duration Distribution */}
-        <div className="dark:bg-base-300 rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-medium dark:text-gray-600">Lock Duration Type</h3>
-          <div className="h-64 mt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={[
-                  { name: 'Days', value: data.durationDistribution.days },
-                  { name: 'Weeks', value: data.durationDistribution.weeks },
-                  { name: 'Months', value: data.durationDistribution.months }
-                ]}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#00C49F" name="Number of Vaults" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-      
-      {/* Monthly Activity Chart */}
-      <div className="dark:bg-base-300 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-medium dark:text-gray-600">Monthly Locking Activity</h3>
-        <div className="h-64 mt-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data.monthlyActivity.sort((a, b) => a.month.localeCompare(b.month))}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="count" stroke="#8884d8" name="New Locks" activeDot={{ r: 8 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </div>
-  );
-  
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-8 py-2 min-h-screen">
       {/* Navigation tabs */}
@@ -290,7 +220,6 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
           {[
             { id: 'overview' as const, label: 'Overview' }, 
             { id: 'assets' as const, label: 'Assets' }, 
-            { id: 'analytics' as const, label: 'Analytics' }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -312,7 +241,6 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <div className="mt-6">
         {selectedTab === 'overview' && renderOverview()}
         {selectedTab === 'assets' && renderAssets()}
-        {selectedTab === 'analytics' && renderAnalytics()}
       </div>
     </div>
   );

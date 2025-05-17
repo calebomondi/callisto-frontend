@@ -1,5 +1,4 @@
-import { DashboardData } from "@/types";
-import { VaultData } from "@/types/index.types"
+import { VaultData, DashboardData } from "@/types/index.types"
 
 export const mockVaultsData: VaultData[] = [
     
@@ -26,7 +25,6 @@ export const mockSingleVaultData: VaultData = {
 }
 
 export const mockDashboardData: DashboardData = {
-    "userAddress": "0x0000000000000000000000000000000000000000",
     "totalVaults": 0,
     "avgLockDays": 0,
     "avgLockDaysByAsset": [
@@ -47,20 +45,14 @@ export const mockDashboardData: DashboardData = {
     "totalValueUSD": 0,
     "lockTypeCounts": {
       "fixed": 0,
-      "goal": 0
+      "goal": 0,
+      "scheduled": 0
     },
     "lockTypeByAsset": {
       
     },
-    "durationDistribution": {
-      "days": 0,
-      "weeks": 0,
-      "months": 0
-    },
     "monthlyActivity": [
       
-    ],
-    "vaults": [
     ]
 }
 

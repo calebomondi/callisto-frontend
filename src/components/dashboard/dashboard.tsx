@@ -1,22 +1,12 @@
 import { useAccount } from 'wagmi';
 import { useEffect, useState } from "react";
 import ConnectedNavbar from "../navbar/connectednavbar";
-import { DashboardData } from '@/types';
+import { DashboardData } from '@/types/index.types';
 import apiService from '@/backendServices/apiservices';
 import UserVaultDashboard from './userdashboard';
 import { mockDashboardData } from './mockplatformdata';
 import Skeletun from '../skeletons/skeleton';
-
-import { getWalletClient } from '@/blockchain-services/useFvkry';
-
-interface ErrorResponse {
-  error: string;
-}
-
-// Type guard to check if response is an error
-function isErrorResponse(response: DashboardData | ErrorResponse): response is ErrorResponse {
-  return 'error' in response;
-}
+import { currentChainId, getWalletClient } from '@/blockchain-services/useFvkry';
 
 export default function Dashboard() {
   const { isConnected } = useAccount();
@@ -34,19 +24,19 @@ export default function Dashboard() {
             setDashData(JSON.parse(cachedData))
             setLoading(false)
           }
-          //from db
-          const response: DashboardData | ErrorResponse = {error: ''};
-          if (response && !isErrorResponse(response) && Object.keys(response).length > 0) {
-            setDashData(response)
-            localStorage.setItem('dashboard_data', JSON.stringify(response))
-          } else {
-            setDashData(mockDashboardData)
-          }
+          
+          //from get vaults contract
+          const chainId = currentChainId()
+          const chainInfo = await apiService.getChainData(chainId);
+          const user = await getWalletClient();
 
-          const walletClient = await getWalletClient()
-          if (walletClient) {
-            console.log("Wallet client initialized successfully");
-          }
+          const vaults = await apiService.getUserVaults(chainId, user.address, chainInfo.lockAsset)
+          if (vaults && vaults.length > 0) {
+            localStorage.setItem('vault_data', JSON.stringify(vaults))
+            const dashboardData = await apiService.dashboardData(vaults)
+            localStorage.setItem('dashboard_data', JSON.stringify(dashboardData))
+            setDashData(dashboardData)
+          } 
 
         } catch (error) {
           console.error("Error fetching wallet data:", error);
@@ -78,7 +68,7 @@ export default function Dashboard() {
       <p className={`text-center my-2 text-amber-600 ${isConnected ? 'hidden' : ''}`}>
         Connect your wallet to view your asset lock analytics
       </p>
-      <UserVaultDashboard data={dashData} />
+      {dashData && <UserVaultDashboard data={dashData} />}
     </div>
   )
 }

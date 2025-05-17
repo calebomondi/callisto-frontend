@@ -106,3 +106,68 @@ export interface ScheduledData {
     checkUnlockStatus: UnlockStatus;
     unlockDaysStatus: UnlockDays[];
 }
+
+interface AssetTotal {
+    symbol: string;
+    totalAmount: number;
+    decimals: number;
+    address: string;
+}
+  
+interface AssetValue extends AssetTotal {
+    valueUSD: number;
+    price: number;
+}
+  
+interface AvgLockDaysByAsset {
+    symbol: string;
+    avgDays: number;
+}
+
+interface UniqueAsset {
+    address: string;
+    symbol: string;
+    name: string;
+}
+
+interface UpcomingUnlock {
+    id: number;
+    title: string;
+    asset: string;
+    unlockDate: string;
+    daysRemaining: number;
+    amount: number;
+}
+
+interface MonthlyActivity {
+    month: string;
+    count: number;
+}
+
+export interface DashboardData {
+    totalVaults: number;
+    avgLockDays: number;
+    avgLockDaysByAsset: AvgLockDaysByAsset[];
+    uniqueAssets: UniqueAsset[];
+    upcomingUnlocks: UpcomingUnlock[];
+    assetTotals: AssetTotal[];
+    assetValues: AssetValue[];
+    totalValueUSD: number;
+    lockTypeCounts: {
+        fixed: number;
+        goal: number;
+        scheduled: number;
+    };
+    lockTypeByAsset: {
+        [symbol: string]: {
+            Fixed: number;
+            goal: number;
+            schedule: number;
+        };
+    };
+    monthlyActivity: MonthlyActivity[];
+}
+
+export interface UserVaultDashboardProps {
+    data: DashboardData;
+}

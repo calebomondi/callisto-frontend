@@ -48,6 +48,9 @@ export default function SubVaultsContainer() {
               lockAsset: chainInfo.lockAsset
             })
           }
+
+          console.log(JSON.stringify(vaults, null, 2))
+
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Failed to fetch vault data')
         } finally {
