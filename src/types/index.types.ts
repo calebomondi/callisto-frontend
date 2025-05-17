@@ -79,8 +79,6 @@ export interface VaultCardProps {
 
 export interface VaultGridProps {
     vaultData: VaultData[];
-    chainId: number;
-    lockAsset: `0x${string}`;
 }
 
 export interface VaultTransactions {

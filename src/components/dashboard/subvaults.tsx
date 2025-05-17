@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useAccount } from 'wagmi'
 import ConnectedNavbar from "../navbar/connectednavbar"
@@ -8,19 +7,21 @@ import { mockVaultsData } from "./mockplatformdata"
 import Skeletun from "../skeletons/skeleton"
 import apiService from "@/backendServices/apiservices"
 import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
+import { useLocation } from "react-router-dom"
 
 export default function SubVaultsContainer() {
+  const location = useLocation()
+
   const [vaultData, setVaultData] = useState<VaultData[]>([])
   const [loading, setLoading] = useState(false)
   const [chainData, setChainData] = useState<{
-    chainId: number
+    chainId: number,
     lockAsset: `0x${string}`
   }>({
     chainId: 0,
     lockAsset: '0x..'
   })
   const [error, setError] = useState<string | null>(null)
-  const { id } = useParams()
   const { isConnected } = useAccount()
 
   useEffect(() => {
@@ -49,8 +50,6 @@ export default function SubVaultsContainer() {
             })
           }
 
-          console.log(JSON.stringify(vaults, null, 2))
-
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Failed to fetch vault data')
         } finally {
@@ -65,7 +64,7 @@ export default function SubVaultsContainer() {
     }
 
     fetchData()
-  }, [id, isConnected])
+  }, [location])
 
   const renderContent = () => {
     if (loading) {
@@ -81,7 +80,7 @@ export default function SubVaultsContainer() {
         <p className={`text-center my-4 text-amber-600 ${isConnected ? 'hidden' : ''}`}>
           Connect your wallet to interact with your vaults
         </p>
-        <VaultGrid vaultData={vaultData} chainId={chainData.chainId} lockAsset={chainData.lockAsset}/>
+        <VaultGrid vaultData={vaultData} />
       </>
     )
   }

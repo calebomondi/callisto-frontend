@@ -142,9 +142,9 @@ export default function LockAsset() {
                             altText=""
                             onClick={() => window.open(
                                 chainID === 84532 
-                                ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
-                                : `https://sepolia.etherscan.io/tx/${tx}`, 
-                                '_blank'
+                                ? `https://base-sepolia.blockscout.com/tx/${tx}` 
+                                : `https://base.blockscout.com/tx/${tx}`
+                                , '_blank'
                             )}
                         >
                             View Transaction

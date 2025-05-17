@@ -160,9 +160,9 @@ export async function addToTokenVault(owner:string, _index:number, _symbol:strin
     }
 }
 
-export async function withdrawAsset(_index:number, _vault:number, _amount:string, _goal:boolean, _symbol:string) {
+export async function withdrawAsset(_index:number, _amount:string, _goal:boolean, _symbol:string) {
     try {
-        const { walletClient, address } = await getWalletClient();
+        const { walletClient, address } = await getWalletClient()
         const publicClient = getPublicClient()
 
         //chain data and token data

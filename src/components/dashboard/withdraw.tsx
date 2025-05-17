@@ -3,8 +3,6 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from "@/types/index.types"
 import { withdrawAsset } from "@/blockchain-services/useFvkry";
-import apiService from "@/backendServices/apiservices";
-import Decimal from 'decimal.js';
 
 export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
     const { toast } = useToast();
@@ -44,7 +42,12 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
             //add to lock
             let tx = "";
             if(vaultData.vaultId !== undefined) {
-                //tx = await withdrawAsset(vaultData.vaultId, vaultData.vaultType, formValues.amount, false, vaultData.decimals, vaultData.symbol) || '';
+                tx = await withdrawAsset(
+                    vaultData.vaultId, 
+                    formValues.amount, 
+                    false, 
+                    vaultData.symbol
+                ) || '';
             }
             if(tx) {
                 //toast
@@ -56,8 +59,8 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
                             altText="Goto schedule to undo"
                             onClick={() => window.open(
                                 chainId === 84532 
-                                ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
-                                : `https://sepolia.ethersan.io/tx/${tx}`
+                                ? `https://base-sepolia.blockscout.com/tx/${tx}` 
+                                : `https://base.blockscout.com/tx/${tx}`
                                 , '_blank'
                             )}
                         >

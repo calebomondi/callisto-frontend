@@ -55,8 +55,8 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                             altText="Goto schedule to undo"
                             onClick={() => window.open(
                                 chainId === 84532 
-                                ? `https://sepolia-blockscout.lisk.com/tx/${tx}` 
-                                : `https://sepolia.ethersan.io/tx/${tx}`
+                                ? `https://base-sepolia.blockscout.com/tx/${tx}` 
+                                : `https://base.blockscout.com/tx/${tx}`
                                 , '_blank'
                             )}
                         >

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Timer, Target, Wallet, ArrowUpRight, Search, Lock, Filter } from 'lucide-react';
+import { Timer, Wallet, ArrowUpRight, Search, Lock, Filter } from 'lucide-react';
 import { VaultCardProps, VaultGridProps } from '@/types/index.types';
 import { useNavigate } from 'react-router-dom';
+
+import apiService from '@/backendServices/apiservices';
+import { currentChainId, getWalletClient } from '@/blockchain-services/useFvkry';
   
 const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) => {
     const [timeLeft, setTimeLeft] = useState<string>('');
@@ -89,7 +92,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
 };
   
  // Main component that renders the grid of vault cards
-const VaultGrid: React.FC<VaultGridProps> = ({ vaultData, chainId, lockAsset }) => {
+const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAsset, setSelectedAsset] = useState('');
   const [selectedLockType, setSelectedLockType] = useState('');
@@ -97,6 +100,31 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData, chainId, lockAsset }) 
   const [showExpired, setShowExpired] = useState(false);
   const [filteredVaults, setFilteredVaults] = useState(vaultData);
   const [showFilters, setShowFilters] = useState(false);
+  const [chainData, setChainData] = useState<{
+    chainId: number,
+    lockAsset: `0x${string}`
+    userAddress?: string
+  }>({
+    chainId: 0,
+    lockAsset: '0x..',
+    userAddress: ''
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const chainId = currentChainId();
+      const chainInfo = await apiService.getChainData(chainId);
+      const user = await getWalletClient();
+
+      setChainData({
+        chainId: chainId,
+        lockAsset: chainInfo.lockAsset,
+        userAddress: user.address
+      })
+    }
+
+    fetchData();
+  }, [vaultData]);
 
   // Get unique asset symbols and lock types for filter options
   const assetSymbols = [...new Set(vaultData.map(vault => vault.symbol))];
@@ -240,7 +268,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData, chainId, lockAsset }) 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {filteredVaults.length > 0 ? (
           filteredVaults.map((subvault, index) => (
-            <VaultCard key={index} subvault={subvault} chainId={chainId} lockAsset={lockAsset} />
+            <VaultCard key={index} subvault={subvault} chainId={chainData.chainId} lockAsset={chainData.lockAsset} />
           ))
         ) : (
           <p className="text-center col-span-full">No vaults match your criteria</p>
