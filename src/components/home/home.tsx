@@ -9,7 +9,6 @@ import Navbar from '../navbar/navbar';
 import { useNavigate } from 'react-router-dom';
 import Features from './features';
 import Hero from './hero';
-import TrustedBy from './trustedby';
 import Stats from './stats';
 import Benefits from './benefits';
 

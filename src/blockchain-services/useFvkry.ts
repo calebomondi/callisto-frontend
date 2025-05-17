@@ -3,7 +3,7 @@ import { createConfig } from "wagmi";
 import { base, baseSepolia } from '@wagmi/core/chains'
 import { getChainId } from '@wagmi/core'
 
-import { TokenVaultParams, Transaction, ApproveTokenParams } from "@/types/index.types";
+import { TokenVaultParams, ApproveTokenParams } from "@/types/index.types";
 import apiService from "@/backendServices/apiservices";
 
 import { LOCKASSET_CONTRACT_ABI, ERC20_ABI } from "./core";
