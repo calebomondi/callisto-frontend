@@ -14,13 +14,7 @@ export default function SubVaultsContainer() {
 
   const [vaultData, setVaultData] = useState<VaultData[]>([])
   const [loading, setLoading] = useState(false)
-  const [chainData, setChainData] = useState<{
-    chainId: number,
-    lockAsset: `0x${string}`
-  }>({
-    chainId: 0,
-    lockAsset: '0x..'
-  })
+
   const [error, setError] = useState<string | null>(null)
   const { isConnected } = useAccount()
 
@@ -44,10 +38,6 @@ export default function SubVaultsContainer() {
           if (vaults && vaults.length > 0) {
             setVaultData(vaults)
             localStorage.setItem('vault_data', JSON.stringify(vaults))
-            setChainData({
-              chainId: chainId,
-              lockAsset: chainInfo.lockAsset
-            })
           }
 
         } catch (err) {

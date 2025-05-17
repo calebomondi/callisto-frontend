@@ -64,7 +64,7 @@ const Documentation: React.FC = () => {
           <h2 className="text-3xl font-bold mb-4">Connecting Your Wallet</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Install a Web3 wallet (MetaMask, WalletConnect).</li>
-            <li>Ensure you're on the correct network (Lisk Sepolia | Ethereum Sepolia).</li>
+            <li>Ensure you're on the correct network (Base Sepolia | Base Mainnet).</li>
             <li>Click "Connect Wallet" in the main interface.</li>
             <li>Approve the connection in your wallet.</li>
           </ol>
@@ -72,8 +72,8 @@ const Documentation: React.FC = () => {
           <h2 className="text-3xl font-bold mb-4">Locking Your Asset</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Click the 'Lock' button on the dashboard to open the modal form.</li>
-            <li>Enter the details of the asset ( ETH or ERC20 token ) you want to lock on the form fields.</li>
-            <li>Click the Lock button the form to initiate the asset transfer.</li>
+            <li>Select the stablecoin you want to lock on the form fields and provide necessary vault details.</li>
+            <li>Click the Lock button on the form to initiate the asset transfer.</li>
             <li>Confirm the transaction on your wallet.</li>
             <li>Check 'My Vaults' for the vault you have created.</li>
             <li>Check 'Transaction' for the transaction of the new vault.</li>
