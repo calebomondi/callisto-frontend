@@ -31,7 +31,7 @@ const stats = [
 
 export default function Stats() {
   return (
-    <section className="py-20 px-24 light:bg-gray-50">
+    <section className="py-20 px-24 light:bg-gray-50" id="stats">
       <div className="text-center mb-16">
         <h2 className="text-2xl font-bold text-navy mb-4">
           Platform Statistics

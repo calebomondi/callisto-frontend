@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import vault from '/vault.png'
 //import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 import { useNavigate } from "react-router-dom";
-import { LockKeyhole } from "lucide-react";
 
 export default function Hero() {
 
@@ -42,7 +41,7 @@ export default function Hero() {
     ];
 */}
     return (
-        <section className="pt-32 pb-20 px-24">
+        <section className="pt-32 pb-20 px-24" id="hero">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-between">
             <motion.div
@@ -64,12 +63,11 @@ export default function Hero() {
                 Create Virtual Vaults For Locking Your Crypto assets And Curb Your Impulsive Spending Behaviour, Build Your Long Term Investment
               </p>
               <div className="flex gap-6 mb-12 justify-center text-amber-500 font-italic">
-                <p>Integrated With Aave, Your Locked Assets Earn Interest</p>
+                <p>Integrated With Aave, Your Locked Assets Yield Interest</p>
               </div>
               <div className="flex justify-center">
-                <Button onClick={handleDash} className="bg-amber-600 hover:bg-amber-500 text-lg px-5 py-4">
+                <Button onClick={handleDash} className="bg-amber-500 hover:bg-amber-500 text-lg px-5 py-4">
                   Let's Get You Started
-                  <LockKeyhole className="ml-2 w-5 h-5 animate-pulse" />
                 </Button>
               </div>
             </motion.div>

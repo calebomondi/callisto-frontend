@@ -30,13 +30,11 @@ const Documentation: React.FC = () => {
                     className='w-full rounded-md max-h-[250px]'
                 />
             </div>
-            <h2 className="text-3xl font-bold mb-4">What Is Fvkry Prvnta?</h2>
+            <h2 className="text-3xl font-bold mb-4">What Is FVP?</h2>
             <p className='mb-4'>
-                FVKRY PRVNTA is a blockchain-based virtual assets and crypto locking platform that aims to enhance financial discipline and promote long-term saving among 
-                cryptocurrency and virtual asset owners. It allows users to check their impulsive spending and trading habits by allowing them to lock their ETH and ERC-20 tokens 
-                in secure vaults that can only be accessed after a predefined lock period ranging from days, weeks, months and upto years.
+                FVP is a self-custodial financial management tool that allows users to manage their crypto assets by locking them in virtual with an aim to foster financial discipline and promote long term investment. 
             </p>
-            <hr className='mb-4'/>
+            <hr className='mb-4 bg-slate-300'/>
             <h2 className="text-3xl font-bold mb-4">Key Features</h2>
             <div className='space-y-2 mb-4'>
                 <p>• A dashboard that show a summary of yout locked assets in details</p>
@@ -120,15 +118,6 @@ const Documentation: React.FC = () => {
             <li>Click the 'Delete' button </li>
             <li>Confirm the deletion transaction on your wallet.</li>
           </ol>
-          <hr className='mb-4'/>
-          <h2 className="text-3xl font-bold mb-4">Claim Fvkry Points</h2>
-          <ol className="list-decimal pl-6 space-y-2 mb-4">
-            <li>Navigate to the 'Financial Health' section.</li>
-            <li>Click the 'Claim Points' button (Points are claimed once every 100 days)</li>
-            <li>You'll be navigated to the 'Rewards' section where you can view your total points.</li>
-            <li>Points can be redeemed to tokens if lock any asset for upto 100 days</li>
-            <li>The Points to redeem we'll be dependanct on the total amount of points</li>
-          </ol>
         </div>
       )
     }
@@ -160,8 +149,8 @@ const Documentation: React.FC = () => {
               key={section.id}
               className={`flex items-center w-full p-2 text-left rounded-md mb-2 ${
                 activeSection === section.id 
-                  ? 'bg-amber-600 text-white' 
-                  : 'hover:bg-amber-500'
+                  ? 'bg-amber-500 text-white'
+                  : 'hover:bg-amber-500 hover:opacity-60 hover:text-white'
               }`}
               onClick={() => setActiveSection(section.id)}
             >

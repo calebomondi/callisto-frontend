@@ -185,7 +185,7 @@ export const tokens = [
 
 export const faqs = [
   {
-    question: "How does FVKRY PRVNTA work?",
+    question: "How does FVP work?",
     answer: "Our platform allows you to lock your crypto assets for a specified period, helping you achieve your savings goals while ensuring financial discipline. You can select your preferred lock duration and monitor your locked assets in real time."
   },
   {
@@ -194,7 +194,7 @@ export const faqs = [
   },
   {
     question: "What are the fees?",
-    answer: "We charge a minimal 0.3% deposit fee to support platform sustainability and continuous development. There are no hidden fees, and all costs are transparently displayed before you initiate a lock."
+    answer: "We charge a minimal 0.5% deposit fee to support platform sustainability and continuous development. There are no hidden fees, and all costs are transparently displayed before you initiate a lock."
   },
   {
     question: "Can I withdraw early?",
@@ -205,12 +205,8 @@ export const faqs = [
     answer: "Its a timetable that you set up for a fixed-duration based lock that allows you to withdraw a portion amount of your locked asset in that vault after a certain set duration, it can be once (after) or frequently (every)."
   },
   {
-    question: "What happens when my lock period ends?",
-    answer: "Once your lock period expires, you can withdraw your assets instantly without any additional fees. You can also extend the lock period if you feel like you need the funds locked up for another set period."
-  },
-  {
     question: "Which cryptocurrencies are supported?",
-    answer: "FVKRY PRVNTA supports a wide range of ERC-20 tokens, including Ethereum (ETH), stablecoins like USDT and USDC, DeFi tokens such as AAVE and UNI, and popular meme tokens like SHIB and PEPE."
+    answer: "FVP supports a wide range of ERC-20 tokens, including Ethereum (ETH), stablecoins like USDT and USDC, DeFi tokens such as AAVE and UNI, and popular meme tokens like SHIB and PEPE."
   },
   {
     question: "How do I track my locked assets?",

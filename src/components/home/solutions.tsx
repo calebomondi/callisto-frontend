@@ -14,7 +14,7 @@ const solutions = [
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">ETH Vault</h3>
-            <p className="text-sm text-gray-600">Locked for 6 months</p>
+            <p className="text-sm dark:text-gray-400">Locked for 6 months</p>
           </div>
           <Lock className="w-8 h-8 text-amber-500" />
         </div>
@@ -23,7 +23,7 @@ const solutions = [
             <p className="text-sm font-medium">Amount Locked</p>
             <p className="text-2xl font-bold">10.5 ETH</p>
           </div>
-          <div className="flex justify-between text-sm text-gray-600">
+          <div className="flex justify-between text-sm dark:text-gray-400">
             <span>Unlock Date</span>
             <span>Oct 15, 2024</span>
           </div>
@@ -41,7 +41,7 @@ const solutions = [
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Unlock Schedule</h3>
-            <p className="text-sm text-gray-600">3-month intervals</p>
+            <p className="text-sm dark:text-gray-400">3-month intervals</p>
           </div>
           <Clock className="w-8 h-8 text-amber-500" />
         </div>
@@ -53,9 +53,9 @@ const solutions = [
             >
               <div>
                 <p className="font-medium">Phase {i}</p>
-                <p className="text-sm text-gray-600">3.5 ETH</p>
+                <p className="text-sm dark:text-gray-400">3.5 ETH</p>
               </div>
-              <p className="text-sm text-gray-600">Month {i * 3}</p>
+              <p className="text-sm dark:text-gray-400">Month {i * 3}</p>
             </div>
           ))}
         </div>
@@ -72,7 +72,7 @@ const solutions = [
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Portfolio Overview</h3>
-            <p className="text-sm text-gray-600">Total Value Locked</p>
+            <p className="text-sm dark:text-gray-400">Total Value Locked</p>
           </div>
           <ChartBar className="w-8 h-8 text-amber-500" />
         </div>
@@ -88,7 +88,7 @@ const solutions = [
               </div>
             ))}
           </div>
-          <div className="flex justify-between text-sm text-gray-600">
+          <div className="flex justify-between text-sm dark:text-gray-400">
             <span>Last 6 Months</span>
             <span>$250,000 TVL</span>
           </div>
@@ -106,7 +106,7 @@ const solutions = [
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold">Active Vaults</h3>
-            <p className="text-sm text-gray-600">4 Vaults</p>
+            <p className="text-sm dark:text-gray-400">4 Vaults</p>
           </div>
           <Wallet className="w-8 h-8 text-amber-500" />
         </div>
@@ -187,12 +187,9 @@ export default function Solutions() {
               <h3 className="text-2xl font-semibold mb-3">
                 {activeSolution?.title}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="dark:text-gray-400 mb-6">
                 {activeSolution?.description}
               </p>
-              <Button className="bg-amber-500 hover:bg-amber-600">
-                Learn More
-              </Button>
             </motion.div>
           </div>
 

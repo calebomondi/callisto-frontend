@@ -21,8 +21,8 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 py-12">
             <div className="flex md:items-center justify-between md:flex-row flex-col">
                 <div>
-                <h3 className="text-xl font-bold mb-4">FVKRY PRVNTA</h3>
-                <p className="">Secure crypto savings platform</p>
+                <h3 className="text-xl font-bold mb-2">FVP</h3>
+                <p className="">Self Custodial Financial Management Platform</p>
                 <div className="mt-4">
                     <input
                     type="email"
@@ -81,7 +81,7 @@ export default function Footer() {
           <div className="border-t dark:border-w-700 mt-8 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className=" text-sm">
-                &copy; {new Date().getFullYear()} FVKRY PRVNTA. All rights reserved.
+                &copy; {new Date().getFullYear()} FVP. All rights reserved.
               </p>
               <div className="flex items-center mt-4 md:mt-0">
                 <span className="flex items-center  text-sm">

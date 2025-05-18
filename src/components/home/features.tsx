@@ -5,7 +5,7 @@ import {
   Shield,
   ChartBar,
   Wallet,
-  RefreshCw,
+  Blocks
 } from "lucide-react";
 
 const features = [
@@ -22,7 +22,7 @@ const features = [
   {
     icon: <Clock className="w-8 h-8 light:text-amber-500" />,
     title: "Flexible Time Locks",
-    description: "Choose your lock duration from 1 week to 1 year with automatic unlocking"
+    description: "Choose your lock duration from 1 day to 5 years with automatic unlocking"
   },
   {
   icon: <Wallet className="w-8 h-8 light:text-amber-500" />,
@@ -36,9 +36,9 @@ const features = [
       "Set up scheduled unlocks to portion out your assets over time",
   },
   {
-    icon: <RefreshCw className="w-6 h-6" />,
-    title: "Flexible Withdrawals",
-    description: "Choose between partial and full withdrawal options",
+    icon: <Blocks className="w-6 h-6" />,
+    title: "Aave Integration",
+    description: "Locked assets are supplied to Aave for yield generation",
   },
 ];
 
