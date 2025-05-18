@@ -238,7 +238,6 @@ export default function LockAsset() {
         notShow = true;
         toUnlockTotal = Number(formValues.unLockAmount) * Math.floor(convertToDays(formValues.durationType,Number(formValues.lockPeriod)) / Number(formValues.unLockDuration));
         amountFine = toUnlockTotal > 1 && toUnlockTotal <= Number(formValues.totalAmount);
-        console.log('toUnlockTotal', toUnlockTotal, 'amountFine', amountFine, 'notShow', notShow)
     }
 
   return (
