@@ -38,6 +38,9 @@ export default function SubVaultsContainer() {
           if (vaults && vaults.length > 0) {
             setVaultData(vaults)
             localStorage.setItem('vault_data', JSON.stringify(vaults))
+          } else if (vaults && vaults.length === 0) {
+            localStorage.removeItem('vault_data')
+            setVaultData(mockVaultsData)
           }
 
         } catch (err) {

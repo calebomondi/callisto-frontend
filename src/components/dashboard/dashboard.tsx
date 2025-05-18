@@ -36,7 +36,10 @@ export default function Dashboard() {
             const dashboardData = await apiService.dashboardData(vaults)
             localStorage.setItem('dashboard_data', JSON.stringify(dashboardData))
             setDashData(dashboardData)
-          } 
+          } else if (vaults && vaults.length === 0) {
+            localStorage.removeItem('vault_data')
+            setDashData(mockDashboardData)
+          }
 
         } catch (error) {
           console.error("Error fetching wallet data:", error);
