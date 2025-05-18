@@ -132,7 +132,7 @@ const Documentation: React.FC = () => {
   return (
     <div className="md:flex h-screen">
       {/* Sidebar */}
-      <div className="md:w-64 p-4 shadow-md sticky top-0 left-0 dark:bg-black/90 bg-white/90 md:bg-transparent">
+      <div className="md:w-64 p-4 shadow-md sticky top-0 left-0 dark:bg-black/50 bg-white/90 md:bg-transparent">
         <div className="flex items-center md:justify-evenly mb-6">
             <a href="/">
                 <img

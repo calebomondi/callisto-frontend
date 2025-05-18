@@ -28,6 +28,7 @@ export default function LockAsset() {
         durationType: 'days'
     })
     const [supportedTokens, setSupportedTokens] = useState<SupportedTokens[]>([])
+    const [isAaveSupported, setIsAaveSupported] = useState<boolean>(false)
 
     useEffect(() => {
         try {
@@ -37,15 +38,24 @@ export default function LockAsset() {
                     if (response && response.length > 0) {
                         setSupportedTokens(response)
                     }
+                    console.log("Supported Tokens:", JSON.stringify(response));
                 }
             }
 
             fetchSupportedTokens()
         } catch (error) {
             console.error("Error fetching supported tokens:", error);
-
         }
-    }, []);
+    }, [isConnected]);
+
+    useEffect(() => {
+        if (isConnected && supportedTokens.length > 0) {
+            const token = supportedTokens.find(token => token.symbol === formValues.symbol);
+            if (token) {
+                setIsAaveSupported(token.aave);
+            }
+        }
+    }, [isConnected, formValues.symbol]);
 
     const TITLE_WORD_LIMIT = 5;
 
@@ -74,9 +84,24 @@ export default function LockAsset() {
             if (words <= TITLE_WORD_LIMIT || value.length < formValues.title.length) {
                 setFormValues(prev => ({ ...prev, [name]: value }));
             }
-        } else {
-            setFormValues(prev => ({ ...prev, [name]: value }));
-        }
+        } 
+
+        if (name === "lockPeriod") {
+            const numericValue = parseInt(value, 10);
+            const max = durationLimits[formValues.durationType];
+
+            if (numericValue > max) {
+                // If user enters a value higher than max, ignore the update or clamp it
+                setFormValues(prev => ({
+                    ...prev,
+                    [name]: max.toString(), // or just skip the update
+                }));
+                return;
+            }
+        }  
+        
+        setFormValues(prev => ({ ...prev, [name]: value }));
+        
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -203,6 +228,13 @@ export default function LockAsset() {
         years: "1 - 5 years",
     };
 
+    const durationLimits: Record<string, number> = {
+        days: 6,
+        weeks: 3,
+        months: 11,
+        years: 5,
+    }
+
     //calculate service fee 0.5%
     const formatNumber = (num: number, maxDecimals = 6) => {
         // Handle the floating point precision issue by using toFixed
@@ -279,7 +311,15 @@ export default function LockAsset() {
                                 ))
                             }
                         </select>
+                        {
+                        isAaveSupported && (
+                            <span className="text-sm p-1 rounded bg-green-500 text-white my-2">
+                                aave
+                            </span>
+                        )
+                    }
                     </label>
+                    
                 </div>
                 <div className="mb-2">
                     <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
