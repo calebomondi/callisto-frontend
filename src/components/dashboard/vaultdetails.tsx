@@ -237,7 +237,7 @@ const VaultDetails = () => {
           <Card>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span className="text-2xl text-amber-600">{vaultData.title}</span>
+                  <span className="text-2xl text-amber-500">{vaultData.title}</span>
                   <p className="text-lg font-mono flex space-x-2"> <Timer /> <span>{timeLeft}</span></p>
                 </CardTitle>
               </CardHeader>
@@ -274,28 +274,28 @@ const VaultDetails = () => {
 
               <div className="flex flex-col md:flex-row">
                   <div className='md:w-1/3'>
-                  <p className="text-center text-gray-400">Start Date</p>
+                  <p className="text-center text-gray-600 dark:text-gray-400">Start Date</p>
                   <p className="font-semibold text-center">{formatDate(new Date(vaultData.startDate).getTime())}</p>
                   </div>
                   <div className='md:w-1/3'>
-                  <p className="text-center text-gray-400">End Date</p>
+                  <p className="text-center text-gray-600 dark:text-gray-400">End Date</p>
                   <p className="font-semibold text-center">{formatDate(new Date(vaultData.endDate).getTime())}</p>
                   </div>
                   <div className='md:w-1/3'>
-                  <p className="text-center text-gray-400">Lock Type</p>
+                  <p className="text-center text-gray-600 dark:text-gray-400">Lock Type</p>
                   <p className="font-semibold text-center capitalize">{vaultData.vaultType}</p>
                   </div>
                   { 
                     vaultData.vaultType === 'schedule' && (
                       <div className='md:w-1/3'>
-                        <p className="text-center text-gray-400">Unlock Schedule</p>
+                        <p className="text-center text-gray-600 dark:text-gray-400">Unlock Schedule</p>
                         <p className="font-semibold text-center">{vaultData.unLockDuration === 0 ? 'None' : `every ${vaultData.unLockDuration} days`}</p>
                       </div>
                     )
                   }
                   {Number(vaultData.unLockGoal) > 0 && (
                   <div className='md:w-1/3'>
-                      <p className="text-center text-gray-400">Goal Amount</p>
+                      <p className="text-center text-gray-600 dark:text-gray-400">Goal Amount</p>
                       <p className="font-semibold text-center">{formatCurrency(Number(vaultData.unLockGoal))}</p>
                   </div>
                   )}

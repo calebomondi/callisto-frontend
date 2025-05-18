@@ -57,7 +57,7 @@ export default function SubVaultsContainer() {
     }
 
     fetchData()
-  }, [location])
+  }, [location, isConnected])
 
   const renderContent = () => {
     if (loading) {

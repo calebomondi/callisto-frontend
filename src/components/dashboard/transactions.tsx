@@ -17,8 +17,8 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
   
   return (
     <div className="overflow-x-auto shadow-md rounded-lg my-6">
-      <table className="min-w-full bg-gray-300">
-        <thead className="bg-gray-300 dark:bg-slate-400">
+      <table className="min-w-full dark:bg-gray-300 bg-white divide-y divide-gray-200">
+        <thead className="bg-gray-200 dark:bg-slate-400">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Depositor</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Amount</th>
@@ -26,7 +26,7 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Timestamp</th>
           </tr>
         </thead>
-        <tbody className="bg-gray-300 dark:bg-slate-300">
+        <tbody className="bg-white dark:bg-slate-300">
           {transactions.length === 0 ? (
             <tr>
               <td colSpan={4} className="px-6 py-4 text-center text-gray-500">

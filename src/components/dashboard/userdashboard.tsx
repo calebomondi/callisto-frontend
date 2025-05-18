@@ -127,7 +127,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       
       {/* Asset details table */}
       <div className="dark:bg-base-300 rounded-lg shadow-md overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-600">
+        <table className="min-w-full divide-y dark:divide-gray-600">
           <thead className="b">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset</th>
@@ -215,7 +215,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-8 py-2 min-h-screen">
       {/* Navigation tabs */}
-      <div className="border-b border-gray-600 mb-6 sticky top-20 dark:bg-black bg-white shadow-md dark:bg-opacity-70 px-3 rounded-sm z-10">
+      <div className="border-b dark:border-gray-600 border-gray-300 mb-6 sticky top-20 dark:bg-black bg-white shadow-md dark:bg-opacity-70 px-3 rounded-sm z-10">
         <nav className="-mb-px flex space-x-8">
           {[
             { id: 'overview' as const, label: 'Overview' }, 
