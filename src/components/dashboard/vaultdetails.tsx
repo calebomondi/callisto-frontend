@@ -390,7 +390,7 @@ const VaultDetails = () => {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
-                                    className={`h-5 w-5 rounded-full ${event.status === 'past' ? 'bg-red-500' : event.status === 'current' ? 'bg-green-500' : event.status === 'future' ? 'bg-blue-500' : ''}`}
+                                    className={`h-5 w-5 text-white rounded-full ${event.status === 'past' ? 'bg-red-500' : event.status === 'current' ? 'bg-green-500' : event.status === 'future' ? 'bg-blue-500' : ''}`}
                               >  
                                     <path
                                     fillRule="evenodd"

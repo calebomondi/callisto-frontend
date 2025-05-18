@@ -56,7 +56,7 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                     description: `Successfully Added ${formValues.amount} ${vaultData.symbol} To ${vaultData.title}`,
                     action: (
                         <ToastAction 
-                            altText="Goto schedule to undo"
+                            altText="View Transaction"
                             onClick={() => window.open(
                                 chainId === 84532 
                                 ? `https://base-sepolia.blockscout.com/tx/${tx}` 

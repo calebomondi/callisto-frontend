@@ -85,8 +85,8 @@ export default function LockAsset() {
         setIsLoading(true)
         try {
             //validate input data
-            if (isNaN(Number(formValues.totalAmount)) || Number(formValues.totalAmount) <= 0) {
-                throw new Error('Amount to lock must be a value and greater than 0')
+            if (isNaN(Number(formValues.totalAmount)) || Number(formValues.totalAmount) <= 0.001) {
+                throw new Error('Amount to lock must be a value and greater than 0.001')
             }
             if (isNaN(Number(formValues.lockPeriod)) || Number(formValues.lockPeriod) <= 0) {
                 throw new Error('Lock period must be a value and greater than 0')
@@ -105,6 +105,20 @@ export default function LockAsset() {
             }
             if (formValues.durationType === 'years' && Number(formValues.lockPeriod) > 5) {
                 throw new Error('Years Cannot Exceed 5')
+            }
+
+            //set form values according to vault type
+            if(formValues.vaultType === 'schedule') {
+                formValues.unLockGoal = ''
+            }
+            if(formValues.vaultType === 'goal') {
+                formValues.unLockDuration = ''
+                formValues.unLockAmount = ''
+            }
+            if(formValues.vaultType === 'Fixed') {
+                formValues.unLockDuration = ''
+                formValues.unLockAmount = ''
+                formValues.unLockGoal = ''
             }
 
             //get vault and duration in day
@@ -136,10 +150,10 @@ export default function LockAsset() {
                 //toast
                 toast({
                     title: `${formValues.title.toUpperCase()}`,
-                    description: `Lock has been Created Successfully`,
+                    description: `Vault has been Created Successfully`,
                     action: (
                         <ToastAction 
-                            altText=""
+                            altText="View Transaction"
                             onClick={() => window.open(
                                 chainID === 84532 
                                 ? `https://base-sepolia.blockscout.com/tx/${tx}` 
@@ -189,12 +203,44 @@ export default function LockAsset() {
         years: "1 - 5 years",
     };
 
+    //calculate service fee 0.5%
+    const formatNumber = (num: number, maxDecimals = 6) => {
+        // Handle the floating point precision issue by using toFixed
+        // to get a reasonable string representation
+        const fixedNum = Number(num.toFixed(maxDecimals));
+        
+        // Convert to string to handle trailing zeros
+        const numStr = fixedNum.toString();
+        
+        // If it's a whole number, return it as is
+        if (!numStr.includes('.')) {
+            return numStr;
+        }
+        
+        // For decimal numbers, format with toPrecision to get proper representation
+        // then convert to number and back to string to remove trailing zeros
+        return Number(parseFloat(numStr).toPrecision(15)).toString();
+    };
+
+    const serviceFee = formValues.totalAmount && formatNumber(Number(formValues.totalAmount) * 0.005);
+
     const remainingTitleWords = TITLE_WORD_LIMIT - countWords(formValues.title);
 
     let toUnlockTotal = 0;
-    if(formValues.vaultType === 'schedule') 
-        toUnlockTotal = Number(formValues.unLockAmount) * Math.floor(convertToDays(formValues.durationType,Number(formValues.lockPeriod)) / Number(formValues.unLockDuration))
-    
+    let notShow = false;
+    let amountFine = false;
+    if(
+        formValues.unLockDuration.length > 0 && 
+        formValues.unLockAmount.length > 0 &&
+        formValues.lockPeriod.length > 0 &&
+        formValues.durationType !== 'days'
+    ) {
+        notShow = true;
+        toUnlockTotal = Number(formValues.unLockAmount) * Math.floor(convertToDays(formValues.durationType,Number(formValues.lockPeriod)) / Number(formValues.unLockDuration));
+        amountFine = toUnlockTotal > 1 && toUnlockTotal <= Number(formValues.totalAmount);
+        console.log('toUnlockTotal', toUnlockTotal, 'amountFine', amountFine, 'notShow', notShow)
+    }
+
   return (
     <div className="flex justify-center items-center">
         <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
@@ -322,14 +368,19 @@ export default function LockAsset() {
                         required
                     />
                 </label>
-                <span className={`text-sm text-gray-400 my-2 ${toUnlockTotal > Number(formValues.totalAmount) ? 'text-red-600' : 'hidden'}`}>
-                    {`Scheduled Unlock Amount: ${toUnlockTotal}`}
-                </span>
+                <div className="w-full text-center flex flex-col items-center">
+                    <span className={`text-sm dark:text-gray-400 my-2 ${formValues.totalAmount.length > 0 ? "" : "hidden"} text-center`}>
+                        {`Service Fee: ${serviceFee} - To Lock: ${formatNumber(Number(formValues.totalAmount) - Number(serviceFee))}`} 
+                    </span>
+                    <span className={`text-sm text-gray-400 my-2 ${!amountFine && 'text-red-600'} ${!notShow && 'hidden'} ${formValues.vaultType !== 'schedule' && 'hidden'}`}>
+                        {`Unlock ${formValues.unLockAmount} ${formValues.symbol} After Every ${formValues.unLockDuration} days, Total Amount: ${toUnlockTotal}`}
+                    </span>
+                </div>
                 <div className="p-1 flex justify-center mt-2">
                     <button 
                         type="submit" 
                         className="btn bg-amber-500 w-1/2 text-white text-base border border-amber-500 hover:bg-amber-600"
-                        disabled={formValues.vaultType === 'schedule' && toUnlockTotal > Number(formValues.totalAmount)}
+                        disabled={formValues.vaultType === 'schedule' && !amountFine}
                     >
                         {
                             isLoading ? (
