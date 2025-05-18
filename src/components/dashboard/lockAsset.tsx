@@ -38,7 +38,6 @@ export default function LockAsset() {
                     if (response && response.length > 0) {
                         setSupportedTokens(response)
                     }
-                    console.log("Supported Tokens:", JSON.stringify(response));
                 }
             }
 
