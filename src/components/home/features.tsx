@@ -62,11 +62,11 @@ const itemVariants = {
 
 export default function Features() {
   return (
-    <section className="py-20 px-24 light:bg-gray-50" id="features">
-      <div className="container mx-auto px-6">
+    <section className="py-12 px-14 md:px-24 light:bg-gray-50" id="features">
+      <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-4xl font-bold mb-4"
+            className="text-3xl font-bold mb-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}

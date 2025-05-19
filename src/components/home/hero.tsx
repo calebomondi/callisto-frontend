@@ -41,15 +41,16 @@ export default function Hero() {
     ];
 */}
     return (
-        <section className="pt-32 pb-20 px-24" id="hero">
+      <section className="pt-16 md:pt-24 sm:px-5 md:px-10 lg:px-10" id="hero">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-12 items-between ">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="p-5"
-            >{/*}
+              className="p-5 items-center flex flex-col justify-center"
+            >
+            {/*}
             <TypewriterEffectSmooth
                 className="font-bold flex justify-center my-2 hidden md:flex tracking-tight flex-wrap w-full"
                 words={words}
@@ -63,7 +64,7 @@ export default function Hero() {
                 Create Virtual Vaults For Locking Your Crypto assets And Curb Your Impulsive Spending Behaviour, Build Your Long Term Investment
               </p>
               <div className="flex gap-6 mb-12 justify-center text-amber-500 font-italic">
-                <p>Integrated With Aave, Your Locked Assets Yield Interest</p>
+                <p className="text-center">Integrated With Aave, Your Locked Assets Yield Interest</p>
               </div>
               <div className="flex justify-center">
                 <Button onClick={handleDash} className="bg-amber-500 hover:bg-amber-500 text-lg px-5 py-4">
@@ -76,9 +77,9 @@ export default function Hero() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative"
+              className="relative items-center flex justify-center"
             >
-              <div className="relative w-full h-[500px]">
+              <div className="relative w-full h-[400px] md:h-[500px]">
                 <motion.div
                   className="absolute inset-0 rounded-3xl"
                   animate={{
@@ -94,7 +95,7 @@ export default function Hero() {
                   <img
                     src={vault}
                     alt="Crypto Vault Illustration"
-                    className="w-full h-full object-contain p-8"
+                    className="w-full h-full object-contain sm:p-4 md:p-6 lg:p-8"
                   />
                 </motion.div>
               </div>

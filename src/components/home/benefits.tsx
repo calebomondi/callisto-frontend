@@ -48,7 +48,7 @@ const cardVariants = {
 
 export default function Benefits() {
   return (
-    <section className="py-20 px-24 light:bg-white">
+    <section className="py-12 px-14 md:px-24 light:bg-white">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -57,7 +57,7 @@ export default function Benefits() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Why Choose FVKRY PRVNTA?
+            Why Choose FVP?
           </motion.h2>
           <motion.p
             className="dark:text-gray-400 max-w-2xl mx-auto"

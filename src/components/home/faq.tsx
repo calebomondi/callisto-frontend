@@ -11,7 +11,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-20 px-24 light:bg-gray-50">
+    <section className="py-12 px-14 md:px-24 light:bg-gray-50">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
