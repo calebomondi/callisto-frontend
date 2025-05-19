@@ -149,7 +149,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
     const searchLower = term.toLowerCase();
     return (
       vault.title.toLowerCase().includes(searchLower) ||
-      vault.asset_symbol.toLowerCase().includes(searchLower)
+      vault.symbol.toLowerCase().includes(searchLower)
     );
   };
 
@@ -255,7 +255,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
         
       </div>
       {/* Vaults Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 py-2 px-12">
         {filteredVaults.length > 0 ? (
           filteredVaults.map((subvault, index) => (
             <VaultCard key={index} subvault={subvault} chainId={chainData.chainId} lockAsset={chainData.lockAsset} />

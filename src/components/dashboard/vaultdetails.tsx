@@ -243,10 +243,10 @@ const VaultDetails = () => {
               </CardHeader>
               <CardContent className="space-y-6">
               {/* Asset Information */}
-              <div className="flex flex-col md:flex-row items-center md:justify-evenly">
+              <div className="flex flex-row items-center justify-evenly">
                   <div className="space-y-2">
                       <h3 className="text-lg font-semibold text-center">Locked Amount</h3>
-                      <p className="text-2xl font-bold text-center">
+                      <p className="text-xl font-bold text-center">
                           {Number(vaultData.amount)} {vaultData.symbol}
                       </p>
                       <p className="text-gray-500 text-center">
@@ -273,38 +273,36 @@ const VaultDetails = () => {
               </div>
 
               <div className="flex flex-col md:flex-row">
-                  <div className='md:w-1/3'>
+                <div className='md:w-1/3'>
                   <p className="text-center text-gray-600 dark:text-gray-400">Start Date</p>
                   <p className="font-semibold text-center">{formatDate(new Date(vaultData.startDate).getTime())}</p>
-                  </div>
-                  <div className='md:w-1/3'>
+                </div>
+                <div className='md:w-1/3'>
                   <p className="text-center text-gray-600 dark:text-gray-400">End Date</p>
                   <p className="font-semibold text-center">{formatDate(new Date(vaultData.endDate).getTime())}</p>
-                  </div>
-                  <div className='md:w-1/3'>
+                </div>
+                <div className='md:w-1/3'>
                   <p className="text-center text-gray-600 dark:text-gray-400">Lock Type</p>
                   <p className="font-semibold text-center capitalize">{vaultData.vaultType}</p>
-                  </div>
-                  { 
-                    vaultData.vaultType === 'schedule' && (
-                      <div className='md:w-1/3'>
-                        <p className="text-center text-gray-600 dark:text-gray-400">Unlock Schedule</p>
-                        <p className="font-semibold text-center">{vaultData.unLockDuration === 0 ? 'None' : `every ${vaultData.unLockDuration} days`}</p>
-                      </div>
-                    )
-                  }
-                  {Number(vaultData.unLockGoal) > 0 && (
-                  <div className='md:w-1/3'>
-                      <p className="text-center text-gray-600 dark:text-gray-400">Goal Amount</p>
-                      <p className="font-semibold text-center">{formatCurrency(Number(vaultData.unLockGoal))}</p>
-                  </div>
-                  )}
-                  {vaultData.unLockDuration > 0 && (
+                </div>
+                {vaultData.vaultType === 'schedule' && (
+                    <div className='md:w-1/3'>
+                      <p className="text-center text-gray-600 dark:text-gray-400">Unlock Schedule</p>
+                      <p className="font-semibold text-center">{vaultData.unLockDuration === 0 ? 'None' : `every ${vaultData.unLockDuration} days`}</p>
+                    </div>
+                )}
+                {vaultData.unLockDuration > 0 && (
                   <div className='md:w-1/3'>
                       <p className="text-center text-gray-400">Unlock Amount</p>
                       <p className="font-semibold text-center">{vaultData.unLockAmount} {vaultData.symbol}</p>
                   </div>
-                  )}
+                )}
+                {Number(vaultData.unLockGoal) > 0 && (
+                  <div className='md:w-1/3'>
+                      <p className="text-center text-gray-600 dark:text-gray-400">Goal Amount</p>
+                      <p className="font-semibold text-center">{formatCurrency(Number(vaultData.unLockGoal))}</p>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons */}
