@@ -89,7 +89,9 @@ export default function Navbar() {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden absolute w-full bg-white dark:bg-black dark: text-gray-800 backdrop-blur-md rounded-xl my-1">
+          <div 
+            className={`md:hidden absolute w-full ${activeSection === 'hero' ? ' dark:bg-black/5 bg-white/5' : 'dark:bg-black/50 bg-white/70  backdrop-blur-md  shadow-lg'} dark:text-gray-800 rounded-xl`}
+          >
             <div className="px-2 pt-2 pb-3 space-y-1">
               {[''].map((item) => (
                 <a
