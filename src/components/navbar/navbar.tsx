@@ -46,7 +46,7 @@ export default function Navbar() {
         ${activeSection === 'hero' ? ' dark:bg-black/5 bg-white/5' : 'dark:bg-black/50 bg-white/70  backdrop-blur-md  shadow-lg'}`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between md:h-20 h-16">
-            <div className="flex items-center">
+            <div className="flex items-center justify-center space-x-5">
               <a href="/">
                 <img
                   src={logo2}
@@ -54,6 +54,7 @@ export default function Navbar() {
                   className='md:w-14 w-10'
                 />
               </a>
+              <span className="bg-green-600 py-1 px-2 rounded-lg">beta</span>
             </div>
 
             <div className="hidden md:flex items-center space-x-8">

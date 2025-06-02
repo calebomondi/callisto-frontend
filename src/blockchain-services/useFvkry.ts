@@ -60,6 +60,10 @@ export async function getWalletClient() {
 }
 
 //Write Functions
+export async function createEthVault() {
+    
+}
+
 async function approveToken({symbol, amount}: ApproveTokenParams) {
     try {
         const { walletClient, address } = await getWalletClient()
