@@ -75,7 +75,7 @@ export default function Navbar() {
                 className="md:px-5 px-3 py-2 bg-amber-500 rounded-lg text-base font-semibold hover:bg-amber-500 hover:scale-105 transition-all flex items-center"
                 onClick={handleDash}
               >
-                Start Locking
+                Start Earning
                 <LockKeyhole className="ml-2 w-5 h-5 animate-pulse" />
               </motion.button>
             </div>
