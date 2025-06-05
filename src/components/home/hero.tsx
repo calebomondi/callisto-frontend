@@ -67,7 +67,7 @@ export default function Hero() {
                 <p className="text-center">Integrated With Aave, Your Locked Assets Yield Interest</p>
               </div>
               <div className="flex justify-center">
-                <Button onClick={handleDash} className="bg-amber-500 hover:bg-amber-500 text-lg px-5 py-4">
+                <Button onClick={handleDash} className="bg-amber-500 hover:bg-amber-500 text-base px-5 py-4">
                   Let's Get You Started
                 </Button>
               </div>
