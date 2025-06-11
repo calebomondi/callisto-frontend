@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { UserVaultDashboardProps } from '@/types/index.types';
+import TransactionDashboard from './transacHist';
 
 const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('en-US', {
@@ -12,7 +13,7 @@ const formatCurrency = (value: number): string => {
 const COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'assets'>('overview');
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'assets' | 'analytics'>('analytics');
   
   if (!data) {
     return <p className='text-center text-lg my-4'>
@@ -211,6 +212,10 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
     </div>
   );
+
+  const renderAnalytics = (): JSX.Element => (
+    <TransactionDashboard />
+  )
   
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-8 py-2 min-h-screen">
@@ -218,7 +223,8 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <div className="border-b dark:border-gray-600 border-gray-300 mb-6 sticky top-20 dark:bg-black bg-white shadow-md dark:bg-opacity-70 px-3 rounded-sm z-10">
         <nav className="-mb-px flex space-x-8">
           {[
-            { id: 'overview' as const, label: 'Overview' }, 
+            { id: 'analytics' as const, label: 'Wallet Analytics' },
+            { id: 'overview' as const, label: 'Vaults Overview' }, 
             { id: 'assets' as const, label: 'Assets' }, 
           ].map((tab) => (
             <button
@@ -241,6 +247,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <div className="mt-6">
         {selectedTab === 'overview' && renderOverview()}
         {selectedTab === 'assets' && renderAssets()}
+        {selectedTab === 'analytics' && renderAnalytics()}
       </div>
     </div>
   );
