@@ -22,7 +22,7 @@ export const CustomConnectButton = () => {
         return (
           <button
             onClick={openConnectModal}
-            className="md:px-6 px-4 py-3 bg-amber-500 rounded-lg text-base font-semibold hover:bg-amber-500 hover:scale-105 transition-all flex items-center btn-sm"
+            className="md:px-6 px-8 py-3 bg-amber-500 rounded-xl text-lg font-semibold hover:bg-amber-500 hover:scale-105 transition-all"
           >
             Launch App
           </button>
