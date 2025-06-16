@@ -13,9 +13,9 @@ export default function FAQ() {
   return (
     <section className="py-12 px-14 md:px-24 light:bg-gray-50">
       <div className="container mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.h2
-            className="text-4xl font-bold mb-4"
+            className="text-3xl font-bold mb-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -23,7 +23,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </motion.h2>
           <motion.p
-            className="dark:text-gray-400 max-w-2xl mx-auto"
+            className="dark:text-gray-400"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -58,16 +58,16 @@ export default function FAQ() {
             >
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full light:bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between cursor-pointer border border-amber-100"
+                className="w-full light:bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between cursor-pointer border border-gray-800 hover:bg-gray-800/50"
               >
-                <h3 className="text-xl font-semibold text-left">
+                <h3 className="font-medium text-left">
                   {faq.question}
                 </h3>
                 <motion.div
                   animate={{ rotate: openIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDown className="w-6 h-6 text-amber-500" />
+                  <ChevronDown className="w-6 h-6 text-purple-500" />
                 </motion.div>
               </button>
               <AnimatePresence>
@@ -79,7 +79,7 @@ export default function FAQ() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="light:bg-amber-50 p-6 rounded-b-xl border-x border-b border-amber-100">
+                    <div className="light:bg-amber-50 p-6 rounded-b-xl border-x border-b border-gray-800">
                       <p className="dark:text-gray-400">{faq.answer}</p>
                     </div>
                   </motion.div>

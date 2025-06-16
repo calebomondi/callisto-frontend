@@ -7,6 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { SupportedTokens, FormValues } from "@/types/index.types";
 import { parseUnits } from "viem";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { ChevronDown } from "lucide-react";
 
 
 
@@ -277,140 +280,199 @@ export default function LockAsset() {
     }
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center dark:bg-gray-900">
         <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
-            <h2 className="text-center text-lg font-semibold">Lock Asset</h2>
+            <h2 className="text-lg font-semibold mb-2">Create New Vault</h2>
             <form onSubmit={handleSubmit} className="w-full p-1">
-                <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
-                    <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
-                        Duration
-                        <select onChange={handleChange} required value={formValues.durationType} name="durationType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="days">Day(s)</option>
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="weeks">Week(s)</option>
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="months">Month(s)</option>
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="years">Year(s)</option>
-                        </select>
-                    </label>
-                    <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
-                        Vault Type
-                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="bg-transparent outline-none border-none dark:text-white text-gray-700">
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="fixed">Fixed</option>
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="goal">Goal Based</option>
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="schedule">Scheduled</option>
-                        </select>
-                    </label>
-                </div>
-                <div className="p-2 grid place-items-center">
-                    <label className="input input-bordered flex items-center justify-between gap-2 font-semibold text-amber-600">
-                        StableCoin
-                        <select 
-                            onChange={handleChange} value={formValues.symbol} 
-                            name="symbol" id="" 
-                            className="bg-transparent outline-none border-none dark:text-white text-gray-700"
-                        >
-                            <option className="dark:text-white text-gray-700 dark:bg-black/90" value="">Select Token</option>
-                            {
-                                supportedTokens.map((token, index) => (
-                                    <option key={index} className="dark:text-white text-gray-700 dark:bg-black/90" value={token.symbol}>{token.symbol}</option>
-                                ))
-                            }
-                        </select>
-                        {
-                        isAaveSupported && (
-                            <span className="text-sm p-1 rounded bg-green-500 text-white my-2">
-                                aave
-                            </span>
-                        )
-                    }
-                    </label>
-                    
-                </div>
                 <div className="mb-2">
-                    <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
-                        Name
-                        <input 
-                            type="text" 
-                            id="title"
-                            name="title"
-                            value={formValues.title}
-                            onChange={handleChange}
-                            className="md:w-5/6 p-2 dark:text-white text-gray-700" 
-                            placeholder="Longtime saving" 
-                            required
-                        />
-                    </label>
+                    <Label className="mb-2">Vault Name</Label>
+                    <Input 
+                        type="text" 
+                        id="title"
+                        name="title"
+                        value={formValues.title}
+                        onChange={handleChange}
+                        className="dark:text-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 border dark:border-gray-700" 
+                        placeholder="eg. Longtime saving" 
+                        required
+                    />
+
                     <div className={`text-sm ${remainingTitleWords < 3 ? 'text-red-500' : 'text-gray-500'} text-right`}>
                         {remainingTitleWords} words remaining
                     </div>
                 </div>
-                <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
-                    Amount
-                    <input 
-                        type="text" 
-                        id="totalAmount"
-                        name="totalAmount"
-                        value={formValues.totalAmount}
+
+                <div className="w-full space-y-2 mb-4">
+                    <Label>
+                        Vault Type
+                    </Label>
+                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="w-full px-2 py-2 rounded-md first-letter:bg-transparent dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700">
+                            <option className="dark:text-white" value="fixed">Fixed</option>
+                            <option className="dark:text-white" value="goal">Goal Based</option>
+                            <option className="dark:text-white" value="schedule">Scheduled</option>
+                        </select>
+                </div>
+                
+                <div className="flex justify-between gap-x-4 items-center mb-2" >
+                    <div className="space-y-2">
+                    <label
+                        htmlFor="tokenType"
+                        className="block text-sm font-semibold"
+                    >
+                        Token Type
+                    </label>
+
+                    <div className="relative">
+                        <select
                         onChange={handleChange}
-                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="e.g 100"
-                        required
-                    />
-                </label>
-                <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
-                    Period
-                    <input 
-                        type="text" 
-                        id="lockPeriod"
-                        name="lockPeriod"
-                        value={formValues.lockPeriod}
-                        onChange={handleChange}
-                        className="md:w-5/6 p-2 dark:text-white text-gray-700" 
-                        placeholder={durationPlaceholders[formValues.durationType]} 
-                        required
-                    />
-                </label>
-                <label className={`${formValues.vaultType !== 'goal' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
-                    Goal
-                    <input 
+                        value={formValues.symbol}
+                        name="symbol"
+                        id="tokenType"
+                        className="appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                        <option className="dark:text-white" value="">
+                            Select Token
+                        </option>
+                        {supportedTokens.map((token, index) => (
+                            <option
+                            key={index}
+                            className="dark:text-white"
+                            value={token.symbol}
+                            >
+                            {token.symbol}
+                            </option>
+                        ))}
+                        </select>
+
+                        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center dark:text-white">
+                        <ChevronDown size={15} />
+                        </div>
+                    </div>
+
+                    {isAaveSupported && (
+                        <span className="inline-block text-sm px-2 py-1 rounded bg-green-500 text-white">
+                        aave
+                        </span>
+                    )}
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Amount</Label>
+                            <Input 
+                                type="text" 
+                                id="totalAmount"
+                                name="totalAmount"
+                                value={formValues.totalAmount}
+                                onChange={handleChange}
+                                className="dark:text-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700" 
+                                placeholder="e.g 100"
+                                required
+                            />
+                    </div>
+                </div>
+
+<div className="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0 w-full mb-6">
+  {/* Duration Section */}
+  <div className="w-full md:w-1/2 space-y-2">
+    <label
+      htmlFor="durationType"
+      className="block text-sm font-semibold"
+    >
+      Duration
+    </label>
+    <select
+      onChange={handleChange}
+      required
+      value={formValues.durationType}
+      name="durationType"
+      id="durationType"
+      className="w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    >
+      <option className="dark:text-white" value="days">Day(s)</option>
+      <option className="dark:text-white" value="weeks">Week(s)</option>
+      <option className="dark:text-white" value="months">Month(s)</option>
+      <option className="dark:text-white" value="years">Year(s)</option>
+    </select>
+  </div>
+
+  {/* Period Input Section */}
+  <div className="w-full md:w-1/2 space-y-2">
+    <label
+      htmlFor="lockPeriod"
+      className="block text-sm font-semibold"
+    >
+      Period
+    </label>
+    <input
+      type="text"
+      id="lockPeriod"
+      name="lockPeriod"
+      value={formValues.lockPeriod}
+      onChange={handleChange}
+      className="w-full p-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      placeholder={durationPlaceholders[formValues.durationType]}
+      required
+    />
+  </div>
+</div>
+
+                <div className={`${formValues.vaultType !== 'goal' && 'hidden'}`}>
+                <h3 className="text-center font-semibold mb-2">Goal details</h3>
+                <Label className={` mb-2 font-semibold`}>
+                    Goal Amount
+                </Label>
+                    <Input 
                         type="text" 
                         id="unLockGoal"
                         name="unLockGoal"
                         value={formValues.unLockGoal}
                         onChange={handleChange}
-                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="target amount"
+                        className="dark:text-white w-full rounded-md dark:bg-gray-800 p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700" 
+                        placeholder="5000"
                         disabled={formValues.vaultType !== 'goal'}
                         required
                     />
-                </label>
-                <label className={`${formValues.vaultType !== 'schedule' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
-                    Unlock
-                    <input 
+                    <div className="w-full mt-4 p-2 rounded-lg bg-gray-800 h-20">
+                        <p className="text-sm text-gray-400 mt-2">
+                            You need to save {formValues.unLockGoal} every week to reach your goal
+                        </p>
+                    </div>
+                </div>
+                <div className={`${formValues.vaultType !== 'schedule' && 'hidden'} mb-4`}>
+                <h3 className="text-center font-semibold mb-2">Unlock details</h3>
+                <Label className={`mb-2`}>
+                    Unlock Amount
+                </Label>
+                    <Input 
                         type="text" 
                         id="unLockAmount"
                         name="unLockAmount"
                         value={formValues.unLockAmount}
                         onChange={handleChange}
-                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="amount"
+                        className="dark:text-white w-full p-2 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 border dark:border-gray-700" 
+                        placeholder="500"
                         disabled={formValues.vaultType !== 'schedule'}
                         required
                     />
-                </label>
-                <label className={`${formValues.vaultType !== 'schedule' && 'hidden'} input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600`}>
-                    Every
-                    <input 
+                </div>
+
+                <div className={`${formValues.vaultType !== 'schedule' && 'hidden'} `}>
+                <Label className={`mb-2 `}>
+                    After Every
+                </Label>
+                    <Input 
                         type="text" 
                         id="unLockDuration"
                         name="unLockDuration"
                         value={formValues.unLockDuration}
                         onChange={handleChange}
-                        className="dark:text-white text-gray-700 md:w-5/6 p-2" 
-                        placeholder="days"
+                        className="dark:text-white p-2 dark:bg-gray-800 focus:ring-2 focus:ring-purple-500 border dark:border-gray-700" 
+                        placeholder="10 days"
                         disabled={formValues.vaultType !== 'schedule'}
                         required
                     />
-                </label>
+               
+                </div>
+
                 <div className="w-full text-center flex flex-col items-center">
                     <span className={`text-sm dark:text-gray-400 my-2 ${formValues.totalAmount.length > 0 ? "" : "hidden"} text-center`}>
                         {`Service Fee: ${serviceFee} - To Lock: ${formatNumber(Number(formValues.totalAmount) - Number(serviceFee))}`} 
@@ -422,7 +484,7 @@ export default function LockAsset() {
                 <div className="p-1 flex justify-center mt-2">
                     <button 
                         type="submit" 
-                        className="btn bg-amber-500 w-1/2 text-white text-base border border-amber-500 hover:bg-amber-600"
+                        className="btn w-1/2 text-base text-white border-none bg-gradient-to-r from-purple-500 to-pink-500 transform transition-transform duration-150 hover:scale-95"
                         disabled={formValues.vaultType === 'schedule' && !amountFine}
                     >
                         {
