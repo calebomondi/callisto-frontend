@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import apiService from '@/backendServices/apiservices';
 import { currentChainId, getWalletClient } from '@/blockchain-services/useFvkry';
 import LockAsset from './lockAsset';
+import { useAccount } from 'wagmi';
   
 const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) => {
     const [timeLeft, setTimeLeft] = useState<string>('');
@@ -115,6 +116,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
     lockAsset: '0x..',
     userAddress: ''
   })
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -268,10 +270,10 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
         
         <div className="flex pl-6 justify-end mb-6">
           <Button
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95"
-          onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
+            className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
+            onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
           >
-          <Plus className="w-4 h-4 mr-1" /> Create New Vault
+            <Plus className="w-4 h-4 mr-1" /> Create New Vault
           </Button>
           <dialog id="my_modal_4" className="modal">
             <div className="modal-box dark:bg-gray-900">

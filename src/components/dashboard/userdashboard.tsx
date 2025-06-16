@@ -22,6 +22,7 @@ import { Plus } from "lucide-react";
 import { VaultData } from "@/types/index.types";
 import VaultDetails from './vaultdetails';
 import TransactionDashboard from './transacHist';
+import { useAccount } from 'wagmi';
 
 const chartConfig = {
   desktop: {
@@ -33,7 +34,7 @@ const chartConfig = {
     color: "#60a5fa",
   },
 }
-
+/*
 interface Activity {
   type: string;
   amount: string;
@@ -69,7 +70,7 @@ const recentActivity: Activity[] = [
       status: "Confirmed",
     },
 ];
-
+*/
 const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -80,7 +81,7 @@ const formatCurrency = (value: number): string => {
 const COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
-  
+  const { isConnected } = useAccount();
   const [selectedView, setSelectedView] = useState<{
     type: "overview" | "assets" | "analytics" | "vault";
     vault?: VaultData;
@@ -227,7 +228,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
         </div>
       </div>
 
-        {/* Recent Activity */}
+        {/* Recent Activity 
          <div className="space-y-4 md:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Recent Activity</h2>
@@ -298,7 +299,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
               </Table>
             </div>
           </div>
-        </div> 
+        </div> */}
     </div>
   );
   
@@ -464,10 +465,10 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             {selectedView.type === "analytics" && "Analytics Dashboard"}
           </h1>
           <Button
-           className="bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95"
-           onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
+            className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
+            onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
           >
-          <Plus className="w-4 h-4 mr-1" /> Create New Vault
+            <Plus className="w-4 h-4 mr-1" /> Create New Vault
           </Button>
           <dialog id="my_modal_4" className="modal">
             <div className="modal-box dark:bg-gray-900">
