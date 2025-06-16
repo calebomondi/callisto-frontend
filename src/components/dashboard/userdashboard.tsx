@@ -86,6 +86,14 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
     vault?: VaultData;
   }>({ type: "analytics" });
 
+  const [modalKey, setModalKey] = useState(0);
+
+  const handleModalClose = () => {
+    const modal = document.getElementById('my_modal_4') as HTMLDialogElement;
+    modal.close();
+    setModalKey(prev => prev + 1); // force re-mount to reset form
+  };
+
   if (!data) {
     return <p className='text-center text-lg my-4'>
       <span className="loading loading-spinner loading-xl text-amber-600"></span>
@@ -464,9 +472,14 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
           <dialog id="my_modal_4" className="modal">
             <div className="modal-box dark:bg-gray-900">
               <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                <button
+                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                 onClick={handleModalClose}
+                >
+                  ✕
+                </button>
               </form>
-              <LockAsset />             
+              <LockAsset key={modalKey} />             
             </div>
           </dialog>
         </div>
