@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react"; //useState, useEffect
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -44,19 +44,19 @@ export const StickyScroll = ({
   //   "#000000", // black
   //   "#171717", // neutral-900
   // ];
-  const linearGradients = [
-    "linear-gradient(to bottom right, #06b6d4, #10b981)", // cyan-500 to emerald-500
-    "linear-gradient(to bottom right, #ec4899, #6366f1)", // pink-500 to indigo-500
-    "linear-gradient(to bottom right, #f97316, #eab308)", // orange-500 to yellow-500
-  ];
+  // const linearGradients = [
+  //   "linear-gradient(to bottom right, #06b6d4, #10b981)", // cyan-500 to emerald-500
+  //   "linear-gradient(to bottom right, #ec4899, #6366f1)", // pink-500 to indigo-500
+  //   "linear-gradient(to bottom right, #f97316, #eab308)", // orange-500 to yellow-500
+  // ];
 
-  const [backgroundGradient, setBackgroundGradient] = useState(
-    linearGradients[0],
-  );
+  // const [backgroundGradient, setBackgroundGradient] = useState(
+  //   linearGradients[0],
+  // );
 
-  useEffect(() => {
-    setBackgroundGradient(linearGradients[activeCard % linearGradients.length]);
-  }, [activeCard]);
+  // useEffect(() => {
+  //   setBackgroundGradient(linearGradients[activeCard % linearGradients.length]);
+  // }, [activeCard]);
 
   return (
     <motion.div
@@ -96,9 +96,9 @@ export const StickyScroll = ({
         </div>
       </div>
       <div
-        style={{ background: backgroundGradient }}
+        // style={{ background: backgroundGradient }}
         className={cn(
-          "sticky top-10 hidden h-80 w-1/2 overflow-hidden rounded-md bg-white lg:block",
+          "sticky top-10 hidden h-80 w-1/2 overflow-hidden rounded-md bg-transparent lg:block",
           contentClassName,
         )}
       >

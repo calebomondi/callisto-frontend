@@ -10,7 +10,7 @@ export default function Hero() {
     const navigate = useNavigate()
 
     const handleDash = () => {
-        navigate("/documentation");
+        navigate("/dashboard");
     }
 
     return (
