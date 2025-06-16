@@ -431,11 +431,13 @@ export default function LockAsset() {
                         disabled={formValues.vaultType !== 'goal'}
                         required
                     />
+                    {/*
                     <div className="w-full mt-4 p-2 rounded-lg bg-gray-800 h-20">
                         <p className="text-sm text-gray-400 mt-2">
                             You need to save {formValues.unLockGoal} every week to reach your goal
                         </p>
                     </div>
+                    */}
                 </div>
                 <div className={`${formValues.vaultType !== 'schedule' && 'hidden'} mb-4`}>
                 <h3 className="text-center font-semibold mb-2">Unlock details</h3>

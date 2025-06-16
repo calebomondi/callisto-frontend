@@ -21,16 +21,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart, PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
 
-const chartData = [{ month: "january", desktop: 1260, mobile: 570 }]
 const chartConfig = {
   desktop: {
-    label: "Desktop",
+    label: "Saved",
     color: "var(--chart-1)",
   },
   mobile: {
-    label: "Mobile",
+    label: "Deficit",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig
@@ -47,7 +46,35 @@ interface VaultDetailsProps {
 }
 
 const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
-  const totalVisitors = chartData[0].desktop + chartData[0].mobile
+  const current = 1900;
+  const target = 7850;
+  const dummyData = {
+    remainingAmount: 5950,
+    daysToEndDate: 60,
+    weeksToEndDate: 8,
+    monthsToEndDate: 2,
+    progress: 25,
+    amountToSaveDaily: 100,
+    amountToSaveWeekly: 744,
+    amountToSaveMonthly: 2975
+  }
+
+  
+  const data = [
+    {
+      name: 'Completion',
+      uv: 24, // Represents 24%
+      fill: '#4285F4', // Blue color for the completed portion
+    },
+  ];
+
+  const backgroundData = [
+    {
+      name: 'Background',
+      uv: 100, // Full circle for the background
+      fill: '#E0E0E0', // Light grey color for the background
+    },
+  ];
   
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -283,7 +310,6 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
       {showNavbar && <ConnectedNavbar />}
 
       <div>
-
         <div className='dark:bg-gray-900'>
           <div className="flex items-center text-gray-400 text-sm py-4 pl-12">
             <button onClick={handleNavigateToVaults} className='hover:text-gray-300'>Vaults</button>
@@ -508,80 +534,124 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                   </dialog>
               </div>
           </div>
+
+          <div className="rounded-xl p-6 border border-purple-500/20">
+              <div className='flex items-center justify-center mb-4'>
+                <div className='text-5xl mr-2 font-bold text-green-500'>788</div>
+                <div className='text-lg font-medium text-gray-400 flex flex-col items-start justify-start'>
+                  <span>Points</span>
+                  <span>Earned</span>
+                </div>
+              </div>
+              <p className='text-center text-amber-400 text-sm'>*Claimable after vault expires</p>
+          </div>
           
           {/* Goal Details */}
           {vaultData.vaultType === "goal" && (
-          <div className="rounded-xl p-6 border border-purple-500/20">
-            <h3 className="text-lg font-medium mb-4">Goal Strategy</h3>
-             <ChartContainer config={chartConfig}>
-              <RadialBarChart
-                data={chartData}
-                endAngle={180}
-                innerRadius={80}
-                outerRadius={130}
-              >
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) - 16}
-                            className="text-2xl font-bold"
-                          >
-                            {totalVisitors.toLocaleString()}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 4}
-                            className=""
-                          >
-                            Visitors
-                          </tspan>
-                        </text>
-                      )
-                    }
-                  }}
-                />
-              </PolarRadiusAxis>
-              <RadialBar
-                dataKey="desktop"
-                stackId="a"
-                cornerRadius={5}
-                fill="blue"
-                className="stroke-transparent stroke-2"
-              />
-              <RadialBar
-                dataKey="mobile"
-                fill="lightblue"
-                stackId="a"
-                cornerRadius={5}
-                className="stroke-transparent stroke-2"
-              />
-              </RadialBarChart>
-            </ChartContainer>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="dark:text-gray-300">Remaining Amount</span>
-                <span className="text-green-400 font-medium">5950 {vaultData.symbol}</span>
+          <div className="rounded-xl p-6 border border-purple-500/20 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-medium mb-4">Goal Tracker</h3>
+            <div className="w-64 h-64 relative"> {/* Fixed size container for the chart */}
+              <ResponsiveContainer width="100%" height="100%">
+                <RadialBarChart
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="75%" // Inner radius to create the donut effect
+                  outerRadius="90%" // Outer radius for the bar
+                  barSize={10} // Thickness of the bar
+                  data={backgroundData} // Render background first
+                  startAngle={90} // Start from the top
+                  endAngle={-270} // Go full circle (360 degrees)
+                >
+                  <RadialBar
+                    
+                    background={false} // No background for the foreground bar itself
+                    //clockWise={false} // Counter-clockwise for the background bar
+                    dataKey="uv"
+                    cornerRadius={5} // Slightly rounded ends for the bar
+                  />
+                </RadialBarChart>
+              </ResponsiveContainer>
+
+              <ResponsiveContainer width="100%" height="100%" className="absolute top-0 left-0">
+                <RadialBarChart
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="75%"
+                  outerRadius="90%"
+                  barSize={10}
+                  data={data} // Render actual progress on top
+                  startAngle={90}
+                  endAngle={90 - (data[0].uv / 100) * 360} // Calculate end angle based on percentage
+                >
+                  <RadialBar
+                    
+                    background={false}
+                    //clockWise={false} // Counter-clockwise for the progress bar
+                    dataKey="uv"
+                    cornerRadius={5}
+                  />
+                </RadialBarChart>
+              </ResponsiveContainer>
+
+              {/* Text overlay for percentage and label */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-3xl font-bold text-blue-600">
+                  {data[0].uv}%
+                </span>
+                <span className="text-lg text-gray-600">
+                  Complete
+                </span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="dark:text-gray-300">Amount to Save Daily</span>
-                <span className="dark:text-white font-medium">{vaultData.amount} {vaultData.symbol}</span>
+            </div>
+            <div className="p-4 w-full text-center space-y-3">
+              {/* Top Stats */}
+              <div className="flex justify-evenly text-sm font-semibold">
+                <div>
+                  <div className="text-purple-600 text-xl">Target:</div>
+                  <div className="text-blue-600 text-lg">10000 USDC</div>
+                </div>
+                <div>
+                  <div className="text-purple-600 text-xl">Deficit:</div>
+                  <div className="text-blue-600 text-lg">2400 USDC</div>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="dark:text-gray-300">Amount to Save Weekly</span>
-                <span className="dark:text-white font-medium">{vaultData.amount} {vaultData.symbol}</span>
+
+              {/* Time Remaining */}
+              <div>
+                <div className="text-pink-700 font-semibold text-xl">Time Remaining</div>
+                <div className="grid grid-cols-3 text-sm gap-y-1">
+                  <div>
+                    <div className="text-gray-600 text-xl">Days</div>
+                    <div className="text-blue-600 font-semibold text-lg">28</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-600 text-xl">Weeks</div>
+                    <div className="text-blue-600 font-semibold text-lg">4</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-600 text-xl">Months</div>
+                    <div className="text-blue-600 font-semibold text-lg">1</div>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="dark:text-gray-300">Amount to Save Monthly</span>
-                <span className="dark:text-white font-medium">{vaultData.amount} {vaultData.symbol}</span>
+
+              {/* Saving Strategy */}
+              <div>
+                <div className="text-pink-700 font-semibold text-xl">Saving Strategy</div>
+                <div className="grid grid-cols-3 text-sm gap-y-1">
+                  <div>
+                    <div className="text-gray-600 text-xl">Daily</div>
+                    <div className="text-blue-600 font-semibold text-lg">50 USDC</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-600 text-xl">Weekly</div>
+                    <div className="text-blue-600 font-semibold text-lg">167 USDC</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-600 text-xl">Monthly</div>
+                    <div className="text-blue-600 font-semibold text-lg">233 USDC</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
