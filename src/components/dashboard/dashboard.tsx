@@ -58,18 +58,18 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <>
+      <div className="dark:bg-gradient-to-b from-gray-900 to-black h-screen">
         <ConnectedNavbar />
         <Skeletun />
-      </>
+      </div>
     )
   }
 
   return (
-    <div className="">
+    <div className="dark:bg-gradient-to-b from-gray-900 to-black">
       <ConnectedNavbar />
-      <p className={`text-center my-2 text-amber-600 ${isConnected ? 'hidden' : ''}`}>
-        Connect your wallet to view your asset lock analytics
+      <p className={`text-center my-2 text-purple-500 ${isConnected ? 'hidden' : ''}`}>
+        Connect your wallet to view your dashboard
       </p>
       {dashData && <UserVaultDashboard data={dashData} />}
     </div>
