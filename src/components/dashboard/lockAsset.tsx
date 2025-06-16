@@ -8,6 +8,8 @@ import { ToastAction } from "@/components/ui/toast"
 import { SupportedTokens, FormValues } from "@/types/index.types";
 import { parseUnits } from "viem";
 
+
+
 export default function LockAsset() {
     const { toast } = useToast()
     const navigate = useNavigate()
@@ -189,6 +191,9 @@ export default function LockAsset() {
                         </ToastAction>
                     )
                 });
+
+                //get vault id
+                
 
                 navigate("/myvaults")
             }
