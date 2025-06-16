@@ -268,8 +268,30 @@ const apiService = {
       console.error('Setting Vault Goal Failed:', error);
       throw error;
     }
-  }
+  },
+  getPoints: async (chainId: number, vaultId: number, owner: string): Promise<number> => {
+    try {
+      const response: AxiosResponse<number> = await axios.get(
+        `${API_URL}/api/points/get-points`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          params: {
+            chainId,
+            vaultId,
+            owner
+          }
+        }
+      );
 
+      return response.data;
+      
+    } catch (error) {
+      console.error('Getting Points Failed:', error);
+      throw error;
+    }
+  }
 }
 
 export default apiService;

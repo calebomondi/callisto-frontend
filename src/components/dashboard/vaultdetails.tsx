@@ -14,25 +14,9 @@ import { ToastAction } from "@/components/ui/toast"
 import apiService from '@/backendServices/apiservices';
 import { useNavigate } from 'react-router-dom';
 import TransactionsTable from './transactions';
-import { VaultTransactions, UnlockDays, UnlockStatus } from '@/types/index.types';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart, PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
-
-const chartConfig = {
-  desktop: {
-    label: "Saved",
-    color: "var(--chart-1)",
-  },
-  mobile: {
-    label: "Deficit",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig
+import { VaultTransactions, UnlockDays, UnlockStatus, VaultGoal } from '@/types/index.types';
+import { RadialBar, RadialBarChart, ResponsiveContainer } from "recharts"
+import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
 
 
 interface PriceData {
@@ -46,24 +30,37 @@ interface VaultDetailsProps {
 }
 
 const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
-  const current = 1900;
-  const target = 7850;
-  const dummyData = {
-    remainingAmount: 5950,
-    daysToEndDate: 60,
-    weeksToEndDate: 8,
-    monthsToEndDate: 2,
-    progress: 25,
-    amountToSaveDaily: 100,
-    amountToSaveWeekly: 744,
-    amountToSaveMonthly: 2975
-  }
+  const [goalData, setGoalData] = useState<VaultGoal | null>(null);
+  const [points, setPoints] = useState<number>(0);
 
+  useEffect(() => {
+    const fetchGoalData = async () => {
+      const vaultData = await apiService.vaultGoal(Number(vault?.amount) || 0, Number(vault?.unLockGoal) || 0, vault?.endDate || '');
+      if(vaultData) {
+        setGoalData(vaultData);
+      }
+    }
+    // Fetch goal data if vault is of type 'goal'
+    if (vault && vault.vaultType === 'goal') {
+      fetchGoalData();
+    } 
+
+    // Fetch points data
+    const fetchPointsData = async () => {
+      const chainId = currentChainId()
+      const user = await getWalletClient();
+      const pointsData = await apiService.getPoints(chainId, vault?.vaultId || 0, user.address);
+      if(pointsData) {
+        setPoints(pointsData)
+      }
+    }
+    fetchPointsData();
+  }, []);  
   
   const data = [
     {
       name: 'Completion',
-      uv: 24, // Represents 24%
+      uv: goalData?.progress, // Represents 24%
       fill: '#4285F4', // Blue color for the completed portion
     },
   ];
@@ -460,7 +457,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               <div className="space-y-2">
                 <Button 
                   onClick={() => (document.getElementById('my_modal_14') as HTMLDialogElement).showModal()}
-                  className="w-full text-white flex items-center justify-center space-x-2 border-none bg-gradient-to-r from-purple-500 to-pink-500 transform transition-transform duration-150 hover:scale-95"
+                  className={`w-full text-white flex items-center justify-center space-x-2 border-none bg-gradient-to-r from-purple-500 to-pink-500 transform transition-transform duration-150 hover:scale-95 ${isLockExpired && 'hidden'}`}
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Funds</span>
@@ -537,7 +534,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
 
           <div className="rounded-xl p-6 border border-purple-500/20">
               <div className='flex items-center justify-center mb-4'>
-                <div className='text-5xl mr-2 font-bold text-green-500'>788</div>
+                <div className='text-5xl mr-2 font-bold text-green-500'>{points}</div>
                 <div className='text-lg font-medium text-gray-400 flex flex-col items-start justify-start'>
                   <span>Points</span>
                   <span>Earned</span>
@@ -547,7 +544,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
           </div>
           
           {/* Goal Details */}
-          {vaultData.vaultType === "goal" && (
+          {vaultData.vaultType === "goal" && !isLockExpired && (
           <div className="rounded-xl p-6 border border-purple-500/20 flex flex-col items-center justify-center">
             <h3 className="text-lg font-medium mb-4">Goal Tracker</h3>
             <div className="w-64 h-64 relative"> {/* Fixed size container for the chart */}
@@ -581,7 +578,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                   barSize={10}
                   data={data} // Render actual progress on top
                   startAngle={90}
-                  endAngle={90 - (data[0].uv / 100) * 360} // Calculate end angle based on percentage
+                  endAngle={90 - ((data[0]?.uv ?? 0) / 100) * 360} // Calculate end angle based on percentage
                 >
                   <RadialBar
                     
@@ -608,11 +605,11 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               <div className="flex justify-evenly text-sm font-semibold">
                 <div>
                   <div className="text-purple-600 text-xl">Target:</div>
-                  <div className="text-blue-600 text-lg">10000 USDC</div>
+                  <div className="text-blue-600 text-lg">{vault?.unLockGoal} USDC</div>
                 </div>
                 <div>
                   <div className="text-purple-600 text-xl">Deficit:</div>
-                  <div className="text-blue-600 text-lg">2400 USDC</div>
+                  <div className="text-blue-600 text-lg">{goalData?.remainingAmount} USDC</div>
                 </div>
               </div>
 
@@ -622,15 +619,15 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                 <div className="grid grid-cols-3 text-sm gap-y-1">
                   <div>
                     <div className="text-gray-600 text-xl">Days</div>
-                    <div className="text-blue-600 font-semibold text-lg">28</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.daysToEndDate}</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Weeks</div>
-                    <div className="text-blue-600 font-semibold text-lg">4</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.weeksToEndDate}</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Months</div>
-                    <div className="text-blue-600 font-semibold text-lg">1</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.monthsToEndDate}</div>
                   </div>
                 </div>
               </div>
@@ -641,15 +638,15 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                 <div className="grid grid-cols-3 text-sm gap-y-1">
                   <div>
                     <div className="text-gray-600 text-xl">Daily</div>
-                    <div className="text-blue-600 font-semibold text-lg">50 USDC</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveDaily} USDC</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Weekly</div>
-                    <div className="text-blue-600 font-semibold text-lg">167 USDC</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveWeekly} USDC</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Monthly</div>
-                    <div className="text-blue-600 font-semibold text-lg">233 USDC</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveMonthly} USDC</div>
                   </div>
                 </div>
               </div>
@@ -658,7 +655,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
           )}
   
 
-          {vaultData.vaultType === "goal" &&(
+          {/*vaultData.vaultType === "goal" &&(
             <div className="rounded-xl p-6 border border-purple-500/20">
             <h3 className="dark:text-white text-lg font-medium mb-4">Performance</h3>
             <div className="space-y-4">
@@ -682,7 +679,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               </div>
             </div>
           </div>
-          )}
+          )*/}
           
         </div>
         

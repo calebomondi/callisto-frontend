@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import apiService from "@/backendServices/apiservices";
-import { createTokenVault, currentChainId } from "@/blockchain-services/useFvkry";
+import { createTokenVault, currentChainId, getWalletClient } from "@/blockchain-services/useFvkry";
 import { useAccount } from 'wagmi';
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
@@ -10,8 +9,7 @@ import { parseUnits } from "viem";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { ChevronDown } from "lucide-react";
-
-
+import apiService from "@/backendServices/apiservices"
 
 export default function LockAsset() {
     const { toast } = useToast()
@@ -195,8 +193,10 @@ export default function LockAsset() {
                     )
                 });
 
-                //get vault id
-                
+                //earn points
+                const { address } = await getWalletClient();
+                const chainInfo = await apiService.getChainData(chainID);
+                await apiService.earnPoints(chainID, address, chainInfo.lockAsset, Number(formValues.totalAmount), days)
 
                 navigate("/myvaults")
             }
