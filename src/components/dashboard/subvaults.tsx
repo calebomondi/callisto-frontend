@@ -69,12 +69,12 @@ export default function SubVaultsContainer() {
     }
 
     return (
-      <>
-        <p className={`text-center my-4 text-amber-600 ${isConnected ? 'hidden' : ''}`}>
+      <div className="dark:bg-gradient-to-b from-gray-900 to-black min-h-screen ">
+        <p className={`text-center py-4 text-purple-600 ${isConnected ? 'hidden' : ''}`}>
           Connect your wallet to interact with your vaults
         </p>
         <VaultGrid vaultData={vaultData} />
-      </>
+      </div>
     )
   }
 

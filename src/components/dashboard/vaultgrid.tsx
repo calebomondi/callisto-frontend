@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Timer, Wallet, ArrowUpRight, Search, Lock } from 'lucide-react';
+import { Timer, Wallet, ArrowUpRight, Search, Lock, Plus } from 'lucide-react';
 import { VaultCardProps, VaultGridProps } from '@/types/index.types';
 import { useNavigate } from 'react-router-dom';
-
+import { Button } from "@/components/ui/button";
 import apiService from '@/backendServices/apiservices';
 import { currentChainId, getWalletClient } from '@/blockchain-services/useFvkry';
+import LockAsset from './lockAsset';
   
 const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) => {
     const [timeLeft, setTimeLeft] = useState<string>('');
@@ -48,44 +49,50 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
     }, [subvault.endDate]);
   
     return (
-      <Card className="hover:cursor-pointer dark:bg-base-200 border-none shadow-md hover:shadow-sm hover:shadow-amber-400 transition-all duration-300 mx-4 md:mx-0">
-        <CardHeader>
-          <CardTitle className="text-center truncate py-1 text-amber-600">
+      <Card className="p-4 dark:bg-gray-900/50 border dark:border-gray-700 hover:border-purple-500 transition-colors">
+        <div className='flex items-center justify-between '>
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              {subvault.title}
+            </CardTitle>
+          </CardHeader>
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
             {subvault.title}
-          </CardTitle>
-        </CardHeader>
+          </span>
+        </div>
         <CardContent>
-          <div className="space-y-4 flex flex-col items-center justify-center">
+          <div className="space-y-4 flex flex-col items-left justify-center">
             {/* Amount and Asset */}
             <div className="flex items-center space-x-2">
-              <Wallet className="w-4 h-4" />
-              <p className="text-center font-semibold">
+              <Wallet className="w-4 h-4 dark:text-gray-400" />
+              <p className="dark:text-gray-400">
                 {subvault.amount.toString()} {subvault.symbol}
               </p>
             </div>
   
             {/* Lock Type */}
             <div className="flex items-center space-x-2">
-              <Lock className="w-4 h-4" />
-              <p className="text-center font-semibold capitalize">
+              <Lock className="w-4 h-4 dark:text-gray-400" />
+              <p className="capitalize dark:text-gray-400">
                 {subvault.vaultType}
               </p>
             </div>
   
             {/* Countdown Timer */}
-            <div className="flex items-center space-x-2 text-emerald-500">
-              <Timer className="w-4 h-4" />
-              <p className="font-mono">{timeLeft}</p>
+            <div className="flex items-center space-x-2">
+              <Timer className="w-4 h-4 dark:text-gray-400" />
+              <p className="dark:text-gray-400">{timeLeft}</p>
             </div>
           </div>
   
-          <button 
-            className="btn btn-sm text-amber-600 btn-outline hover:bg-amber-600 hover:text-gray-800 hover:border-amber-600 mt-5 w-full flex items-center justify-center gap-2" 
+          <Button 
+            variant="outline"
+            className="mt-3 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white border-none  transform transition-transform duration-150 hover:scale-95"
             onClick={handleNavigate}
           >
-            View Lock
+            View Vault
             <ArrowUpRight className="w-4 h-4" />
-          </button>
+          </Button>
         </CardContent>
       </Card>
     );
@@ -169,12 +176,17 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
   }, [searchTerm, selectedAsset, selectedLockType, showNearExpiry, showExpired, vaultData]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 dark:bg-gradient-to-b from-gray-900 to-black min-h-screen">
       {/* Search and Filter Section */}
-      <div className="flex flex-col gap-1 sticky top-20 dark:bg-black/90 bg-white shadow-md p-2 rounded-md">
-        <div className='flex flex-col md:flex-row gap-1'>
+      <div className="flex flex-col gap-1 sticky top-20 p-2 rounded-md">
+        <div className='flex flex-col md:flex-row justify-between items-center pr-10 pl-6'>
           {/* Top Row - Always visible */}
-          <div className="flex flex-col sm:flex-row w-full">
+          <div>
+            <h1 className="text-3xl font-bold">Your Vaults</h1>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-2">
+          <div className="flex flex-col sm:flex-row md:flex-row w-full">
             {/* Search Input */}
             <div className="relative flex w-full p-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -189,7 +201,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
           </div>
           
           {/* Collapsible Filter Section */}
-          <div className={`flex flex-6 flex-row sm:flex-wrap w-full`}>
+          <div className={`flex flex-row flex-wrap w-full`}>
             {/* Asset Symbol Filter */}
             <div className="flex flex-row gap-3 sm:ml-auto">
               <select
@@ -223,7 +235,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
                 }}
                 className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
                   ${showNearExpiry 
-                    ? 'border-amber-600 text-amber-600 bg-amber-600/10' 
+                    ? 'border-purple-600 text-purple-400 bg-purple-600/10' 
                     : 'border-gray-300 dark:border-gray-600'}`}
               >
                 <Timer className="w-4 h-4" />
@@ -246,16 +258,33 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
               </button>
             </div>
           </div>
+          </div>
         </div> 
         
         {/* Results Count - Always visible */}
-        <div className="text-sm text-gray-500 mt-1">
+        <div className="text-sm text-gray-500 mt-1 pl-6">
           Showing {filteredVaults.length} of {vaultData.length} vaults
         </div>
         
+        <div className="flex pl-6 justify-end mb-6">
+          <Button
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95"
+          onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
+          >
+          <Plus className="w-4 h-4 mr-1" /> Create New Vault
+          </Button>
+          <dialog id="my_modal_4" className="modal">
+            <div className="modal-box dark:bg-gray-900">
+              <form method="dialog">
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+              </form>
+              <LockAsset />             
+            </div>
+          </dialog>
+        </div>
       </div>
       {/* Vaults Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 py-2 px-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
         {filteredVaults.length > 0 ? (
           filteredVaults.map((subvault, index) => (
             <VaultCard key={index} subvault={subvault} chainId={chainData.chainId} lockAsset={chainData.lockAsset} />
