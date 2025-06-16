@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import AnimatedSection from '../AnimatedSection/animatedsection';
 
 import { LockKeyhole} from 'lucide-react';
-import Solutions from './solutions';
+// import Solutions from './solutions';
 import FAQ from './faq';
 import Footer from './footer';
 import Navbar from '../navbar/navbar';
@@ -11,6 +11,7 @@ import Features from './features';
 import Hero from './hero';
 import Stats from './stats';
 import Benefits from './benefits';
+import { StickyScrollRevealDemo } from './solutiontwo';
 
 export default function Home () {
   const navigate = useNavigate()
@@ -20,7 +21,7 @@ export default function Home () {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen dark:bg-gradient-to-b from-gray-900 to-black">
       {/* Navigation */}
       <Navbar />
 
@@ -32,7 +33,8 @@ export default function Home () {
         <StatisticsSection />
       </AnimatedSection> */}
       <Stats />
-      <Solutions />
+      <StickyScrollRevealDemo />
+      {/* <Solutions /> */}
 
       {/* Features Section */}
       <Features />
@@ -51,12 +53,12 @@ export default function Home () {
       {/* CTA Section */}
       <AnimatedSection className="py-20 bg-navy">
         <div className="max-w-3xl mx-auto px-4 text-center flex flex-col items-center" id="cta">
-          <h2 className="text-2xl font-bold text-navy mb-4">Ready to Start Saving?</h2>
-          <p className="text-lg mb-8">Join thousands of users who trust FVKRY PRVNTA with their assets</p>
+          <h2 className="text-2xl font-bold mb-6">Ready to Start Saving?</h2>
+          <p className="mb-8 text-gray-300">Join thousands of users who trust FVKRY PRVNTA with their assets</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="md:px-6 px-4 py-3 bg-amber-500 rounded-lg text-base font-semibold hover:bg-amber-500 hover:scale-105 transition-all flex items-center"
+            className="md:px-6 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-base font-semibold hover:scale-105 transition-all flex items-center"
             onClick={handleDash}
           >
             Let's Get You Started

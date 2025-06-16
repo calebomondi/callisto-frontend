@@ -25,7 +25,7 @@ const stats = [
     title: "Uptime",
     value: "99.99%",
     description: "Reliable platform performance and availability",
-    icon: <Activity className="w-6 h-6 text-amber-500" />,
+    icon: <Activity className="w-6 h-6" />,
   },
 ];
 
@@ -36,7 +36,7 @@ export default function Stats() {
         <h2 className="text-3xl font-bold text-navy mb-6">
           Platform Statistics
         </h2>
-        <p className="dark:text-gray-300 max-w-2xl mx-auto">
+        <p className="dark:text-gray-400 max-w-2xl mx-auto">
           Our platform's growth and performance metrics showcase our commitment to providing a secure and reliable savings solution for the crypto community.
         </p>
       </div>
@@ -73,15 +73,15 @@ export default function Stats() {
               }}
             >
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <div className="text-amber-500">{stat.icon}</div>
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <div className="text-purple-500">{stat.icon}</div>
                 </div>
                 <h3 className="text-lg font-semibold">{stat.title}</h3>
               </div>
 
               <div className="space-y-2">
                 <motion.p
-                  className="text-4xl font-bold text-amber-500"
+                  className="text-4xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
                   initial={{ scale: 0.5, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
                   transition={{
@@ -97,13 +97,13 @@ export default function Stats() {
               </div>
 
               <motion.div
-                className="mt-4 h-1 bg-amber-100 rounded-full overflow-hidden"
+                className="mt-4 h-1 bg-purple-100 rounded-full overflow-hidden"
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 transition={{ duration: 1, delay: index * 0.2 }}
               >
                 <div
-                  className="h-full bg-amber-500 rounded-full"
+                  className="h-full bg-purple-500 rounded-full"
                   style={{ width: "70%" }}
                 />
               </motion.div>
