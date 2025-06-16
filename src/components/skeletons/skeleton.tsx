@@ -2,7 +2,7 @@
 const Skeletun = () => {
   
   return (
-    <div className="animate-pulse p-10">
+    <div className="animate-pulse p-10  h-screen">
       {/* Navbar */}
       <div className="h-16 bg-gray-500 w-full mb-4"></div>
 

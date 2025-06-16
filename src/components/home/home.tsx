@@ -12,6 +12,7 @@ import Hero from './hero';
 import Stats from './stats';
 import Benefits from './benefits';
 import { StickyScrollRevealDemo } from './solutiontwo';
+import HowItWorks from './howitworks';
 
 export default function Home () {
   const navigate = useNavigate()
@@ -32,6 +33,7 @@ export default function Home () {
       {/* <AnimatedSection>
         <StatisticsSection />
       </AnimatedSection> */}
+      <HowItWorks />
       <Stats />
       <StickyScrollRevealDemo />
       {/* <Solutions /> */}

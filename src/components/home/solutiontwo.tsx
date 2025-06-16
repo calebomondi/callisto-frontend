@@ -16,6 +16,20 @@ const content = [
       </div>
     ),
   },
+    {
+    title: "Wallet Analytics",
+    description:
+      "Track ypur locked assets and upcoming unlocks",
+    content: (
+      <div>
+        <img
+          src="/analytics_dashboard.png"
+          className="h-full w-full object-cover"
+          alt="linear board demo"
+        />
+      </div>
+    ),
+  },
   {
     title: "Vault Management",
     description:
@@ -34,20 +48,6 @@ const content = [
     title: "Unlock Schedule",
     description:
       "Create custom unlock schedules for your assets",
-    content: (
-      <div>
-        <img
-          src={vaultDashboard}
-          className="h-full w-full object-cover"
-          alt="linear board demo"
-        />
-      </div>
-    ),
-  },
-  {
-    title: "Asset Analytics",
-    description:
-      "Track ypur locked assets and upcoming unlocks",
     content: (
       <div>
         <img
