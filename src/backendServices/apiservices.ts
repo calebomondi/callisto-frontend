@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from 'axios';
 import { API_URL } from './apiurl';
 import { currentChainId } from '@/blockchain-services/useFvkry';
-import { TokenData, ChainData, SupportedTokens, VaultData, VaultTransactions, ScheduledData, DashboardData } from '@/types/index.types';
+import { TokenData, ChainData, SupportedTokens, VaultData, VaultTransactions, ScheduledData, DashboardData, AnalysisData } from '@/types/index.types';
 
 const apiService = {
   vaultSchedule: async (vaultData:VaultData): Promise<ScheduledData> => {        
@@ -162,7 +162,29 @@ const apiService = {
       console.error('Getting Vault Transactions Failed:', error);
       throw error;
     }
-  }
+  },
+  getTransactionHistory: async (chain: number, address: string): Promise<AnalysisData> => {        
+      try {
+        const response: AxiosResponse<AnalysisData> = await axios.post(
+          `${API_URL}/api/transactions/history`,
+          {
+            chain,
+            address
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+  
+        return response.data;
+        
+      } catch (error) {
+        console.error('Asset Locking Failed:', error);
+        throw error;
+      }
+  }, 
 }
 
 export default apiService;

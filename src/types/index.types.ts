@@ -169,3 +169,120 @@ export interface DashboardData {
 export interface UserVaultDashboardProps {
     data: DashboardData;
 }
+
+interface DateRange {
+  from: string;
+  to: string;
+}
+
+interface NetFlow {
+  ETH: number;
+  tokens: Record<string, number>;
+}
+
+interface Summary {
+  totalTransactions: number;
+  totalGasFees: number;
+  netFlow: NetFlow;
+  dateRange: DateRange;
+}
+
+interface TransactionCategory {
+  count: number;
+  transactions: any[];
+  totalValue: number;
+  gasFees: number;
+}
+
+interface SpendingBehavior {
+  hash: string;
+  summary: string;
+  category: string;
+  timestamp: string;
+}
+
+interface ImpulsiveSpending extends SpendingBehavior {
+  gasFee: number;
+  averageGasFee: number;
+  flag: string;
+  severity: 'low' | 'medium' | 'high';
+  timeDifference?: number;
+}
+
+interface FrequentSpending extends SpendingBehavior {
+  timeDifference?: number;
+  flag: string;
+  severity: 'low' | 'medium' | 'high';
+}
+
+interface BehaviorAnalysis {
+  impulsiveSpending: ImpulsiveSpending[];
+  frequentTrading: FrequentSpending[];
+  unusualActivity: FrequentSpending[];
+  riskScore: number;
+}
+
+interface MonthlyData {
+  transactions: number;
+  gasFees: number;
+  volume: number;
+  categories: Record<string, number>;
+}
+
+interface TopToken {
+  symbol: string;
+  name: string;
+  totalVolume: number;
+  transactions: number;
+  logo: string | null;
+}
+
+interface GasFeeAnalysis {
+  total: number;
+  average: number;
+}
+
+export interface AnalysisData {
+  summary: Summary;
+  categories: Record<string, TransactionCategory>;
+  behaviorAnalysis: BehaviorAnalysis;
+  monthlyBreakdown: Record<string, MonthlyData>;
+  topTokens: TopToken[];
+  gasFeeAnalysis: GasFeeAnalysis;
+}
+
+// Chart data interfaces
+export interface CategoryPieData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export interface MonthlyChartData {
+  month: string;
+  transactions: number;
+  gasFees: number;
+  volume: number;
+}
+
+export interface GasFeesByCategoryData {
+  category: string;
+  gasFees: number;
+  transactions: number;
+}
+
+export interface TopTokensData {
+  symbol: string;
+  volume: number;
+  transactions: number;
+}
+
+export interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  label?: string;
+}
