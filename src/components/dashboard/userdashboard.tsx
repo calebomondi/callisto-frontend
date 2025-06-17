@@ -459,7 +459,8 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             {selectedView.type === "overview" && "Overall Dashboard"}
             {selectedView.type === "assets" && "Assets Dashboard"}
             {selectedView.type === "vault" && "Vault Dashboard"}
-            {selectedView.type === "analytics" && "Wallet Analytics"}
+            {selectedView.type === "analytics" && "Wallet Analytics  "}
+            {selectedView.type === "analytics" && <span className='text-sm text-amber-500'>*Only on mainnet</span>}
           </h1>
           <Button
             className={`btn btn-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
