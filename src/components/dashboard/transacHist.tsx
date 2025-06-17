@@ -54,7 +54,7 @@ import { useAccount } from 'wagmi';
 import { CustomTooltipProps, AnalysisData } from '@/types/index.types';
 import { sampleAnalyzedData } from './mockplatformdata';
 import apiService from '@/backendServices/apiservices';
-// import { currentChainId } from '@/blockchain-services/useFvkry';
+import { currentChainId } from '@/blockchain-services/useFvkry';
 import { getWalletClient } from '@/blockchain-services/useFvkry';
 
 const chartConfig = {
@@ -77,8 +77,10 @@ const TransactionDashboard = () => {
   useEffect(() => {
     if(isConnected) {
       const fetchData = async () => {
+        const chainId = currentChainId()
         const { address } = await getWalletClient();
-        const data = await apiService.getTransactionHistory(8453, "0xcB1C1FdE09f811B294172696404e88E658659905")
+        const data = await apiService.getTransactionHistory(chainId, address)
+        // const data = await apiService.getTransactionHistory(8453, "0xcB1C1FdE09f811B294172696404e88E658659905")
 
         if(data) {
             setAnalysisData(data)
@@ -332,7 +334,7 @@ const TransactionDashboard = () => {
               })()}
             </div>
             {/**third card */}
-            <div className="p-4 rounded-3xl border dark:border-gray-800 shadow-md">
+            {/* <div className="p-4 rounded-3xl border dark:border-gray-800 shadow-md">
                 <div className="flex flex-col items-start gap-y-2">
                   <div className="p-2 bg-orange-100 rounded-full">
                     <DollarSign className="h-5 w-5 text-orange-600" />
@@ -349,7 +351,7 @@ const TransactionDashboard = () => {
                   </div>
                   <span className="text-xs text-gray-500">65% efficiency</span>
                 </div>
-            </div>
+            </div> */}
             {/**fourth card */}
             <div className="p-4 rounded-3xl border dark:border-gray-800 shadow-md">
               <div className="flex flex-col items-start gap-y-2">
