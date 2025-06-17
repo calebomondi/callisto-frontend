@@ -200,7 +200,7 @@ const apiService = {
   earnPoints: async (chainId: number, owner: string, contractAddress: string, amount_locked: number, lock_duration_days: number): Promise<EarnPoints> => {
     try {
       const response: AxiosResponse<EarnPoints> = await axios.post(
-        `${API_URL}/api/points/earn`,
+        `${API_URL}/api/points/earn-points`,
         {
           chainId,
           owner,
@@ -269,18 +269,18 @@ const apiService = {
       throw error;
     }
   },
-  getPoints: async (chainId: number, vaultId: number, owner: string): Promise<number> => {
+  getPoints: async (chainId: number, vaultId: number, owner: string): Promise<{points: number}> => {
     try {
-      const response: AxiosResponse<number> = await axios.get(
+      const response: AxiosResponse<{points: number}> = await axios.get(
         `${API_URL}/api/points/get-points`,
         {
           headers: {
             'Content-Type': 'application/json'
           },
           params: {
+            owner,
             chainId,
-            vaultId,
-            owner
+            vaultId
           }
         }
       );
@@ -289,6 +289,30 @@ const apiService = {
       
     } catch (error) {
       console.error('Getting Points Failed:', error);
+      throw error;
+    }
+  },
+  pointsAddition: async (chainId: number, vaultId: number, owner: string, amount_added: number): Promise<EarnPoints> => {
+    try {
+      const response: AxiosResponse<EarnPoints> = await axios.post(
+        `${API_URL}/api/points/earn-point-on-addition`,
+        {
+          chainId,
+          vaultId,
+          owner,
+          amount_added
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return response.data;
+      
+    } catch (error) {
+      console.error('Adding Points Failed:', error);
       throw error;
     }
   }

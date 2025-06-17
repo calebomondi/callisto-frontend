@@ -18,7 +18,6 @@ import { VaultTransactions, UnlockDays, UnlockStatus, VaultGoal } from '@/types/
 import { RadialBar, RadialBarChart, ResponsiveContainer } from "recharts"
 import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
 
-
 interface PriceData {
   currentPrice: number;
   lockedPrice: number;
@@ -31,31 +30,7 @@ interface VaultDetailsProps {
 
 const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
   const [goalData, setGoalData] = useState<VaultGoal | null>(null);
-  const [points, setPoints] = useState<number>(0);
-
-  useEffect(() => {
-    const fetchGoalData = async () => {
-      const vaultData = await apiService.vaultGoal(Number(vault?.amount) || 0, Number(vault?.unLockGoal) || 0, vault?.endDate || '');
-      if(vaultData) {
-        setGoalData(vaultData);
-      }
-    }
-    // Fetch goal data if vault is of type 'goal'
-    if (vault && vault.vaultType === 'goal') {
-      fetchGoalData();
-    } 
-
-    // Fetch points data
-    const fetchPointsData = async () => {
-      const chainId = currentChainId()
-      const user = await getWalletClient();
-      const pointsData = await apiService.getPoints(chainId, vault?.vaultId || 0, user.address);
-      if(pointsData) {
-        setPoints(pointsData)
-      }
-    }
-    fetchPointsData();
-  }, []);  
+  const [points, setPoints] = useState<{points: number}>({points: 0}); 
   
   const data = [
     {
@@ -86,14 +61,13 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
   const [canUnlockNow, setCanUnlockNow] = useState<UnlockStatus>({
     canUnlockNow: false,
     amountToUnlock: 0
-});
+  });
   const [isLockExpired, setIsLockExpired] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [transactions, setTransactions] = useState<VaultTransactions[]>([])
   //const [viewTransactions, setViewTransactions] = useState<boolean>(false)
   const [withdrawModalKey, setWithdrawModalKey] = useState(0);
   const [addFundsModalKey, setAddFundsModalKey] = useState(0);
-
 
   //get params and query values
   const [searchParams] = useSearchParams();
@@ -143,6 +117,32 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               const vaults = await apiService.getUserVaults(Number(chainId), address, lockAsset);
               if (vaults && vaults.length > 0) {
                 getSingleVaultData(JSON.stringify(vaults))
+
+                const specificVault = vaults.find(v => v.vaultId === Number(vaultId));
+                if (specificVault) {
+                  const fetchGoalData = async () => {
+                    const vaultData = await apiService.vaultGoal(Number(specificVault?.amount) || 0, Number(specificVault?.unLockGoal) || 0, specificVault?.endDate || '');
+                    console.log(specificVault.amount, specificVault.unLockGoal, specificVault.endDate)
+                    if(vaultData) {
+                      setGoalData(vaultData)
+                    } 
+                  }
+                  // Fetch goal data if vault is of type 'goal'
+                  if (specificVault.vaultType === 'goal') {
+                    fetchGoalData();
+                  } 
+
+                  // Fetch points data
+                  const fetchPointsData = async () => {
+                    const chainId = currentChainId();
+                    const user = await getWalletClient();
+                    const pointsData = await apiService.getPoints(chainId, specificVault?.vaultId ?? 0, user.address);
+                    if(pointsData) {
+                      setPoints(pointsData)
+                    }
+                  }
+                  fetchPointsData();
+                }
               }
             } else {
               console.error("Address is null. Cannot fetch user vaults.");
@@ -534,7 +534,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
 
           <div className="rounded-xl p-6 border border-purple-500/20">
               <div className='flex items-center justify-center mb-4'>
-                <div className='text-5xl mr-2 font-bold text-green-500'>{points}</div>
+                <div className='text-5xl mr-2 font-bold text-green-500'>{points.points}</div>
                 <div className='text-lg font-medium text-gray-400 flex flex-col items-start justify-start'>
                   <span>Points</span>
                   <span>Earned</span>
@@ -605,7 +605,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               <div className="flex justify-evenly text-sm font-semibold">
                 <div>
                   <div className="text-purple-600 text-xl">Target:</div>
-                  <div className="text-blue-600 text-lg">{vault?.unLockGoal} USDC</div>
+                  <div className="text-blue-600 text-lg">{vaultData?.unLockGoal} USDC</div>
                 </div>
                 <div>
                   <div className="text-purple-600 text-xl">Deficit:</div>

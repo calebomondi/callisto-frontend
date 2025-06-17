@@ -101,7 +101,6 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
     </p>
   }
 
-
   const renderOverview = (): JSX.Element => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {/* Total value card */}
@@ -178,8 +177,8 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <div className="p-4 dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-1">Asset Distribution</h3>
         <p className="text-gray-400 text-sm">Distribution of locked assets</p>
-        <div  className="flex items-start gap-2">
-          <div className="flex-1">
+        <div  className="flex flex-col items-center justify-center gap-2">
+          <div className="w-full">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -203,27 +202,23 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex-1 space-y-4 pt-4">
+          <div className="flex items-center justify-evenly w-full space-x-4">
             {data.assetValues.map((asset, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
                   <div
-                    key={index}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: "blue" }}
-                      />
-                      <div>
-                        <p className="font-medium">{asset.symbol}</p>
-                        <p className="text-sm text-gray-400">
-                          ${asset.valueUSD}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="font-medium">{asset.valueUSD}</p>
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }} // Use corresponding color
+                  />
+                  <div>
+                    <p className="font-medium">{asset.symbol}</p>
+                    <p className="text-sm text-gray-400">
+                      ${Math.floor(asset.valueUSD)}
+                    </p>
                   </div>
-                ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

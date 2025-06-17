@@ -3,6 +3,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from "@/types/index.types"
 import { addToTokenVault } from "@/blockchain-services/useFvkry";
+import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry";
+import apiService from "@/backendServices/apiservices";
 
 const handleRefresh = () => {
   window.location.reload();
@@ -68,7 +70,13 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                         </ToastAction>
                     )
                 });
-                
+
+                // earn points
+                const { address } = await getWalletClient();
+                const chainID = currentChainId();
+                const result = await apiService.pointsAddition(chainID, vaultData.vaultId, address, Number(formValues.amount));
+                console.log("Points Earned:", result.status);
+
                 //refresh page
                 handleRefresh();
             }
