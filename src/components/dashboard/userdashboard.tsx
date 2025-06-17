@@ -92,12 +92,12 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
   const handleModalClose = () => {
     const modal = document.getElementById('my_modal_4') as HTMLDialogElement;
     modal.close();
-    setModalKey(prev => prev + 1); // force re-mount to reset form
+    setModalKey(prev => prev + 1);
   };
 
   if (!data) {
     return <p className='text-center text-lg my-4'>
-      <span className="loading loading-spinner loading-xl text-amber-600"></span>
+      <span className="loading loading-spinner loading-xl text-purple-600"></span>
     </p>
   }
 
@@ -457,7 +457,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             {selectedView.type === "overview" && "Overall Dashboard"}
             {selectedView.type === "assets" && "Assets Dashboard"}
             {selectedView.type === "vault" && "Vault Dashboard"}
-            {selectedView.type === "analytics" && "Analytics Dashboard"}
+            {selectedView.type === "analytics" && "Wallet Analytics"}
           </h1>
           <Button
             className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}

@@ -116,6 +116,14 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
     lockAsset: '0x..',
     userAddress: ''
   })
+
+  const [modalKey, setModalKey] = useState(0)
+
+  const handleVaultGridModalClose  = () => {
+    const modal = document.getElementById('my_modal_vaultgrid') as HTMLDialogElement;
+    modal.close();
+    setModalKey(prev => prev + 1);
+  };
   const { isConnected } = useAccount();
 
   useEffect(() => {
@@ -270,17 +278,22 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
         
         <div className="flex pl-6 justify-end mb-6">
           <Button
-            className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
-            onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95"
+            onClick={() => (document.getElementById('my_modal_vaultgrid') as HTMLDialogElement).showModal()}
           >
             <Plus className="w-4 h-4 mr-1" /> Create New Vault
           </Button>
-          <dialog id="my_modal_4" className="modal">
+          <dialog id="my_modal_vaultgrid" className="modal">
             <div className="modal-box dark:bg-gray-900">
               <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                <button
+                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                 onClick={handleVaultGridModalClose}
+                >
+                  ✕
+                </button>
               </form>
-              <LockAsset />             
+              <LockAsset key={modalKey} />             
             </div>
           </dialog>
         </div>

@@ -8,8 +8,10 @@ import { SupportedTokens, FormValues } from "@/types/index.types";
 import { parseUnits } from "viem";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, CheckCircle, ChevronDown } from "lucide-react";
+import { Button } from "../ui/button";
 import apiService from "@/backendServices/apiservices";
+
 
 export default function LockAsset() {
     const { toast } = useToast()
@@ -32,6 +34,17 @@ export default function LockAsset() {
     })
     const [supportedTokens, setSupportedTokens] = useState<SupportedTokens[]>([])
     const [isAaveSupported, setIsAaveSupported] = useState<boolean>(false)
+    const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false)
+    const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false)
+
+    const handleConfirmCreationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setShowConfirmModal(true);
+    };
+
+     const handleCancel = () => {
+        setShowConfirmModal(false);
+    };
 
     useEffect(() => {
         try {
@@ -174,25 +187,26 @@ export default function LockAsset() {
                 }
             )
             if(tx) {
+                setShowSuccessModal(true)
+                setShowConfirmModal(false)
                 //toast
-                toast({
-                    title: `${formValues.title.toUpperCase()}`,
-                    description: `Vault has been Created Successfully`,
-                    action: (
-                        <ToastAction 
-                            altText="View Transaction"
-                            onClick={() => window.open(
-                                chainID === 84532 
-                                ? `https://base-sepolia.blockscout.com/tx/${tx}` 
-                                : `https://base.blockscout.com/tx/${tx}`
-                                , '_blank'
-                            )}
-                        >
-                            View Transaction
-                        </ToastAction>
-                    )
-                });
-
+                // toast({
+                //     title: `${formValues.title.toUpperCase()}`,
+                //     description: `Vault has been Created Successfully`,
+                //     action: (
+                //         <ToastAction 
+                //             altText="View Transaction"
+                //             onClick={() => window.open(
+                //                 chainID === 84532 
+                //                 ? `https://base-sepolia.blockscout.com/tx/${tx}` 
+                //                 : `https://base.blockscout.com/tx/${tx}`
+                //                 , '_blank'
+                //             )}
+                //         >
+                //             View Transaction
+                //         </ToastAction>
+                //     )
+                // });
                 //earn points
                 const { address } = await getWalletClient();
                 const chainInfo = await apiService.getChainData(chainID);
@@ -371,50 +385,50 @@ export default function LockAsset() {
                     </div>
                 </div>
 
-<div className="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0 w-full mb-6">
-  {/* Duration Section */}
-  <div className="w-full md:w-1/2 space-y-2">
-    <label
-      htmlFor="durationType"
-      className="block text-sm font-semibold"
-    >
-      Duration
-    </label>
-    <select
-      onChange={handleChange}
-      required
-      value={formValues.durationType}
-      name="durationType"
-      id="durationType"
-      className="w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-    >
-      <option className="dark:text-white" value="days">Day(s)</option>
-      <option className="dark:text-white" value="weeks">Week(s)</option>
-      <option className="dark:text-white" value="months">Month(s)</option>
-      <option className="dark:text-white" value="years">Year(s)</option>
-    </select>
-  </div>
+                <div className="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0 w-full mb-6">
+                {/* Duration Section */}
+                <div className="w-full md:w-1/2 space-y-2">
+                  <label
+                    htmlFor="durationType"
+                    className="block text-sm font-semibold"
+                  >
+                    Duration
+                  </label>
+                  <select
+                    onChange={handleChange}
+                    required
+                    value={formValues.durationType}
+                    name="durationType"
+                    id="durationType"
+                    className="w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option className="dark:text-white" value="days">Day(s)</option>
+                    <option className="dark:text-white" value="weeks">Week(s)</option>
+                    <option className="dark:text-white" value="months">Month(s)</option>
+                    <option className="dark:text-white" value="years">Year(s)</option>
+                  </select>
+                </div>
 
-  {/* Period Input Section */}
-  <div className="w-full md:w-1/2 space-y-2">
-    <label
-      htmlFor="lockPeriod"
-      className="block text-sm font-semibold"
-    >
-      Period
-    </label>
-    <input
-      type="text"
-      id="lockPeriod"
-      name="lockPeriod"
-      value={formValues.lockPeriod}
-      onChange={handleChange}
-      className="w-full p-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-      placeholder={durationPlaceholders[formValues.durationType]}
-      required
-    />
-  </div>
-</div>
+                  {/* Period Input Section */}
+                  <div className="w-full md:w-1/2 space-y-2">
+                    <label
+                      htmlFor="lockPeriod"
+                      className="block text-sm font-semibold"
+                    >
+                      Period
+                    </label>
+                    <input
+                      type="text"
+                      id="lockPeriod"
+                      name="lockPeriod"
+                      value={formValues.lockPeriod}
+                      onChange={handleChange}
+                      className="w-full p-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder={durationPlaceholders[formValues.durationType]}
+                      required
+                    />
+                  </div>
+                </div>
 
                 <div className={`${formValues.vaultType !== 'goal' && 'hidden'}`}>
                 <h3 className="text-center font-semibold mb-2">Goal details</h3>
@@ -477,18 +491,96 @@ export default function LockAsset() {
                 </div>
 
                 <div className="w-full text-center flex flex-col items-center">
-                    <span className={`text-sm dark:text-gray-400 my-2 ${formValues.totalAmount.length > 0 ? "" : "hidden"} text-center`}>
-                        {`Service Fee: ${serviceFee} - To Lock: ${formatNumber(Number(formValues.totalAmount) - Number(serviceFee))}`} 
-                    </span>
-                    <span className={`text-sm text-gray-400 my-2 ${!amountFine && 'text-red-600'} ${!notShow && 'hidden'} ${formValues.vaultType !== 'schedule' && 'hidden'}`}>
+                    <span className={`text-sm text-gray-400 my-3 ${!amountFine && 'text-red-600'} ${!notShow && 'hidden'} ${formValues.vaultType !== 'schedule' && 'hidden'}`}>
                         {`Unlock ${formValues.unLockAmount} ${formValues.symbol} After Every ${formValues.unLockDuration} days, Total Amount: ${toUnlockTotal}`}
                     </span>
                 </div>
                 <div className="p-1 flex justify-center mt-2">
                     <button 
-                        type="submit" 
+                        type="button"
+                        onClick={handleConfirmCreationClick} 
                         className="btn w-1/2 text-base text-white border-none bg-gradient-to-r from-purple-500 to-pink-500 transform transition-transform duration-150 hover:scale-95"
                         disabled={formValues.vaultType === 'schedule' && !amountFine}
+                    >
+                        Create Vault <ArrowRight size={20} />
+                    </button>
+                </div>
+            </form>
+        </div>
+        {showConfirmModal && (
+        <dialog open className="modal">
+            <div className="modal-box bg-gray-800">
+                <h3 className="font-bold text-lg text-center">Confirm Vault Creation</h3>
+                <div className="py-4 px-4 mt-6 space-y-3 bg-[#1d3d36] rounded-lg ">
+                    <div>
+                        <div className="flex justify-between">
+                            <p>Vault Name:</p>
+                            <p> {formValues.title}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Vault Type:</p>
+                            <p className="capitalize"> {formValues.vaultType}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Initial Amount:</p>
+                            <p>{formValues.totalAmount} {formValues.symbol}</p>
+                        </div>
+                        {formValues.vaultType === "goal" && (
+                            <>
+                            <div className="flex justify-between">
+                                <p>Goal Amount:</p>
+                                <p>{formValues.unLockGoal} {formValues.symbol}</p>
+                            </div>
+                            </>
+                        )}
+                        <div className="flex justify-between">
+                            <p>Lock Period:</p>
+                            <p> {formValues.lockPeriod} {formValues.durationType}</p>
+                        </div>
+                        {formValues.vaultType === "schedule" && (
+                            <>
+                            <div className="flex justify-between">
+                                <p>Unlock Amount:</p>
+                                <p>{formValues.unLockAmount} {formValues.symbol}</p>
+                            </div>
+                            <div className="flex justify-between">
+                                <p>After Every:</p>
+                                <p> {formValues.unLockDuration} days</p>
+                            </div>
+                            <div className="flex justify-between">
+                                <p>Amount per unlock:</p>
+                                <p> ${toUnlockTotal}</p>
+                            </div>
+                            </>
+                        )}
+                    </div>
+                    <div className="px-3 py-3 bg-gray-300/10 rounded-md">
+                        <p className="text-gray-400 text-sm">Estimated Earnings</p>
+                        <div className="flex justify-between">
+                            <p>Yield Percentage:</p>
+                            <p>4%</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Points to earn</p>
+                            <p>10 points</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex justify-between text-sm">
+                            <p>Service Fee</p>
+                            <p>{Number(serviceFee)/100 * Number(formValues.totalAmount)} {formValues.symbol}</p>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                            <p>To Lock</p>
+                            <p>{(Number(formatNumber(Number(formValues.totalAmount) - Number(serviceFee)))/100 * Number(formValues.totalAmount)).toFixed(2)} {formValues.symbol}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal-action">
+                    <Button className="bg-red-500 hover:scale-95 hover:bg-red-500" onClick={handleCancel}>Cancel</Button>
+                    <Button
+                     className="bg-green-600 hover:bg-green-700 hover:scale-95"
+                     onClick={handleSubmit}
                     >
                         {
                             isLoading ? (
@@ -498,10 +590,26 @@ export default function LockAsset() {
                                 </>
                             ) : 'Create Vault'
                         }
-                    </button>
+                    </Button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </dialog>
+        )}
+        {showSuccessModal && (
+          <dialog id="success_modal" className="modal" open>
+            <div className="modal-box dark:bg-gray-800 dark:text-white flex flex-col justify-center items-center">
+              <CheckCircle size={40} className="text-green-500"/>
+              <h3 className="font-bold text-lg">Success!</h3>
+              <p className="py-4">Your vault was created successfully!</p>
+              <Button
+                className="bg-green-500 hover:bg-green-600 px-6 text-white"
+                onClick={() => setShowSuccessModal(false)}
+              >
+                Close
+              </Button>
+            </div>
+          </dialog>
+        )}
     </div>
   )
 }
