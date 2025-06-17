@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { CustomConnectButton } from "../walletconnect/walletconnect";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { CircleUserIcon, Bell } from "lucide-react";
+import { CircleUserIcon } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";Bell
 
 export default function ConnectedNavbar() {
   const { isConnected } = useAccount();
@@ -98,11 +98,11 @@ export default function ConnectedNavbar() {
               {isConnected ? <ConnectButton /> :<CustomConnectButton />}              
           </div>
         </dialog>
-        <Button
+        {/* <Button
           className="bg-transparent hover:bg-gray-400 w-10 h-10"
         >
           <Bell className="h-5 w-5"  />
-        </Button>
+        </Button> */}
       </div>
     </div>
   )
