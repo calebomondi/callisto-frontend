@@ -278,7 +278,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
         
         <div className="flex pl-6 justify-end mb-6">
           <Button
-            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95"
+            className={`${isConnected ? "" : "hidden"} bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95`}
             onClick={() => (document.getElementById('my_modal_vaultgrid') as HTMLDialogElement).showModal()}
           >
             <Plus className="w-4 h-4 mr-1" /> Create New Vault
