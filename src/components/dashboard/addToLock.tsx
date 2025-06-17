@@ -3,6 +3,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 import { VaultData } from "@/types/index.types"
 import { addToTokenVault } from "@/blockchain-services/useFvkry";
+import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry";
+import apiService from "@/backendServices/apiservices";
 
 const handleRefresh = () => {
   window.location.reload();
@@ -68,7 +70,13 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                         </ToastAction>
                     )
                 });
-                
+
+                // earn points
+                const { address } = await getWalletClient();
+                const chainID = currentChainId();
+                const result = await apiService.pointsAddition(chainID, vaultData.vaultId, address, Number(formValues.amount));
+                console.log("Points Earned:", result.status);
+
                 //refresh page
                 handleRefresh();
             }
@@ -96,7 +104,7 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                 <h2 className="text-center text-lg font-semibold">Add To Lock ({vaultData.symbol})</h2>
                 <form onSubmit={handleSubmit} className="w-full p-1">
                     <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
-                        <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-amber-600">
+                        <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-gray-500">
                             Amount
                             <input 
                                 type="text" 
@@ -113,7 +121,7 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                     <div className="p-1 flex justify-center mt-2">
                         <button 
                             type="submit" 
-                            className="btn bg-amber-500 w-1/2 text-white text-base border border-amber-500 hover:bg-amber-600"
+                            className="btn bg-gradient-to-r from-purple-500 to-pink-500 w-1/2 text-white text-base hover:scale-95"
                         >
                             {isLoading ? 
                                 <>

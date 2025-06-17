@@ -94,16 +94,16 @@ export default function Features() {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="light:bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              className="light:bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow dark:border dark:border-gray-900 dark:hover:border-purple-500 dark:transition-colors"
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
               <div className="w-12 h-12 light:bg-amber-100 rounded-lg flex items-center justify-center mb-4">
-                <div className="text-amber-500">{feature.icon}</div>
+                <div className="text-purple-500">{feature.icon}</div>
               </div>
-              <h3 className="text-xl font-semibold mb-2 dark:text-gray-400">{feature.title}</h3>
-              <p className="dark:text-gray-300">{feature.description}</p>
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="dark:text-gray-400">{feature.description}</p>
             </motion.div>
           ))}
         </motion.div>

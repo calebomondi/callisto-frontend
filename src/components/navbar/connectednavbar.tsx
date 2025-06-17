@@ -1,12 +1,13 @@
 import logo2 from "/2.png";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import LockAsset from "../dashboard/lockAsset";
+// import LockAsset from "../dashboard/lockAsset";
 import { useAccount } from "wagmi";
 import { CustomConnectButton } from "../walletconnect/walletconnect";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { CircleUserIcon } from "lucide-react";
+import { CircleUserIcon, Bell } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { Button } from "../ui/button";
 
 export default function ConnectedNavbar() {
   const { isConnected } = useAccount();
@@ -21,7 +22,7 @@ export default function ConnectedNavbar() {
   }, [])
 
   return (
-    <div className="navbar dark:bg-black/90 bg-white sticky top-0 shadow-md z-50">
+    <div className="navbar dark:bg-gray-900 border-b border-gray-800 bg-white sticky top-0 shadow-lg z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -41,7 +42,7 @@ export default function ConnectedNavbar() {
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li className={path === 'dashboard' ? 'text-amber-600' : ''}>
+            <li className={path === 'dashboard' ? 'text-purple-600' : ''}>
               <Link to="/dashboard/">Dashboard</Link>
             </li>
             <li>
@@ -62,27 +63,27 @@ export default function ConnectedNavbar() {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 font-semibold">
-          <li className={path === 'dashboard' ? 'text-amber-600' : ''}>
+          <li className={path === 'dashboard' ? 'text-purple-400' : ''}>
             <Link to="/dashboard/">Dashboard</Link>
           </li>
-          <li className={path === 'myvaults' ? 'text-amber-600' : ''}>
+          <li className={path === 'myvaults' ? 'text-purple-400' : ''}>
             <Link to="/myvaults/">My Vaults</Link>
           </li>
           
         </ul>
       </div>
       <div className="navbar-end scale-75">
-        <button className={`${!isConnected && 'hidden'} btn rounded-md border-none text-base bg-amber-500 text-white font-semibold hover:scale-95 hover:bg-amber-600`} onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}>
+        {/* <button className={`${!isConnected && 'hidden'} px-12 py-2 btn rounded-lg border-none text-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:scale-95`} onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}>
           Lock
         </button>
         <dialog id="my_modal_4" className="modal">
-          <div className="modal-box">
+          <div className="modal-box dark:bg-gray-900">
             <form method="dialog">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
             </form>
             <LockAsset />             
           </div>
-        </dialog>
+        </dialog> */}
         <div className="hidden md:block ml-4">
           {isConnected ? <ConnectButton /> :<CustomConnectButton />}
         </div>
@@ -97,6 +98,11 @@ export default function ConnectedNavbar() {
               {isConnected ? <ConnectButton /> :<CustomConnectButton />}              
           </div>
         </dialog>
+        <Button
+          className="bg-transparent hover:bg-gray-400 w-10 h-10"
+        >
+          <Bell className="h-5 w-5"  />
+        </Button>
       </div>
     </div>
   )

@@ -286,3 +286,23 @@ export interface CustomTooltipProps {
   }>;
   label?: string;
 }
+
+export interface EarnPoints {
+  status: boolean;
+}
+
+export interface BreakVault {
+  message: string;
+  pointsafterPenalty: number;
+}
+
+export interface VaultGoal {
+  remainingAmount: number;
+  daysToEndDate: number;
+  weeksToEndDate: number;
+  monthsToEndDate: number;
+  progress: number;
+  amountToSaveDaily: number;
+  amountToSaveWeekly: number;
+  amountToSaveMonthly: number;
+}

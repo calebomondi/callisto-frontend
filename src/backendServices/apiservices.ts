@@ -1,7 +1,19 @@
 import axios, {AxiosResponse} from 'axios';
 import { API_URL } from './apiurl';
 import { currentChainId } from '@/blockchain-services/useFvkry';
-import { TokenData, ChainData, SupportedTokens, VaultData, VaultTransactions, ScheduledData, DashboardData } from '@/types/index.types';
+import { 
+  TokenData, 
+  ChainData, 
+  SupportedTokens, 
+  VaultData, 
+  VaultTransactions, 
+  ScheduledData, 
+  DashboardData, 
+  AnalysisData,
+  BreakVault,
+  EarnPoints,
+  VaultGoal
+} from '@/types/index.types';
 
 const apiService = {
   vaultSchedule: async (vaultData:VaultData): Promise<ScheduledData> => {        
@@ -160,6 +172,147 @@ const apiService = {
       
     } catch (error) {
       console.error('Getting Vault Transactions Failed:', error);
+      throw error;
+    }
+  },
+  getTransactionHistory: async (chain: number, address: string): Promise<AnalysisData> => {        
+      try {
+        const response: AxiosResponse<AnalysisData> = await axios.post(
+          `${API_URL}/api/transactions/history`,
+          {
+            chain,
+            address
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+  
+        return response.data;
+        
+      } catch (error) {
+        console.error('Asset Locking Failed:', error);
+        throw error;
+      }
+  }, 
+  earnPoints: async (chainId: number, owner: string, contractAddress: string, amount_locked: number, lock_duration_days: number): Promise<EarnPoints> => {
+    try {
+      const response: AxiosResponse<EarnPoints> = await axios.post(
+        `${API_URL}/api/points/earn-points`,
+        {
+          chainId,
+          owner,
+          contractAddress,
+          amount_locked,
+          lock_duration_days
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return response.data;
+
+    } catch (error) {
+      console.error('Earning Points Failed:', error);
+      throw error;
+    }
+  },
+  breakVault: async (owner: string, chainId: number, vaultId: number): Promise<BreakVault> => {
+    try {
+      const response: AxiosResponse<BreakVault> = await axios.post(
+        `${API_URL}/api/points/break-vault`,
+        {
+          owner,
+          chainId,
+          vaultId
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return response.data;
+
+    } catch (error) {
+      console.error('Breaking Vault Failed:', error);
+      throw error;
+      
+    }
+  },
+  vaultGoal: async (currentAmount: number, goalAmount: number, endDate: string): Promise<VaultGoal> => {
+    try {
+      const response: AxiosResponse<VaultGoal> = await axios.post(
+        `${API_URL}/api/vaults/goal`,
+        {
+          currentAmount,
+          goalAmount,
+          endDate
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return response.data;
+
+    } catch (error) {
+      console.error('Setting Vault Goal Failed:', error);
+      throw error;
+    }
+  },
+  getPoints: async (chainId: number, vaultId: number, owner: string): Promise<{points: number}> => {
+    try {
+      const response: AxiosResponse<{points: number}> = await axios.get(
+        `${API_URL}/api/points/get-points`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          params: {
+            owner,
+            chainId,
+            vaultId
+          }
+        }
+      );
+
+      return response.data;
+      
+    } catch (error) {
+      console.error('Getting Points Failed:', error);
+      throw error;
+    }
+  },
+  pointsAddition: async (chainId: number, vaultId: number, owner: string, amount_added: number): Promise<EarnPoints> => {
+    try {
+      const response: AxiosResponse<EarnPoints> = await axios.post(
+        `${API_URL}/api/points/earn-point-on-addition`,
+        {
+          chainId,
+          vaultId,
+          owner,
+          amount_added
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return response.data;
+      
+    } catch (error) {
+      console.error('Adding Points Failed:', error);
       throw error;
     }
   }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Shield, Github, CheckCircle, Twitter } from 'lucide-react';
+import { Button } from '../ui/button';
 
 export default function Footer() {
     const [showNotification, setShowNotification] = useState(false);
@@ -17,45 +18,45 @@ export default function Footer() {
         </div>
       )}
 
-    <footer className="bg-amber-600 text-white ">
-        <div className="max-w-7xl mx-auto px-4 py-12">
+    <footer className="border-t border-gray-800">
+        <div className="container mx-auto px-24 py-12">
             <div className="flex md:items-center justify-between md:flex-row flex-col">
                 <div>
-                <h3 className="text-xl font-bold mb-2">FVP</h3>
-                <p className="">Self Custodial Financial Management Platform</p>
+                <h3 className="text-xl font-bold mb-2 text-purple-500">FVP</h3>
+                <p className="text-gray-400">Self Custodial Financial Management Platform</p>
                 <div className="mt-4">
                     <input
                     type="email"
                     placeholder="Enter your email"
                     className="bg-white text-gray-800 rounded px-4 py-2 w-full focus:outline-amber-800"
                     />
-                    <button
+                    <Button
                     onClick={() => {
                         setShowNotification(true);
                         setTimeout(() => setShowNotification(false), 3000);
                     }}
-                    className="mt-2 px-4 py-2 rounded w-full hover:bg-opacity-90 transition-all border border-white shadow-sm"
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-95 w-full mt-4"
                     >
                     Subscribe to Updates
-                    </button>
+                    </Button>
                 </div>
                 </div>
                 <div className='mt-4 '>
                 <h4 className="font-semibold mb-4">Quick Links</h4>
                 <ul className="space-y-2">
-                    <li className="hover:scale-105 transition-colors cursor-pointer">About</li>
-                    <li className="hover:text-golden transition-colors cursor-pointer">Features</li>
-                    <li className="hover:text-golden transition-colors cursor-pointer">Documentation</li>
-                    <li className="hover:text-golden transition-colors cursor-pointer">Support</li>
+                    <li className="text-gray-400 hover:text-white">About</li>
+                    <li className="text-gray-400 hover:text-white">Features</li>
+                    <li className="text-gray-400 hover:text-white">Documentation</li>
+                    <li className="text-gray-400 hover:text-white">Support</li>
                 </ul>
                 </div>
                 <div className='mt-4'>
                 <h4 className="font-semibold mb-4">Legal</h4>
                 <ul className="space-y-2 ">
-                    <li className="hover:text-golden transition-colors cursor-pointer">Terms of Service</li>
-                    <li className="hover:text-golden transition-colors cursor-pointer">Privacy Policy</li>
-                    <li className="hover:text-golden transition-colors cursor-pointer">Risk Disclosure</li>
-                    <li className="hover:text-golden transition-colors cursor-pointer">Data Protection</li>
+                    <li className="text-gray-400 hover:text-white">Terms of Service</li>
+                    <li className="text-gray-400 hover:text-white">Privacy Policy</li>
+                    <li className="text-gray-400 hover:text-white">Risk Disclosure</li>
+                    <li className="text-gray-400 hover:text-white">Data Protection</li>
                 </ul>
                 </div>
             <div className='mt-4'>
@@ -71,20 +72,20 @@ export default function Footer() {
               <div className="mt-4">
                 <h5 className="text-sm font-semibold mb-2">Our Communities</h5>
                 <ul className="space-y-2 ">
-                  <li className="hover:text-golden transition-colors cursor-pointer">Telegram Group</li>
-                  <li className="hover:text-golden transition-colors cursor-pointer">Discord Server</li>
-                  <li className="hover:text-golden transition-colors cursor-pointer">Reddit</li>
+                  <li>Telegram Group</li>
+                  <li>Discord Server</li>
+                  <li>Reddit</li>
                 </ul>
               </div>
             </div>
           </div>
-          <div className="border-t dark:border-w-700 mt-8 pt-8">
+          <div className="border-t border-gray-800 mt-8 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className=" text-sm">
+              <p className=" text-sm text-gray-400">
                 &copy; {new Date().getFullYear()} FVP. All rights reserved.
               </p>
               <div className="flex items-center mt-4 md:mt-0">
-                <span className="flex items-center  text-sm">
+                <span className="flex items-center text-sm text-gray-400">
                   <Shield className="w-4 h-4 mr-2" />
                   Smart Contracts Audited by
                   <a href="#" className="text-golden hover:text-golden/80 ml-1">

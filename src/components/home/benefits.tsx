@@ -6,25 +6,25 @@ const benefits = [
     title: "Enhanced Security",
     description: "Your assets are secured by smart contracts on the Ethereum blockchain",
     icon: <Shield className="w-6 h-6" />,
-    color: "bg-amber-500",
+    color: "bg-purple-500",
   },
   {
     title: "Better Returns",
     description: "Avoid panic selling and benefit from long-term market growth",
     icon: <TrendingUp className="w-6 h-6" />,
-    color: "bg-amber-500",
+    color: "bg-purple-500",
   },
   {
     title: "Time-Locked Savings",
     description: "Set custom lock periods to match your financial goals",
     icon: <Clock className="w-6 h-6" />,
-    color: "bg-amber-500",
+    color: "bg-purple-500",
   },
   {
     title: "Financial Discipline",
     description: "Build better crypto investment habits with controlled access",
     icon: <Wallet className="w-6 h-6" />,
-    color: "bg-amber-500",
+    color: "bg-purple-500",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function Benefits() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Why Choose FVP?
+            Why Choose <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">FVP</span>
           </motion.h2>
           <motion.p
             className="dark:text-gray-400 max-w-2xl mx-auto"
@@ -97,11 +97,11 @@ export default function Benefits() {
                   </motion.div>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-3 dark:text-gray-400">{benefit.title}</h3>
-                <p className="dark:text-gray-300">{benefit.description}</p>
+                <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
+                <p className="dark:text-gray-400">{benefit.description}</p>
 
                 <motion.div
-                  className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-amber-300 rounded-b-xl"
+                  className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-purple-300 rounded-b-xl"
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
