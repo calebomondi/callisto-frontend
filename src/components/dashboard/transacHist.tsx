@@ -299,7 +299,7 @@ const TransactionDashboard = () => {
                   </div>
                   <h4 className="text-lg font-semibold">Avg. Gas Fee</h4>
                 </div>
-                <p className="text-3xl font-bold">
+                <p className="text-xl md:text-3xl font-bold">
                   {formatCurrency(analysisData.gasFeeAnalysis.average)}
                 </p>
                 <p className="text-sm text-gray-400 mt-2">Per transaction</p>
@@ -323,7 +323,7 @@ const TransactionDashboard = () => {
                   .sort((a, b) => b[1].transactions - a[1].transactions)[0];
                 return (
                   <>
-                    <p className="text-3xl font-bold">{ mostActiveMonth ? mostActiveMonth[0] : 'Nan' }</p>
+                    <p className="text-xl md:text-3xl font-bold">{ mostActiveMonth ? mostActiveMonth[0] : 'Nan' }</p>
                     <p className="text-sm text-gray-400 mt-2">{ mostActiveMonth ? mostActiveMonth[1].transactions : '0'} transactions</p>
                     <div className="mt-4 flex items-center space-x-2">
                       <TrendingUp className="h-4 w-4 text-green-500" />
@@ -360,7 +360,7 @@ const TransactionDashboard = () => {
                 </div>
                 <h4 className="text-lg font-semibold">Token Diversity</h4>
               </div>
-              <p className="text-3xl font-bold">
+              <p className="text-xl md:text-3xl font-bold">
               {Object.keys(analysisData.summary.netFlow.tokens).filter(token => 
                 analysisData.summary.netFlow.tokens[token] > 0
               ).length}
