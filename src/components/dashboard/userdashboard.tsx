@@ -336,7 +336,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
                     </div>
                   </TableCell>
                   <TableCell className=" py-4">
-                    <div className="text-sm">{asset.totalAmount} {asset.symbol}</div>
+                    <div className="text-sm">{Math.floor(asset.totalAmount)} {asset.symbol}</div>
                   </TableCell>
                   <TableCell className="py-4">
                     <div className="text-sm">{formatCurrency(asset.valueUSD)}</div>
@@ -369,34 +369,36 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Asset lock duration chart */}
-      <div className="w-1/2 mt-6 dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md p-6">
+      <div className="mt-6 dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md p-6">
         <h3 className="text-lg font-medium">Average Lock Duration by Asset</h3>
-        <div className="h-64 mt-4">
-          <ChartContainer config={chartConfig}>
-            <BarChart
-              accessibilityLayer
-              data={data.avgLockDaysByAsset}
-              // margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              //strokeDasharray="3 3"
-            >
-              <CartesianGrid  vertical={false} />
-              <XAxis
-                dataKey="symbol"
-                tickLine={false}
-                className="font-bold"
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)} 
-              />
-              {/* <YAxis label={{ value: 'Days', angle: -90, position: 'insideLeft' }} /> */}
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent />}
-                // formatter={(value) => [`${Math.round(Number(value))} days`, 'Avg Lock Period']} 
-              />
-              <Bar dataKey="avgDays" fill="#8884d8"  radius={10}  name="Average Lock Days" />
-            </BarChart>
-          </ChartContainer>
+        <div className='grid place-items-center'>
+          <div className="md:w-1/2 w-full mt-4">
+            <ChartContainer config={chartConfig}>
+              <BarChart
+                accessibilityLayer
+                data={data.avgLockDaysByAsset}
+                // margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                //strokeDasharray="3 3"
+              >
+                <CartesianGrid  vertical={false} />
+                <XAxis
+                  dataKey="symbol"
+                  tickLine={false}
+                  className="font-bold"
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)} 
+                />
+                {/* <YAxis label={{ value: 'Days', angle: -90, position: 'insideLeft' }} /> */}
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
+                  // formatter={(value) => [`${Math.round(Number(value))} days`, 'Avg Lock Period']} 
+                />
+                <Bar dataKey="avgDays" fill="#8884d8"  radius={10}  name="Average Lock Days" />
+              </BarChart>
+            </ChartContainer>
+          </div>
         </div>
       </div>
     </div>
@@ -451,16 +453,16 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <Sidebar onVaultSelect={handleVaultSelect} />
 
       {/* Right section: Graphs, Distribution, Unlocks (spans 2 columns) */}
-      <div className="flex-1 p-8 space-y-8 overflow-y-auto">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">
+      <div className="flex-1 p-4 space-y-8 overflow-y-auto">
+        <div className="flex justify-between items-center ">
+          <h1 className="text-xl md:text-3xl font-bold">
             {selectedView.type === "overview" && "Overall Dashboard"}
             {selectedView.type === "assets" && "Assets Dashboard"}
             {selectedView.type === "vault" && "Vault Dashboard"}
             {selectedView.type === "analytics" && "Wallet Analytics"}
           </h1>
           <Button
-            className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
+            className={`btn btn-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
             onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
           >
             <Plus className="w-4 h-4 mr-1" /> Create New Vault

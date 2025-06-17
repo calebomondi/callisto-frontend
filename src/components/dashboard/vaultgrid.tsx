@@ -188,11 +188,11 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
   return (
     <div className="space-y-8 dark:bg-gradient-to-b from-gray-900 to-black min-h-screen">
       {/* Search and Filter Section */}
-      <div className="flex flex-col gap-1 sticky top-20 p-2 rounded-md">
+      <div className="flex flex-col gap-1 sticky top-20 p-2 rounded-md bg-gray-900 z-50">
         <div className='flex flex-col md:flex-row justify-between items-center pr-10 pl-6'>
           {/* Top Row - Always visible */}
           <div>
-            <h1 className="text-3xl font-bold">Your Vaults</h1>
+            <h1 className="text-3xl font-bold hidden md:block">Your Vaults</h1>
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-2">
