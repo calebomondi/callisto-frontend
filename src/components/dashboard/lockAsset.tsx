@@ -562,7 +562,7 @@ export default function LockAsset() {
                         </div>
                         <div className="flex justify-between">
                             <p>Points to earn</p>
-                            <p>10 points</p>
+                            <p>{Number(formValues.totalAmount) + convertToDays(formValues.durationType,Number(formValues.lockPeriod)) * 0.5} points</p>
                         </div>
                     </div>
                     <div>
