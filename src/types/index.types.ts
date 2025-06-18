@@ -306,3 +306,8 @@ export interface VaultGoal {
   amountToSaveWeekly: number;
   amountToSaveMonthly: number;
 }
+
+export interface TokenBalances {
+    balance: string;
+    symbol: string;
+}

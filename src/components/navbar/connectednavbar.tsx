@@ -8,20 +8,41 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { CircleUserIcon } from "lucide-react";
 import { useLocation } from "react-router-dom";
 // import { Button } from "../ui/button";Bell
+import { TokenBalances } from "@/types/index.types";
+import apiService from "@/backendServices/apiservices";
+import { currentChainId } from "@/blockchain-services/useFvkry";
+import { getWalletClient } from "@/blockchain-services/useFvkry";
 
 export default function ConnectedNavbar() {
   const { isConnected } = useAccount();
   const location = useLocation();
   const [path,setPath] = useState<string>('dashboard');
+  const [tokensData, setTokensData] = useState<TokenBalances[]>([]);
   
   useEffect(() => {
     const path = location.pathname.substring(1);
     const pathSegments = path.split('/');
     const firstSegment = pathSegments[0];
     setPath(firstSegment);
-  }, [])
+
+    if (isConnected) {
+      const fetchTokensData = async () => {
+        try {
+          const user = await getWalletClient();
+          const tokensData = await apiService.getTokenBalances(currentChainId(), user.address);
+          setTokensData(tokensData);
+        } catch (error) {
+          console.error('Error fetching tokens data:', error);
+        }
+      }
+
+      fetchTokensData();
+    }
+
+  }, [isConnected, location.pathname]);
 
   return (
+    <>
     <div className="navbar dark:bg-gray-900 border-b border-gray-800 bg-white sticky top-0 shadow-lg z-50">
       <div className="navbar-start">
         <div className="dropdown">
@@ -48,7 +69,6 @@ export default function ConnectedNavbar() {
             <li>
               <Link to="/myvaults/">My Vaults</Link>
             </li>
-            
           </ul>
         </div>
         <div className="flex items-center">
@@ -105,5 +125,19 @@ export default function ConnectedNavbar() {
         </Button> */}
       </div>
     </div>
+    {isConnected && (
+      <div className="flex justify-center items-center p-2 text-md gap-2 font-semibold">
+        <span className="text-gray-300">Balances:</span>
+        {
+          tokensData.map((asset, index) => (
+            <p key={index} className="flex gap-1">
+              <span>{asset.symbol}</span>
+              (<span>{Math.floor(parseFloat(asset.balance))}</span>)
+            </p>
+          ))
+        }
+      </div>
+    )}
+    </>
   )
 }

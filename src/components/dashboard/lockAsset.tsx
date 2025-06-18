@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createTokenVault, currentChainId, getWalletClient } from "@/blockchain-services/useFvkry";
 import { useAccount } from 'wagmi';
 import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast"
-import { SupportedTokens, FormValues } from "@/types/index.types";
+import { SupportedTokens, FormValues, TokenBalances } from "@/types/index.types";
 import { parseUnits } from "viem";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -12,11 +11,10 @@ import { ArrowRight, CheckCircle, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import apiService from "@/backendServices/apiservices";
 
-
 export default function LockAsset() {
     const { toast } = useToast()
     const navigate = useNavigate()
-    const { isConnected } = useAccount();
+    const { isConnected } = useAccount()
 
     //form
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,10 +34,65 @@ export default function LockAsset() {
     const [isAaveSupported, setIsAaveSupported] = useState<boolean>(false)
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false)
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false)
+    const [tokensData, setTokensData] = useState<TokenBalances[]>([])
 
     const handleConfirmCreationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setShowConfirmModal(true);
+
+        try {
+            // validate input data
+            if (isNaN(Number(formValues.totalAmount)) || Number(formValues.totalAmount) < 1) {
+                throw new Error('Amount to lock must be a value and greater than 0.001')
+            }
+            if (isNaN(Number(formValues.lockPeriod)) || Number(formValues.lockPeriod) <= 0) {
+                throw new Error('Lock period must be a value and greater than 0')
+            }
+            if (isNaN(Number(formValues.unLockGoal)) || Number(formValues.unLockGoal) < 0) {
+                throw new Error('Locking Goal must be a value and greater than 0')
+            }
+            if (formValues.durationType === 'days' && Number(formValues.lockPeriod) > 6) {
+                throw new Error('Days Cannot Exceed 7')
+            }
+            if (formValues.durationType === 'weeks' && Number(formValues.lockPeriod) > 3) {
+                throw new Error('Weeks Cannot Exceed 4')
+            }
+            if (formValues.durationType === 'months' && Number(formValues.lockPeriod) > 11) {
+                throw new Error('Months Cannot Exceed 11')
+            }
+            if (formValues.durationType === 'years' && Number(formValues.lockPeriod) > 5) {
+                throw new Error('Years Cannot Exceed 5')
+            }
+            if (hasSufficientBalance()) {
+                throw new Error('Insufficient Balance to Lock Asset!')
+            }
+
+            //set form values according to vault type
+            if(formValues.vaultType === 'schedule') {
+                formValues.unLockGoal = ''
+            }
+            if(formValues.vaultType === 'goal') {
+                formValues.unLockDuration = ''
+                formValues.unLockAmount = ''
+                if(Number(formValues.unLockGoal) <= Number(formValues.totalAmount)) {
+                    throw new Error('Goal Amount cannot be less than or equal to initial deposit amount!')
+                }
+            }
+            if(formValues.vaultType === 'Fixed') {
+                formValues.unLockDuration = ''
+                formValues.unLockAmount = ''
+                formValues.unLockGoal = ''
+            }
+
+            setShowConfirmModal(true);
+
+        } catch (error:any) {
+            console.log(`Confirmation Error!`, error.message);
+            toast({
+                variant: "destructive",
+                title: "ERROR",
+                description: error.message
+            })
+        }
     };
 
      const handleCancel = () => {
@@ -56,12 +109,18 @@ export default function LockAsset() {
                     }
                 }
             }
-
             fetchSupportedTokens()
+
+            const fetchTokensData = async () => {
+                const user = await getWalletClient();
+                const tokensData = await apiService.getTokenBalances(currentChainId(), user.address);
+                setTokensData(tokensData);
+            }
+            fetchTokensData()
         } catch (error) {
             console.error("Error fetching supported tokens:", error);
         }
-    }, [isConnected]);
+    }, [isConnected, formValues.symbol]);
 
     useEffect(() => {
         if (isConnected && supportedTokens.length > 0) {
@@ -73,6 +132,13 @@ export default function LockAsset() {
     }, [isConnected, formValues.symbol]);
 
     const TITLE_WORD_LIMIT = 5;
+
+    const hasSufficientBalance = (): boolean => {
+        const token = tokensData.find(t => t.symbol === formValues.symbol);
+        const availableBalance = token ? Number(token.balance) : 0;
+        const amountToLock = parseFloat(formValues.totalAmount);
+        return availableBalance < amountToLock
+    }
 
     const countWords = (text: string): number => {
         return text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -124,43 +190,6 @@ export default function LockAsset() {
 
         setIsLoading(true)
         try {
-            //validate input data
-            if (isNaN(Number(formValues.totalAmount)) || Number(formValues.totalAmount) <= 0.001) {
-                throw new Error('Amount to lock must be a value and greater than 0.001')
-            }
-            if (isNaN(Number(formValues.lockPeriod)) || Number(formValues.lockPeriod) <= 0) {
-                throw new Error('Lock period must be a value and greater than 0')
-            }
-            if (isNaN(Number(formValues.unLockGoal)) || Number(formValues.unLockGoal) < 0) {
-                throw new Error('Locking Goal must be a value and greater than 0')
-            }
-            if (formValues.durationType === 'days' && Number(formValues.lockPeriod) > 6) {
-                throw new Error('Days Cannot Exceed 7')
-            }
-            if (formValues.durationType === 'weeks' && Number(formValues.lockPeriod) > 3) {
-                throw new Error('Weeks Cannot Exceed 4')
-            }
-            if (formValues.durationType === 'months' && Number(formValues.lockPeriod) > 11) {
-                throw new Error('Months Cannot Exceed 11')
-            }
-            if (formValues.durationType === 'years' && Number(formValues.lockPeriod) > 5) {
-                throw new Error('Years Cannot Exceed 5')
-            }
-
-            //set form values according to vault type
-            if(formValues.vaultType === 'schedule') {
-                formValues.unLockGoal = ''
-            }
-            if(formValues.vaultType === 'goal') {
-                formValues.unLockDuration = ''
-                formValues.unLockAmount = ''
-            }
-            if(formValues.vaultType === 'Fixed') {
-                formValues.unLockDuration = ''
-                formValues.unLockAmount = ''
-                formValues.unLockGoal = ''
-            }
-
             //get vault and duration in day
             const days = convertToDays(formValues.durationType,Number(formValues.lockPeriod))
 
@@ -221,8 +250,7 @@ export default function LockAsset() {
             toast({
                 variant: "destructive",
                 title: "ERROR",
-                description: error.message,
-                action: <ToastAction altText="Try again">Try again</ToastAction>,
+                description: error.message
             })
         } finally {
             //clear form
@@ -256,27 +284,6 @@ export default function LockAsset() {
         months: 11,
         years: 5,
     }
-
-    //calculate service fee 0.5%
-    const formatNumber = (num: number, maxDecimals = 6) => {
-        // Handle the floating point precision issue by using toFixed
-        // to get a reasonable string representation
-        const fixedNum = Number(num.toFixed(maxDecimals));
-        
-        // Convert to string to handle trailing zeros
-        const numStr = fixedNum.toString();
-        
-        // If it's a whole number, return it as is
-        if (!numStr.includes('.')) {
-            return numStr;
-        }
-        
-        // For decimal numbers, format with toPrecision to get proper representation
-        // then convert to number and back to string to remove trailing zeros
-        return Number(parseFloat(numStr).toPrecision(15)).toString();
-    };
-
-    const serviceFee = formValues.totalAmount && formatNumber(Number(formValues.totalAmount) * 0.005);
 
     const remainingTitleWords = TITLE_WORD_LIMIT - countWords(formValues.title);
 
@@ -562,17 +569,17 @@ export default function LockAsset() {
                         </div>
                         <div className="flex justify-between">
                             <p>Points to earn</p>
-                            <p>{Number(formValues.totalAmount) + convertToDays(formValues.durationType,Number(formValues.lockPeriod)) * 0.5} points</p>
+                            <p>{Number(formValues.totalAmount) + Math.floor(convertToDays(formValues.durationType,Number(formValues.lockPeriod)) * 0.5)} points</p>
                         </div>
                     </div>
                     <div>
                         <div className="flex justify-between text-sm">
                             <p>Service Fee</p>
-                            <p>{Number(serviceFee)/100 * Number(formValues.totalAmount)} {formValues.symbol}</p>
+                            <p>{0.005 * Number(formValues.totalAmount)} {formValues.symbol}</p>
                         </div>
                         <div className="flex justify-between text-sm">
                             <p>To Lock</p>
-                            <p>{(Number(formatNumber(Number(formValues.totalAmount) - Number(serviceFee)))/100 * Number(formValues.totalAmount)).toFixed(2)} {formValues.symbol}</p>
+                            <p>{Number(formValues.totalAmount) - 0.005 * Number(formValues.totalAmount)} {formValues.symbol}</p>
                         </div>
                     </div>
                 </div>

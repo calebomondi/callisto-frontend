@@ -31,7 +31,7 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
             <TableHead className="text-gray-400 font-medium">Depositor</TableHead>
             <TableHead className="text-gray-400 font-medium">Amount</TableHead>
             <TableHead className="text-gray-400 font-medium">Type</TableHead>
-            <TableHead className="text-gray-400 font-medium">Timestamp</TableHead>
+            <TableHead className="text-gray-400 font-medium">Timestamp (GMT)</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

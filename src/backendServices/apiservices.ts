@@ -12,10 +12,29 @@ import {
   AnalysisData,
   BreakVault,
   EarnPoints,
-  VaultGoal
+  VaultGoal,
+  TokenBalances
 } from '@/types/index.types';
 
-const apiService = {
+// Define the type for apiService
+interface ApiService {
+  vaultSchedule: (vaultData: VaultData) => Promise<ScheduledData>;
+  dashboardData: (userVaults: VaultData[]) => Promise<DashboardData>;
+  getChainData: (chainId: number) => Promise<ChainData>;
+  getTokenData: (symbol: string, chainId: number) => Promise<TokenData>;
+  getSupportedTokens: () => Promise<SupportedTokens[]>;
+  getUserVaults: (chainId: number, owner: string, contractAddress: string) => Promise<VaultData[]>;
+  getVaultTransactions: (chainId: number, contractAddress: string, owner: string, decimals: number, vaultId: number) => Promise<VaultTransactions[]>;
+  getTransactionHistory: (chain: number, address: string) => Promise<AnalysisData>;
+  earnPoints: (chainId: number, owner: string, contractAddress: string, amount_locked: number, lock_duration_days: number) => Promise<EarnPoints>;
+  breakVault: (owner: string, chainId: number, vaultId: number) => Promise<BreakVault>;
+  vaultGoal: (currentAmount: number, goalAmount: number, endDate: string) => Promise<VaultGoal>;
+  getPoints: (chainId: number, vaultId: number, owner: string) => Promise<{ points: number }>;
+  pointsAddition: (chainId: number, vaultId: number, owner: string, amount_added: number) => Promise<EarnPoints>;
+  getTokenBalances: (chainId: number, owner: string) => Promise<TokenBalances[]>;
+}
+
+const apiService: ApiService = {
   vaultSchedule: async (vaultData:VaultData): Promise<ScheduledData> => {        
       try {
         const response: AxiosResponse<ScheduledData> = await axios.post(
@@ -313,6 +332,28 @@ const apiService = {
       
     } catch (error) {
       console.error('Adding Points Failed:', error);
+      throw error;
+    }
+  },
+  getTokenBalances: async (chainId: number, owner:string): Promise<TokenBalances[]> => {
+    try {
+      const response: AxiosResponse<TokenBalances[]> = await axios.get(
+        `${API_URL}/api/vaults/get-token-balances`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          params: {
+            chainId,
+            owner
+          }
+        }
+      );
+
+      return response.data;
+      
+    } catch (error) {
+      console.error('Getting Token Addresses Failed:', error);
       throw error;
     }
   }
