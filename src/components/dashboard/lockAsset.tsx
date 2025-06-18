@@ -22,13 +22,13 @@ export default function LockAsset() {
         symbol: "", 
         title: "", 
         totalAmount: "", 
-        vaultType: "Fixed", 
+        vaultType: "schedule", 
         lockPeriod: "", 
         slip: "", 
         unLockDuration: "", 
         unLockAmount: "", 
         unLockGoal: "",
-        durationType: 'days'
+        durationType: 'weeks'
     })
     const [supportedTokens, setSupportedTokens] = useState<SupportedTokens[]>([])
     const [isAaveSupported, setIsAaveSupported] = useState<boolean>(false)
@@ -487,8 +487,8 @@ export default function LockAsset() {
                 <Label className={`mb-2 `}>
                     After Every
                 </Label>
-                    <Input 
-                        type="text" 
+                    <Input
+                        type="text"
                         id="unLockDuration"
                         name="unLockDuration"
                         value={formValues.unLockDuration}
