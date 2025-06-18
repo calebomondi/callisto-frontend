@@ -120,7 +120,7 @@ export default function LockAsset() {
         } catch (error) {
             console.error("Error fetching supported tokens:", error);
         }
-    }, [isConnected, formValues.symbol]);
+    }, [isConnected, formValues.symbol, formValues.vaultType, formValues.durationType]);
 
     useEffect(() => {
         if (isConnected && supportedTokens.length > 0) {
@@ -129,7 +129,7 @@ export default function LockAsset() {
                 setIsAaveSupported(token.aave);
             }
         }
-    }, [isConnected, formValues.symbol]);
+    }, [isConnected, formValues.symbol, formValues.vaultType, formValues.durationType]);
 
     const TITLE_WORD_LIMIT = 5;
 
@@ -408,8 +408,12 @@ export default function LockAsset() {
                     name="durationType"
                     id="durationType"
                     className="w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option className="dark:text-white" value="days">Day(s)</option>
+                  > 
+                    {
+                        formValues.vaultType !== 'schedule' && (
+                            <option className="dark:text-white" value="days">Day(s)</option>
+                        )
+                    }
                     <option className="dark:text-white" value="weeks">Week(s)</option>
                     <option className="dark:text-white" value="months">Month(s)</option>
                     <option className="dark:text-white" value="years">Year(s)</option>
