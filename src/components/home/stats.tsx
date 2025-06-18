@@ -4,20 +4,20 @@ import { DollarSign, Users, Lock, Activity } from "lucide-react";
 const stats = [
   {
     title: "Total Value Locked",
-    value: "$12.5M+",
+    value: "5000",
     description: "Total assets secured in our smart contracts",
     icon: <DollarSign className="w-6 h-6" />,
     prefix: "$",
   },
   {
     title: "Active Users",
-    value: "15,000+",
+    value: "150+",
     description: "Trusted by thousands of crypto savers worldwide",
     icon: <Users className="w-6 h-6" />,
   },
   {
     title: "Successful Locks",
-    value: "45,000+",
+    value: "100+",
     description: "Successfully completed savings goals",
     icon: <Lock className="w-6 h-6" />,
   },
