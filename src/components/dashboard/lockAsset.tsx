@@ -302,9 +302,9 @@ export default function LockAsset() {
     }
 
   return (
-    <div className="flex justify-center items-center dark:bg-gray-900">
+    <div className="dark:bg-gray-900">
         <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
-            <h2 className="text-lg font-semibold mb-2">Create New Vault</h2>
+            <h2 className="text-lg font-semibold mb-2 text-left">Create New Vault</h2>
             <form onSubmit={handleSubmit} className="w-full p-1">
                 <div className="mb-2">
                     <Label className="mb-2">Vault Name</Label>
@@ -328,15 +328,21 @@ export default function LockAsset() {
                     <Label>
                         Vault Type
                     </Label>
-                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="w-full px-2 py-2 rounded-md first-letter:bg-transparent dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700">
+                    <div className="relative">
+                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="appearance-none w-full px-3 py-2 rounded-md first-letter:bg-transparent dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700">
                             <option className="dark:text-white" value="fixed">Fixed</option>
                             <option className="dark:text-white" value="goal">Goal Based</option>
                             <option className="dark:text-white" value="schedule">Scheduled</option>
                         </select>
+                        <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center dark:text-white">
+                            <ChevronDown size={15} strokeWidth={2.5}/>
+                        </div>
+                    </div>
+
                 </div>
                 
-                <div className="flex justify-between gap-x-4 items-center mb-2" >
-                    <div className="space-y-2">
+                <div className="flex gap-x-4 items-center mb-2" >
+                    <div className="space-y-2 w-1/2">
                     <label
                         htmlFor="tokenType"
                         className="block text-sm font-semibold"
@@ -350,7 +356,7 @@ export default function LockAsset() {
                         value={formValues.symbol}
                         name="symbol"
                         id="tokenType"
-                        className="appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
                         <option className="dark:text-white" value="">
                             Select Token
@@ -365,9 +371,8 @@ export default function LockAsset() {
                             </option>
                         ))}
                         </select>
-
-                        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center dark:text-white">
-                        <ChevronDown size={15} />
+                        <div className="pointer-events-none absolute top-0 bottom-2 right-2 flex items-center dark:text-white">
+                            <ChevronDown size={15} strokeWidth={2.5}/>
                         </div>
                     </div>
 
@@ -377,7 +382,7 @@ export default function LockAsset() {
                         </span>
                     )}
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 w-1/2">
                         <Label>Amount</Label>
                             <Input 
                                 type="text" 
@@ -401,6 +406,7 @@ export default function LockAsset() {
                   >
                     Duration
                   </label>
+                  <div className="relative">
                   <select
                     onChange={handleChange}
                     required
@@ -418,6 +424,10 @@ export default function LockAsset() {
                     <option className="dark:text-white" value="months">Month(s)</option>
                     <option className="dark:text-white" value="years">Year(s)</option>
                   </select>
+                    <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center dark:text-white">
+                        <ChevronDown size={15} strokeWidth={2.5}/>
+                    </div>
+                  </div>
                 </div>
 
                   {/* Period Input Section */}
@@ -434,7 +444,7 @@ export default function LockAsset() {
                       name="lockPeriod"
                       value={formValues.lockPeriod}
                       onChange={handleChange}
-                      className="w-full p-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                       placeholder={durationPlaceholders[formValues.durationType]}
                       required
                     />
@@ -457,13 +467,6 @@ export default function LockAsset() {
                         disabled={formValues.vaultType !== 'goal'}
                         required
                     />
-                    {/*
-                    <div className="w-full mt-4 p-2 rounded-lg bg-gray-800 h-20">
-                        <p className="text-sm text-gray-400 mt-2">
-                            You need to save {formValues.unLockGoal} every week to reach your goal
-                        </p>
-                    </div>
-                    */}
                 </div>
                 <div className={`${formValues.vaultType !== 'schedule' && 'hidden'} mb-4`}>
                 <h3 className="text-center font-semibold mb-2">Unlock details</h3>
@@ -510,7 +513,7 @@ export default function LockAsset() {
                     <button 
                         type="button"
                         onClick={handleConfirmCreationClick} 
-                        className="btn w-1/2 text-base text-white border-none bg-gradient-to-r from-purple-500 to-pink-500 transform transition-transform duration-150 hover:scale-95"
+                        className="btn w-3/4 text-base text-white border-none bg-gradient-to-r from-purple-500 to-pink-500 transform transition-transform duration-150 hover:scale-95"
                         disabled={formValues.vaultType === 'schedule' && !amountFine}
                     >
                         Create Vault <ArrowRight size={20} />

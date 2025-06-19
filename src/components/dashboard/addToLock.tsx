@@ -6,9 +6,11 @@ import { addToTokenVault } from "@/blockchain-services/useFvkry";
 import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry";
 import apiService from "@/backendServices/apiservices";
 
+/*
 const handleRefresh = () => {
   window.location.reload();
 };
+*/
 
 export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
     const { toast } = useToast();
@@ -78,7 +80,7 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
                 console.log("Points Earned:", result.status);
 
                 //refresh page
-                handleRefresh();
+                //handleRefresh();
             }
 
         } catch (error: any) {

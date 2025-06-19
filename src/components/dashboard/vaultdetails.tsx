@@ -31,6 +31,7 @@ interface VaultDetailsProps {
 const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
   const [goalData, setGoalData] = useState<VaultGoal | null>(null);
   const [points, setPoints] = useState<{points: number}>({points: 0}); 
+  const [update, setUpdate] = useState<boolean>(false)
   
   const data = [
     {
@@ -100,7 +101,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
     if (vault) {
       setVaultData(vault);
     }
-  }, [vault]);
+  }, [vault, update]);
   
   // Effect for fetching vault data
   useEffect(() => {
@@ -154,7 +155,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
         } 
     }
     fetchVaultData();
-  }, [vault, isConnected, vaultId, address, lockAsset, chainId]);
+  }, [vault, isConnected, vaultId, address, lockAsset, chainId, update]);
 
   // Separate effect for fetching transactions - runs when vaultData changes
   useEffect(() => {
@@ -178,7 +179,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
     };
 
     fetchTransactions();
-  }, [vaultData, isConnected, address, lockAsset, vaultId, chainId]);
+  }, [vaultData, isConnected, address, lockAsset, vaultId, chainId, update]);
 
   // Calculate time remaining
   useEffect(() => {
@@ -211,7 +212,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
     setTimeLeft(calculateTimeLeft()); // Initial calculation
   
     return () => clearInterval(timer);
-  }, [vaultData.endDate]);
+  }, [vaultData.endDate, update]);
 
   // Calculate unlock schedule timeline
   useEffect(() => {
@@ -225,7 +226,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
       }
     };
     fetchScheduleData();
-  }, [vaultData.unLockDuration, vaultData.vaultType]);
+  }, [vaultData.unLockDuration, vaultData.vaultType, update]);
 
   //price data
   useEffect(() => {
@@ -290,12 +291,14 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
     const modal = document.getElementById('my_modal_15') as HTMLDialogElement;
     modal.close();
     setWithdrawModalKey(prev => prev + 1);
+    setUpdate(prev => !prev); // Trigger update to refresh vault data
   };
 
   const handleAddFundsModalClose = () => {
     const modal = document.getElementById('my_modal_14') as HTMLDialogElement;
     modal.close();
     setAddFundsModalKey(prev => prev + 1);
+    setUpdate(prev => !prev); // Trigger update to refresh vault data
   };
 
   const handleNavigateToVaults = () => {
