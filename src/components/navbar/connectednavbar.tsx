@@ -1,11 +1,10 @@
-import logo2 from "/2.png";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import LockAsset from "../dashboard/lockAsset";
 import { useAccount } from "wagmi";
 import { CustomConnectButton } from "../walletconnect/walletconnect";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { CircleUserIcon } from "lucide-react";
+import { CircleUserIcon, Menu } from "lucide-react";
 import { useLocation } from "react-router-dom";
 // import { Button } from "../ui/button";Bell
 import { TokenBalances } from "@/types/index.types";
@@ -47,18 +46,7 @@ export default function ConnectedNavbar() {
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16" />
-            </svg>
+            <Menu />
           </div>
           <ul
             tabIndex={0}
@@ -71,12 +59,12 @@ export default function ConnectedNavbar() {
             </li>
           </ul>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center md:ml-10">
           <a href="/">
             <img
-              src={logo2}
+              src="/new_logo.png"
               alt=""
-              className='md:w-11 w-10'
+              className='md:w-6 w-6'
             />
           </a>
         </div>

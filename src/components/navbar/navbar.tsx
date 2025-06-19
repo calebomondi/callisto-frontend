@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { X, Menu } from "lucide-react";
-import logo2 from "/2.png";
 import { motion } from 'framer-motion';
 import { LockKeyhole } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -49,12 +48,12 @@ export default function Navbar() {
             <div className="flex items-center justify-center space-x-5">
               <a href="/">
                 <img
-                  src={logo2}
+                  src="new_logo.png"
                   alt=""
-                  className='md:w-14 w-10'
+                  className='md:w-8 w-8'
                 />
               </a>
-              <span className="bg-green-600 py-1 px-2 rounded-lg">beta</span>
+              <span className="text-sm bg-green-600/60 py-1 px-2 rounded-md">beta</span>
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
