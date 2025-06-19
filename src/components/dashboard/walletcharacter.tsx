@@ -10,7 +10,7 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
   const getCharacter = (score: number) => {
     if (score <= 40) {
       return {
-        emoji: "/zen_holder.png",
+        emoji: "/zen_holder_two.png",
         name: "Zen Holder",
         description: "Disciplined and wise with money",
         color: "from-green-500 to-emerald-600",
@@ -19,7 +19,7 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
       };
     } else if (score <= 80) {
       return {
-        emoji: "/curious_ape.png",
+        emoji: "/curious_ape_two.png",
         name: "Curious Ape",
         description: "Learning and improving",
         color: "from-yellow-500 to-orange-500",
@@ -28,7 +28,7 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
       };
     } else {
       return {
-        emoji: "/degen_ape.png",
+        emoji: "/degen_ape_two.png",
         name: "Degen Ape",
         description: "Needs guidance and discipline",
         color: "from-red-500 to-pink-500",
