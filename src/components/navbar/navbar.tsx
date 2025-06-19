@@ -50,7 +50,7 @@ export default function Navbar() {
                 <img
                   src="new_logo.png"
                   alt=""
-                  className='md:w-8 w-8'
+                  className='md:w-8 w-6'
                 />
               </a>
               <span className="text-sm bg-green-600/60 py-1 px-2 rounded-md">beta</span>
