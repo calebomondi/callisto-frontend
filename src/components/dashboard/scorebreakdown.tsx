@@ -14,7 +14,7 @@ interface ScoreBreakdownProps {
 const ScoreBreakdown = ({ scores }: ScoreBreakdownProps) => {
   const categories = [
     {
-      name: "Holding Discipline",
+      name: "Frequent Transactions",
       score: scores.discipline,
       maxScore: 35,
       icon: <Clock className="w-5 h-5" />,
@@ -22,7 +22,7 @@ const ScoreBreakdown = ({ scores }: ScoreBreakdownProps) => {
       iconColor: "text-blue-400"
     },
     {
-      name: "Trading Behavior",
+      name: "Impulsive Transactions",
       score: scores.trading,
       maxScore: 30,
       icon: <TrendingUp className="w-5 h-5" />,

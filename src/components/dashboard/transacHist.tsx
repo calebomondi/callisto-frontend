@@ -38,7 +38,6 @@ import apiService from '@/backendServices/apiservices';
 import { currentChainId } from '@/blockchain-services/useFvkry';
 import { getWalletClient } from '@/blockchain-services/useFvkry';
 import WalletCharacter from './walletcharacter';
-import ScoreBreakdown from './scorebreakdown';
 const chartConfig = {
   desktop: {
     label: "Desktop",
@@ -61,8 +60,8 @@ const TransactionDashboard = () => {
       const fetchData = async () => {
         const chainId = currentChainId()
         const { address } = await getWalletClient();
-        // const data = await apiService.getTransactionHistory(chainId, address)
-        const data = await apiService.getTransactionHistory(8453, "0xcB1C1FdE09f811B294172696404e88E658659905")
+        const data = await apiService.getTransactionHistory(chainId, address)
+        // const data = await apiService.getTransactionHistory(8453, "0xcB1C1FdE09f811B294172696404e88E658659905")
 
         if(data) {
             setAnalysisData(data)
@@ -134,7 +133,7 @@ const TransactionDashboard = () => {
     return null;
   };
 
-  const convertRiskScoreToBreakdown = (totalScore: number) => ({
+  /*const convertRiskScoreToBreakdown = (totalScore: number) => ({
   discipline: Math.round(totalScore * 0.35),
   trading: Math.round(totalScore * 0.30),
   risk: Math.round(totalScore * 0.20),
@@ -143,26 +142,28 @@ const TransactionDashboard = () => {
 });
 
   const getPersonalityType = (score: number) => {
-    if (score >= 80) return "ZEN_HOLDER";
-    if (score >= 50) return "CURIOUS_APE";
+    if (score < 40) return "ZEN_HOLDER";
+    if (score < 80) return "CURIOUS_APE";
     return "DEGEN_MONKEY";
-  };
+  };*/
 
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 gap-4'>
           {/**first grid */}
           <div>
             <WalletCharacter
               score={analysisData.behaviorAnalysis.riskScore} 
-              personalityType={getPersonalityType(analysisData.behaviorAnalysis.riskScore)}
+              frequentTxs={analysisData.behaviorAnalysis.frequentTrading.length}
+              impulsiveTxs={analysisData.behaviorAnalysis.impulsiveSpending.length}
             />
           </div>
-          {/**Second grid */}
+          {/**Second grid 
           <div>
             <ScoreBreakdown scores={convertRiskScoreToBreakdown(analysisData.behaviorAnalysis.riskScore)}/>
           </div>
+          */}
         </div>
 
         {/* Charts Section */}
