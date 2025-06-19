@@ -21,7 +21,7 @@ export default function Hero() {
               className="flex flex-col mb-8 items-center justify-center space-y-6"
             >
               <h2 className="max-w-4xl mx-auto text-3xl md:text-4xl lg:text-6xl font-bold text-center pt-12">
-                Manage Your Crypto Assets, Invest In Your Future
+                Structure Your Assets. Own your Destiny.
               </h2>
               {/* 
               <p className="max-w-xl text-lg dark:text-gray-400 text-center">

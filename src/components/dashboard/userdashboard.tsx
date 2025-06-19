@@ -137,11 +137,11 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Upcoming unlocks */}
-      <div className="dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md p-6  md:col-span-2">
+      <div className="border dark:border-gray-800 rounded-lg shadow-md p-6  md:col-span-2">
         <h3 className="text-xl font-semibold">Upcoming Unlocks (Next 7 Days)</h3>
         {data.upcomingUnlocks.length > 0 ? (
           <div className="mt-2 overflow-x-auto">
-            <Table className="min-w-full divide-y divide-gray-200">
+            <Table>
               <TableHeader>
                 <TableRow className="dark:border-gray-800 hover:bg-gray-800/20">
                   <TableHead className="text-gray-400 font-medium">Title</TableHead>
@@ -151,14 +151,14 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
                   <TableHead className="text-gray-400 font-medium">Days Left</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className="divide-y divide-gray-200">
+              <TableBody>
                 {data.upcomingUnlocks.map((unlock) => (
                   <TableRow key={unlock.id} className="dark:border-gray-800 hover:bg-gray-800/20">
-                    <TableCell className="px-4 py-2 whitespace-nowrap">{unlock.title}</TableCell>
-                    <TableCell className="px-4 py-2 whitespace-nowrap">{unlock.asset}</TableCell>
-                    <TableCell className="px-4 py-2 whitespace-nowrap">{unlock.amount}</TableCell>
-                    <TableCell className="px-4 py-2 whitespace-nowrap">{new Date(unlock.unlockDate).toLocaleDateString()}</TableCell>
-                    <TableCell className="px-4 py-2 whitespace-nowrap">
+                    <TableCell className="py-4">{unlock.title}</TableCell>
+                    <TableCell className="py-4">{unlock.asset}</TableCell>
+                    <TableCell className="py-4">{unlock.amount}</TableCell>
+                    <TableCell className="py-4">{new Date(unlock.unlockDate).toLocaleDateString()}</TableCell>
+                    <TableCell className="py-4">
                       <span className="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
                         {unlock.daysRemaining} days
                       </span>
@@ -174,7 +174,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Asset distribution */}
-      <div className="p-4 dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md">
+      <div className="p-4 border dark:border-gray-800 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-1">Asset Distribution</h3>
         <p className="text-gray-400 text-sm">Distribution of locked assets</p>
         <div  className="flex flex-col items-center justify-center gap-2">
@@ -303,8 +303,8 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <h3 className="text-xl font-semibold">Asset Overview</h3>
       
       {/* Asset details table */}
-      <div className="dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md overflow-hidden">
-        <Table className="min-w-full divide-y dark:divide-gray-600">
+      <div className="border dark:border-gray-800 rounded-lg shadow-md overflow-hidden">
+        <Table>
           <TableHeader>
             <TableRow className="dark:border-gray-800 hover:bg-gray-800/20">
               <TableHead className="text-gray-400 font-medium">Asset</TableHead>
@@ -328,7 +328,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
                         {asset.symbol.charAt(0)}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-600">{asset.symbol}</div>
+                        <div className="text-sm font-medium text-gray-400">{asset.symbol}</div>
                         <div className="text-xs text-gray-500 truncate w-32" title={asset.address}>
                           {asset.address.substring(0, 6)}...{asset.address.substring(asset.address.length - 4)}
                         </div>
@@ -345,7 +345,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
                   <TableCell className="py-4">
                     <div className="text-sm">{Math.round(avgDays)} days</div>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap">
+                  <TableCell className="py-4">
                     <div className="flex space-x-2">
                       <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
                         Fixed: {lockTypes.Fixed}
@@ -369,7 +369,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Asset lock duration chart */}
-      <div className="mt-6 dark:bg-gray-900/50 border dark:border-gray-800 rounded-lg shadow-md p-6">
+      <div className="mt-6 border dark:border-gray-800 rounded-lg shadow-md p-6">
         <h3 className="text-lg font-medium">Average Lock Duration by Asset</h3>
         <div className='grid place-items-center'>
           <div className="md:w-1/2 w-full mt-4">
