@@ -13,7 +13,7 @@ export default function Hero() {
     return (
       <section className="pt-16 md:pt-24 sm:px-5 md:px-10 lg:px-10" id="hero">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
