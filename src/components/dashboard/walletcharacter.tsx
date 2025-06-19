@@ -10,7 +10,7 @@ const WalletCharacter = ({ score }: WalletCharacterProps) => {
   const getCharacter = (score: number) => {
     if (score >= 80) {
       return {
-        emoji: "/zen_holder.png",
+        emoji: "/zen_holder_two.png",
         name: "Zen Holder",
         description: "Disciplined and wise with money",
         color: "from-green-500 to-emerald-600",
@@ -19,7 +19,7 @@ const WalletCharacter = ({ score }: WalletCharacterProps) => {
       };
     } else if (score >= 50) {
       return {
-        emoji: "/curious_ape.png",
+        emoji: "/curious_ape_two.png",
         name: "Curious Ape",
         description: "Learning and improving",
         color: "from-yellow-500 to-orange-500",
@@ -28,7 +28,7 @@ const WalletCharacter = ({ score }: WalletCharacterProps) => {
       };
     } else {
       return {
-        emoji: "/degen_ape.png",
+        emoji: "/degen_ape_two.png",
         name: "Degen Ape",
         description: "Needs guidance and discipline",
         color: "from-red-500 to-pink-500",
@@ -44,7 +44,7 @@ const WalletCharacter = ({ score }: WalletCharacterProps) => {
     <Card className={`border-purple-500/20 p-6 text-center`}>
       <div className="space-y-4">
         <div className="flex justify-center">
-          <div className="w-60 h-60 rounded-full mb-4">
+          <div className="w-72 h-72 rounded-full">
             <img
                 src={character.emoji}
                 alt="img"
