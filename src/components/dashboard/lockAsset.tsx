@@ -321,11 +321,17 @@ export default function LockAsset() {
                     <Label>
                         Vault Type
                     </Label>
-                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="w-full px-2 py-2 rounded-md first-letter:bg-transparent dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700">
+                    <div className="relative">
+                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="appearance-none w-full px-3 py-2 rounded-md first-letter:bg-transparent dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700">
                             <option className="dark:text-white" value="fixed">Fixed</option>
                             <option className="dark:text-white" value="goal">Goal Based</option>
                             <option className="dark:text-white" value="schedule">Scheduled</option>
                         </select>
+                        <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center dark:text-white">
+                            <ChevronDown size={15} strokeWidth={2.5}/>
+                        </div>
+                    </div>
+
                 </div>
                 
                 <div className="flex gap-x-4 items-center mb-2" >
@@ -343,7 +349,7 @@ export default function LockAsset() {
                         value={formValues.symbol}
                         name="symbol"
                         id="tokenType"
-                        className="w-full appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
                         <option className="dark:text-white" value="">
                             Select Token
@@ -358,9 +364,8 @@ export default function LockAsset() {
                             </option>
                         ))}
                         </select>
-
-                        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center dark:text-white">
-                        <ChevronDown size={15} />
+                        <div className="pointer-events-none absolute top-0 bottom-2 right-2 flex items-center dark:text-white">
+                            <ChevronDown size={15} strokeWidth={2.5}/>
                         </div>
                     </div>
 
@@ -394,19 +399,24 @@ export default function LockAsset() {
                   >
                     Duration
                   </label>
+                  <div className="relative">
                   <select
                     onChange={handleChange}
                     required
                     value={formValues.durationType}
                     name="durationType"
                     id="durationType"
-                    className="w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="appearance-none w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
                     <option className="dark:text-white" value="days">Day(s)</option>
                     <option className="dark:text-white" value="weeks">Week(s)</option>
                     <option className="dark:text-white" value="months">Month(s)</option>
                     <option className="dark:text-white" value="years">Year(s)</option>
                   </select>
+                    <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center dark:text-white">
+                        <ChevronDown size={15} strokeWidth={2.5}/>
+                    </div>
+                  </div>
                 </div>
 
                   {/* Period Input Section */}
@@ -423,7 +433,7 @@ export default function LockAsset() {
                       name="lockPeriod"
                       value={formValues.lockPeriod}
                       onChange={handleChange}
-                      className="w-full p-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                       placeholder={durationPlaceholders[formValues.durationType]}
                       required
                     />
