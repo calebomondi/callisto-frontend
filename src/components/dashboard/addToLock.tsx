@@ -7,7 +7,7 @@ import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
 import apiService from "@/backendServices/apiservices";
 
 export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, chainId: Number}) {
-    const { toast } = useToast();
+    const { toast } = useToast()
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formValues, setFormValues] = useState<{amount: string}>({
