@@ -28,7 +28,7 @@ export default function Hero() {
                 Create Virtual Vaults For Locking Your Crypto assets And Curb Your Impulsive Spending Behaviour, Build Your Long Term Investment
               </p>
               */}
-              <p className="text-center text-purple-400 text-2xl font-bold">
+              <p className="text-center text-purple-400 text-lg md:text-2xl font-bold">
                 Earn Yields of Upto 5% and redeemable points on every vault.
               </p>
               <Button onClick={handleDash} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-95 text-base px-12 py-6 rounded-3xl mb-2">
