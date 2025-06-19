@@ -413,7 +413,7 @@ export default function LockAsset() {
                     value={formValues.durationType}
                     name="durationType"
                     id="durationType"
-                    className="w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="appearance-none w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   > 
                     {
                         formValues.vaultType !== 'schedule' && (

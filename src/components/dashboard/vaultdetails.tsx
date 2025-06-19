@@ -306,7 +306,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
   }
 
   return (
-    <div className=''>
+    <div className='h-screen'>
       {showNavbar && <ConnectedNavbar />}
 
       <div>
@@ -596,7 +596,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               {/* Text overlay for percentage and label */}
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-3xl font-bold text-blue-600">
-                  {data[0].uv}%
+                  {data[0].uv || 0}%
                 </span>
                 <span className="text-lg text-gray-600">
                   Complete
@@ -608,11 +608,11 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
               <div className="flex justify-evenly text-sm font-semibold">
                 <div>
                   <div className="text-purple-600 text-xl">Target:</div>
-                  <div className="text-blue-600 text-lg">{vaultData?.unLockGoal} USDC</div>
+                  <div className="text-blue-600 text-lg">{vaultData?.unLockGoal || 0} USDC</div>
                 </div>
                 <div>
                   <div className="text-purple-600 text-xl">Deficit:</div>
-                  <div className="text-blue-600 text-lg">{goalData?.remainingAmount} USDC</div>
+                  <div className="text-blue-600 text-lg">{goalData?.remainingAmount || 0} USDC</div>
                 </div>
               </div>
 
@@ -622,15 +622,15 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                 <div className="grid grid-cols-3 text-sm gap-y-1">
                   <div>
                     <div className="text-gray-600 text-xl">Days</div>
-                    <div className="text-blue-600 font-semibold text-lg">{goalData?.daysToEndDate}</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.daysToEndDate || 0}</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Weeks</div>
-                    <div className="text-blue-600 font-semibold text-lg">{goalData?.weeksToEndDate}</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.weeksToEndDate || 0}</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Months</div>
-                    <div className="text-blue-600 font-semibold text-lg">{goalData?.monthsToEndDate}</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.monthsToEndDate || 0}</div>
                   </div>
                 </div>
               </div>
@@ -641,15 +641,15 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                 <div className="grid grid-cols-3 text-sm gap-y-1">
                   <div>
                     <div className="text-gray-600 text-xl">Daily</div>
-                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveDaily} USDC</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveDaily || 0} USDC</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Weekly</div>
-                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveWeekly} USDC</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveWeekly || 0} USDC</div>
                   </div>
                   <div>
                     <div className="text-gray-600 text-xl">Monthly</div>
-                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveMonthly} USDC</div>
+                    <div className="text-blue-600 font-semibold text-lg">{goalData?.amountToSaveMonthly || 0} USDC</div>
                   </div>
                 </div>
               </div>

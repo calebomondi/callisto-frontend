@@ -297,7 +297,7 @@ const TransactionDashboard = () => {
               <h3 className="text-lg font-semibold text-yellow-600">Behavioral Insights & Risk Alerts</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {analysisData.behaviorAnalysis.impulsiveSpending.map((alert, index) => (
+              {analysisData.behaviorAnalysis.impulsiveSpending.slice(0, 5).map((alert, index) => (
                 <div key={index} className="rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium">{alert.flag}</span>
@@ -311,7 +311,7 @@ const TransactionDashboard = () => {
                   <p className="text-xs text-gray-200">Gas: {formatCurrency(alert.gasFee)} (Avg: {formatCurrency(alert.averageGasFee)})</p>
                 </div>
               ))}
-              {analysisData.behaviorAnalysis.frequentTrading.map((alert, index) => (
+              {analysisData.behaviorAnalysis.frequentTrading.slice(0, 5).map((alert, index) => (
                 <div key={index} className="rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium">{alert.flag}</span>
