@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import overallDashboard from '/overall_dashboard.png'
-//import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 import { useNavigate } from "react-router-dom";
-import { BackgroundGradient } from "../ui/background-gradient";
 
 export default function Hero() {
 
@@ -16,12 +13,12 @@ export default function Hero() {
     return (
       <section className="pt-16 md:pt-24 sm:px-5 md:px-10 lg:px-10" id="hero">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1">
+          <div className="grid grid-cols-2">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col mb-8 items-center justify-center space-y-4"
+              className="flex flex-col mb-8 items-center justify-center space-y-6"
             >
               <h2 className="max-w-4xl mx-auto text-3xl md:text-4xl lg:text-6xl font-bold text-center pt-12">
                 Manage Your Crypto Assets, Invest In Your Future
@@ -45,13 +42,11 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="max-w-6xl mx-auto"
             >
-                <BackgroundGradient className="rounded-lg">
-                  <img
-                    src={overallDashboard}
-                    alt="Crypto Vault Illustration"
-                    className="w-full h-full object-contain p-2 rounded-md"
-                  />
-                </BackgroundGradient>
+              <img
+                src="/sora_vault_one.png"
+                alt="Crypto Vault Illustration"
+                className="w-full h-full object-contain p-2 rounded-md"
+              />
             </motion.div>
           </div>
         </div>
