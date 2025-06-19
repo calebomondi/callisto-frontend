@@ -590,6 +590,12 @@ export default function LockAsset() {
                         </div>
                     </div>
                 </div>
+                    <div>
+                        <p className="text-xs p-1 pt-3">
+                            Note: Your wallet will ask for permission 
+                            to spend tokens on your behalf. This is normal for DEX operations.
+                        </p>
+                    </div>
                 <div className="modal-action">
                     <Button className="bg-red-500 hover:scale-95 hover:bg-red-500" onClick={handleCancel}>Cancel</Button>
                     <Button
