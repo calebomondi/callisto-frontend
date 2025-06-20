@@ -1,5 +1,4 @@
 import { StickyScroll } from "../ui/sticky-scroll-reveal";
-import vaultDashboard from "/vault_dashboard.png";
 import { motion } from "framer-motion"
 const content = [
   {
@@ -9,7 +8,7 @@ const content = [
     content: (
       <div>
         <img
-          src={vaultDashboard}
+          src="/lock_modal.png"
           className="h-full w-full object-cover"
           alt="linear board demo"
         />
@@ -23,7 +22,7 @@ const content = [
     content: (
       <div>
         <img
-          src="/analytics_dashboard.png"
+          src="/wallet_analytics.png"
           className="h-full w-full object-cover"
           alt="linear board demo"
         />
@@ -37,7 +36,7 @@ const content = [
     content: (
       <div>
         <img
-          src={vaultDashboard}
+          src="vault_dashboard.png"
           className="h-full w-full object-cover"
           alt="linear board demo"
         />
@@ -51,7 +50,7 @@ const content = [
     content: (
       <div>
         <img
-          src={vaultDashboard}
+          src="vault_dashboard.png"
           className="h-full w-full object-cover"
           alt="linear board demo"
         />
