@@ -59,10 +59,9 @@ const TransactionDashboard = () => {
     if(isConnected) {
       const fetchData = async () => {
         const chainId = currentChainId()
-        const { address } = await getWalletClient();
-        const data = await apiService.getTransactionHistory(chainId, address)
+        const user = await getWalletClient();
+        const data = await apiService.getTransactionHistory(chainId, user.address)
         // const data = await apiService.getTransactionHistory(8453, "0xcB1C1FdE09f811B294172696404e88E658659905")
-
         if(data) {
             setAnalysisData(data)
         }
