@@ -7,7 +7,7 @@ import { SupportedTokens, FormValues, TokenBalances } from "@/types/index.types"
 import { parseUnits } from "viem";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { ArrowRight, CheckCircle, ChevronDown } from "lucide-react";
+import { ArrowRight, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "../ui/button";
 import apiService from "@/backendServices/apiservices";
 
@@ -34,6 +34,7 @@ export default function LockAsset() {
     const [isAaveSupported, setIsAaveSupported] = useState<boolean>(false)
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false)
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false)
+    const [showSecurityNotice, setShowSecurityNotice] = useState<boolean>(false)
     const [tokensData, setTokensData] = useState<TokenBalances[]>([])
 
     const handleConfirmCreationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -590,17 +591,43 @@ export default function LockAsset() {
                         </div>
                     </div>
                 </div>
-                    <div>
-                        <p className="text-xs p-1 pt-3">
-                            Note: Your wallet will ask for permission 
-                            to spend tokens on your behalf. This is normal for DEX operations.
-                        </p>
+                    <div className={`bg-red-400 flex flex-col items-center justify-start p-4 rounded-lg mt-4 text-md`}>
+                        <div className="flex items-center justify-between w-full">
+                            <span className="font-bold">🛡️ Security Notice</span>
+                            <span>
+                                {
+                                    showSecurityNotice ? 
+                                    <ChevronUp size={20} onClick={() => setShowSecurityNotice(false)} className="cursor-pointer" /> : 
+                                    <ChevronDown size={20} onClick={() => setShowSecurityNotice(true)} className="cursor-pointer" />
+                                }
+                            </span>
+                        </div>
+                        <div className={`${showSecurityNotice ? 'block' : 'hidden'} ${currentChainId() !== 8453 && 'hidden' } flex flex-col items-start justify-start mt-2`}>
+                            <span>
+                                Your wallet might show a warning about this transaction because we're 
+                                requesting token approval. This is standard for DEX operations.
+                            </span>
+                            <span className="mt-2 flex flex-col">
+                                <span>What's happening:</span>
+                                <span>- We need permission to swap your tokens</span>
+                                <span>- Only the exact amount you specify</span>
+                                <span>- Our contract is verified and audited</span>
+                                <span>- You can revoke this anytime</span>
+                            </span>
+                        </div>
                     </div>
                 <div className="modal-action">
-                    <Button className="bg-red-500 hover:scale-95 hover:bg-red-500" onClick={handleCancel}>Cancel</Button>
+                    <Button 
+                        className="bg-red-500 hover:scale-95 hover:bg-red-500" 
+                        onClick={handleCancel}
+                        disabled={showSecurityNotice}
+                    >
+                        Cancel
+                    </Button>
                     <Button
-                     className="bg-green-600 hover:bg-green-700 hover:scale-95"
-                     onClick={handleSubmit}
+                        className="bg-green-600 hover:bg-green-700 hover:scale-95"
+                        onClick={handleSubmit}
+                        disabled={showSecurityNotice}
                     >
                         {
                             isLoading ? (
