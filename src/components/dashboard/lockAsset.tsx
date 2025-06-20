@@ -42,6 +42,10 @@ export default function LockAsset() {
 
         try {
             // validate input data
+            if(!formValues.symbol || !formValues.title || !formValues.totalAmount || !formValues.lockPeriod
+            ) {
+                throw new Error('Please fill all the required fields!')
+            }
             if (isNaN(Number(formValues.totalAmount)) || Number(formValues.totalAmount) < 1) {
                 throw new Error('Amount to lock must be a value and greater than 0.001')
             }
@@ -70,12 +74,18 @@ export default function LockAsset() {
             //set form values according to vault type
             if(formValues.vaultType === 'schedule') {
                 formValues.unLockGoal = ''
+                if(!formValues.unLockDuration || !formValues.unLockAmount) {
+                    throw new Error('Please fill all required values!')
+                }
             }
             if(formValues.vaultType === 'goal') {
                 formValues.unLockDuration = ''
                 formValues.unLockAmount = ''
                 if(Number(formValues.unLockGoal) <= Number(formValues.totalAmount)) {
                     throw new Error('Goal Amount cannot be less than or equal to initial deposit amount!')
+                }
+                if(!formValues.unLockGoal) {
+                    throw new Error('Please enter goal amount!')
                 }
             }
             if(formValues.vaultType === 'Fixed') {
@@ -355,6 +365,7 @@ export default function LockAsset() {
                         <select
                         onChange={handleChange}
                         value={formValues.symbol}
+                        required
                         name="symbol"
                         id="tokenType"
                         className="w-full appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -591,7 +602,7 @@ export default function LockAsset() {
                         </div>
                     </div>
                 </div>
-                    <div className={`bg-red-400 flex flex-col items-center justify-start p-4 rounded-lg mt-4 text-md`}>
+                    <div className={`bg-red-400 flex flex-col items-center justify-start p-4 rounded-lg mt-4 text-md ${currentChainId() !== 8453 && 'hidden' }`}>
                         <div className="flex items-center justify-between w-full">
                             <span className="font-bold">🛡️ Security Notice</span>
                             <span>
@@ -602,7 +613,7 @@ export default function LockAsset() {
                                 }
                             </span>
                         </div>
-                        <div className={`${showSecurityNotice ? 'block' : 'hidden'} ${currentChainId() !== 8453 && 'hidden' } flex flex-col items-start justify-start mt-2`}>
+                        <div className={`${showSecurityNotice ? 'block' : 'hidden'} flex flex-col items-start justify-start mt-2`}>
                             <span>
                                 Your wallet might show a warning about this transaction because we're 
                                 requesting token approval. This is standard for DEX operations.
