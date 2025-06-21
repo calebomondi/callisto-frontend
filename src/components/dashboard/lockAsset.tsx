@@ -316,7 +316,7 @@ export default function LockAsset() {
     }
 
   return (
-    <div className="dark:bg-gray-900">
+    <div className="bg-gray-900">
         <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-left">Create New Vault</h2>
             <form onSubmit={handleSubmit} className="w-full p-1">
@@ -328,7 +328,7 @@ export default function LockAsset() {
                         name="title"
                         value={formValues.title}
                         onChange={handleChange}
-                        className="dark:text-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 border dark:border-gray-700" 
+                        className="text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 border border-gray-700" 
                         placeholder="eg. Longtime saving" 
                         required
                     />
@@ -343,12 +343,12 @@ export default function LockAsset() {
                         Vault Type
                     </Label>
                     <div className="relative">
-                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="appearance-none w-full px-3 py-2 rounded-md first-letter:bg-transparent dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700">
-                            <option className="dark:text-white" value="fixed">Fixed</option>
-                            <option className="dark:text-white" value="goal">Goal Based</option>
-                            <option className="dark:text-white" value="schedule">Scheduled</option>
+                        <select onChange={handleChange} required value={formValues.vaultType} name="vaultType" id="" className="appearance-none w-full px-3 py-2 rounded-md first-letter:bg-transparent bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-700">
+                            <option className="text-white" value="fixed">Fixed</option>
+                            <option className="text-white" value="goal">Goal Based</option>
+                            <option className="text-white" value="schedule">Scheduled</option>
                         </select>
-                        <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center dark:text-white">
+                        <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center text-white">
                             <ChevronDown size={15} strokeWidth={2.5}/>
                         </div>
                     </div>
@@ -371,22 +371,22 @@ export default function LockAsset() {
                         required
                         name="symbol"
                         id="tokenType"
-                        className="w-full appearance-none dark:bg-gray-800 mb-2 dark:text-white border dark:border-gray-700 text-sm rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full appearance-none bg-gray-800 mb-2 text-white border border-gray-700 text-sm rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
-                        <option className="dark:text-white" value="">
+                        <option className="text-white" value="">
                             Select Token
                         </option>
                         {supportedTokens.map((token, index) => (
                             <option
                             key={index}
-                            className="dark:text-white"
+                            className="text-white"
                             value={token.symbol}
                             >
                             {token.symbol}
                             </option>
                         ))}
                         </select>
-                        <div className="pointer-events-none absolute top-0 bottom-2 right-2 flex items-center dark:text-white">
+                        <div className="pointer-events-none absolute top-0 bottom-2 right-2 flex items-center text-white">
                             <ChevronDown size={15} strokeWidth={2.5}/>
                         </div>
                     </div>
@@ -405,7 +405,7 @@ export default function LockAsset() {
                                 name="totalAmount"
                                 value={formValues.totalAmount}
                                 onChange={handleChange}
-                                className="dark:text-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700" 
+                                className="text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-700" 
                                 placeholder="e.g 100"
                                 required
                             />
@@ -428,18 +428,18 @@ export default function LockAsset() {
                     value={formValues.durationType}
                     name="durationType"
                     id="durationType"
-                    className="appearance-none w-full dark:bg-gray-800 border dark:border-gray-700 dark:text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="appearance-none w-full bg-gray-800 border border-gray-700 text-white text-sm rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   > 
                     {
                         formValues.vaultType !== 'schedule' && (
-                            <option className="dark:text-white" value="days">Day(s)</option>
+                            <option className="text-white" value="days">Day(s)</option>
                         )
                     }
-                    <option className="dark:text-white" value="weeks">Week(s)</option>
-                    <option className="dark:text-white" value="months">Month(s)</option>
-                    <option className="dark:text-white" value="years">Year(s)</option>
+                    <option className="text-white" value="weeks">Week(s)</option>
+                    <option className="text-white" value="months">Month(s)</option>
+                    <option className="text-white" value="years">Year(s)</option>
                   </select>
-                    <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center dark:text-white">
+                    <div className="pointer-events-none absolute top-2 bottom-2 right-2 flex items-center text-white">
                         <ChevronDown size={15} strokeWidth={2.5}/>
                     </div>
                   </div>
@@ -459,7 +459,7 @@ export default function LockAsset() {
                       name="lockPeriod"
                       value={formValues.lockPeriod}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 dark:bg-gray-800 border dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                       placeholder={durationPlaceholders[formValues.durationType]}
                       required
                     />
@@ -477,7 +477,7 @@ export default function LockAsset() {
                         name="unLockGoal"
                         value={formValues.unLockGoal}
                         onChange={handleChange}
-                        className="dark:text-white w-full rounded-md dark:bg-gray-800 p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 border dark:border-gray-700" 
+                        className="text-white w-full rounded-md bg-gray-800 p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-700" 
                         placeholder="5000"
                         disabled={formValues.vaultType !== 'goal'}
                         required
@@ -494,7 +494,7 @@ export default function LockAsset() {
                         name="unLockAmount"
                         value={formValues.unLockAmount}
                         onChange={handleChange}
-                        className="dark:text-white w-full p-2 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 border dark:border-gray-700" 
+                        className="text-white w-full p-2 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 border border-gray-700" 
                         placeholder="500"
                         disabled={formValues.vaultType !== 'schedule'}
                         required
@@ -511,7 +511,7 @@ export default function LockAsset() {
                         name="unLockDuration"
                         value={formValues.unLockDuration}
                         onChange={handleChange}
-                        className="dark:text-white p-2 dark:bg-gray-800 focus:ring-2 focus:ring-purple-500 border dark:border-gray-700" 
+                        className="text-white p-2 bg-gray-800 focus:ring-2 focus:ring-purple-500 border border-gray-700" 
                         placeholder="10 days"
                         disabled={formValues.vaultType !== 'schedule'}
                         required
@@ -658,7 +658,7 @@ export default function LockAsset() {
         )}
         {showSuccessModal && (
           <dialog id="success_modal" className="modal" open>
-            <div className="modal-box dark:bg-gray-800 dark:text-white flex flex-col justify-center items-center">
+            <div className="modal-box bg-gray-800 text-white flex flex-col justify-center items-center">
               <CheckCircle size={40} className="text-green-500"/>
               <h3 className="font-bold text-lg">Success!</h3>
               <p className="py-4">Your vault was created successfully!</p>

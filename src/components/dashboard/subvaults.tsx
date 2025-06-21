@@ -69,7 +69,7 @@ export default function SubVaultsContainer() {
     }
 
     return (
-      <div className="dark:bg-gradient-to-b from-gray-900 to-black min-h-screen ">
+      <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen ">
         <p className={`text-center py-4 text-purple-600 ${isConnected ? 'hidden' : ''}`}>
           Connect your wallet to interact with your vaults
         </p>

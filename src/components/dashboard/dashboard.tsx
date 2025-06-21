@@ -58,7 +58,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="dark:bg-gradient-to-b from-gray-900 to-black h-screen">
+      <div className="bg-gradient-to-b from-gray-900 to-black h-screen">
         <ConnectedNavbar />
         <Skeletun />
       </div>
@@ -66,7 +66,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="dark:bg-gradient-to-b from-gray-900 to-black">
+    <div className="bg-gradient-to-b from-gray-900 to-black">
       <ConnectedNavbar />
       <p className={`text-center my-2 text-purple-500 ${isConnected ? 'hidden' : ''}`}>
         Connect your wallet to view your dashboard

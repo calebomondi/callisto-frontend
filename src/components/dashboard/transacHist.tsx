@@ -173,7 +173,7 @@ const TransactionDashboard = () => {
         <div className="grid grid-cols-1 gap-6">
           {/**first grid */}
           {/* Monthly Activity Line Chart */}
-          <div className="rounded-lg p-6 border dark:border-gray-800 shadow-md">
+          <div className="rounded-lg p-6 border border-gray-800 shadow-md">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-lg font-semibold">Monthly Activity Trend</h3>
@@ -213,7 +213,7 @@ const TransactionDashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Transaction Categories Pie Chart */}
-          <div className="p-6 border dark:border-gray-800 rounded-lg shadow-md">
+          <div className="p-6 border border-gray-800 rounded-lg shadow-md">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-lg font-semibold">Transaction Categories</h3>
@@ -270,7 +270,7 @@ const TransactionDashboard = () => {
             </div>
           </div>
             {/* Top Tokens Volume Chart */}
-          <Card className="border dark:border-gray-800 shadow-md">
+          <Card className="border border-gray-800 shadow-md">
               <CardHeader>
                 <CardTitle className='text-lg font-semibold'>Top Tokens By Volume</CardTitle>
                 <p className="text-sm text-gray-500 italic">Total amount sent and received</p>

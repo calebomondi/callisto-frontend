@@ -43,7 +43,7 @@ export default function ConnectedNavbar() {
 
   return (
     <>
-    <div className="navbar dark:bg-gray-900 border-b border-gray-800 bg-white sticky top-0 shadow-lg z-50">
+    <div className="navbar bg-gray-900 border-b border-gray-800 sticky top-0 shadow-lg z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">

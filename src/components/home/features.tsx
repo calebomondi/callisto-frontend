@@ -62,7 +62,7 @@ const itemVariants = {
 
 export default function Features() {
   return (
-    <section className="py-12 px-14 md:px-24 light:bg-gray-50" id="features">
+    <section className="py-12 px-14 md:px-24" id="features">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -74,7 +74,7 @@ export default function Features() {
             Key Features
           </motion.h2>
           <motion.p
-            className="dark:text-gray-400 max-w-2xl mx-auto"
+            className="text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -94,7 +94,7 @@ export default function Features() {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="light:bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow dark:border dark:border-gray-900 dark:hover:border-purple-500 dark:transition-colors"
+              className="rounded-xl p-6 shadow-lg hover:shadow-xl border border-gray-900 hover:border-purple-500 transition-colors"
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -103,7 +103,7 @@ export default function Features() {
                 <div className="text-purple-500">{feature.icon}</div>
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="dark:text-gray-400">{feature.description}</p>
+              <p className="text-gray-400">{feature.description}</p>
             </motion.div>
           ))}
         </motion.div>

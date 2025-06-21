@@ -18,11 +18,11 @@ export default function Home () {
   const navigate = useNavigate()
 
   const handleDash = () => {
-    navigate("/documentation");
+    navigate("/dashboard");
   }
 
   return (
-    <div className="flex flex-col min-h-screen dark:bg-gradient-to-b from-gray-900 to-black">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-900 to-black">
       {/* Navigation */}
       <Navbar />
 

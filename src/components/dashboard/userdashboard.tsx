@@ -104,21 +104,21 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
   const renderOverview = (): JSX.Element => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {/* Total value card */}
-      <div className="p-6 rounded-lg shadow-md border dark:border-gray-800">
+      <div className="p-6 rounded-lg shadow-md border border-gray-800">
         <h3 className="text-sm text-gray-400">Total Locked Value</h3>
         <p className="text-2xl font-bold mt-2">{formatCurrency(data.totalValueUSD)}</p>
         <p className="text-sm text-gray-500 mt-1">Across {data.totalVaults} vaults</p>
       </div>
       
       {/* Average lock time */}
-      <div className="p-6 rounded-lg shadow-md border dark:border-gray-800">
+      <div className="p-6 rounded-lg shadow-md border border-gray-800">
         <h3 className="text-sm text-gray-400">Average Lock Time</h3>
         <p className="text-2xl font-bold mt-2">{Math.round(data.avgLockDays)} days</p>
         <p className="text-sm text-gray-500 mt-1">All assets combined</p>
       </div>
       
       {/* Lock Types */}
-      <div className="p-6 rounded-lg shadow-md border dark:border-gray-800">
+      <div className="p-6 rounded-lg shadow-md border border-gray-800">
         <h3 className="text-sm text-gray-400">Lock Types</h3>
         <div className="flex justify-around items-center mt-2">
           <div className="text-center">
@@ -137,13 +137,13 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Upcoming unlocks */}
-      <div className="border dark:border-gray-800 rounded-lg shadow-md p-6  md:col-span-2">
+      <div className="border border-gray-800 rounded-lg shadow-md p-6  md:col-span-2">
         <h3 className="text-xl font-semibold">Upcoming Unlocks (Next 7 Days)</h3>
         {data.upcomingUnlocks.length > 0 ? (
           <div className="mt-2 overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="dark:border-gray-800 hover:bg-gray-800/20">
+                <TableRow className="border-gray-800 hover:bg-gray-800/20">
                   <TableHead className="text-gray-400 font-medium">Title</TableHead>
                   <TableHead className="text-gray-400 font-medium">Asset</TableHead>
                   <TableHead className="text-gray-400 font-medium">Amount</TableHead>
@@ -153,7 +153,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
               </TableHeader>
               <TableBody>
                 {data.upcomingUnlocks.map((unlock) => (
-                  <TableRow key={unlock.id} className="dark:border-gray-800 hover:bg-gray-800/20">
+                  <TableRow key={unlock.id} className="border-gray-800 hover:bg-gray-800/20">
                     <TableCell className="py-4">{unlock.title}</TableCell>
                     <TableCell className="py-4">{unlock.asset}</TableCell>
                     <TableCell className="py-4">{unlock.amount}</TableCell>
@@ -174,7 +174,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Asset distribution */}
-      <div className="p-4 border dark:border-gray-800 rounded-lg shadow-md">
+      <div className="p-4 border border-gray-800 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-1">Asset Distribution</h3>
         <p className="text-gray-400 text-sm">Distribution of locked assets</p>
         <div  className="flex flex-col items-center justify-center gap-2">
@@ -229,7 +229,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             <h2 className="text-xl font-semibold">Recent Activity</h2>
             <Button
               variant="outline"
-              className="dark:text-gray-400 dark:border-gray-800 hover:bg-gray-300"
+              className="text-gray-400 border-gray-800 hover:bg-gray-300"
             >
               View All
             </Button>
@@ -303,10 +303,10 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       <h3 className="text-xl font-semibold">Asset Overview</h3>
       
       {/* Asset details table */}
-      <div className="border dark:border-gray-800 rounded-lg shadow-md overflow-hidden">
+      <div className="border border-gray-800 rounded-lg shadow-md overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="dark:border-gray-800 hover:bg-gray-800/20">
+            <TableRow className="border-gray-800 hover:bg-gray-800/20">
               <TableHead className="text-gray-400 font-medium">Asset</TableHead>
               <TableHead className="text-gray-400 font-medium">Total Amount</TableHead>
               <TableHead className="text-gray-400 font-medium">Current Value</TableHead>
@@ -321,10 +321,10 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
               const lockTypes = data.lockTypeByAsset[asset.symbol] || { fixed: 0, goal: 0, scheduled: 0 };
               
               return (
-                <TableRow key={asset.address} className="dark:border-gray-800 hover:bg-gray-800/20">
+                <TableRow key={asset.address} className="border-gray-800 hover:bg-gray-800/20">
                   <TableCell className="font-medium py-4">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-lg border dark:border-gray-800 flex items-center justify-center text-lg font-bold">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-lg border border-gray-800 flex items-center justify-center text-lg font-bold">
                         {asset.symbol.charAt(0)}
                       </div>
                       <div className="ml-4">
@@ -369,7 +369,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
       </div>
       
       {/* Asset lock duration chart */}
-      <div className="mt-6 border dark:border-gray-800 rounded-lg shadow-md p-6">
+      <div className="mt-6 border border-gray-800 rounded-lg shadow-md p-6">
         <h3 className="text-lg font-medium">Average Lock Duration by Asset</h3>
         <div className='grid place-items-center'>
           <div className="md:w-1/2 w-full mt-4">
@@ -420,7 +420,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
     // <div className=" px-2 sm:px-2 lg:px-8 py-2 min-h-screen bg-[#1a1122]">
     //   <Sidebar onVaultSelect={handleVaultSelect} />
     //   {/* Navigation tabs */}
-    //   {/* <div className="border-b dark:border-gray-600 border-gray-300 mb-6 sticky top-20 dark:bg-black bg-white shadow-md dark:bg-opacity-70 px-3 rounded-sm z-10">
+    //   {/* <div className="border-b border-gray-600 border-gray-300 mb-6 sticky top-20 dark:bg-black bg-white shadow-md dark:bg-opacity-70 px-3 rounded-sm z-10">
     //     <nav className="-mb-px flex space-x-8">
     //       {[
     //         { id: 'overview' as const, label: 'Overview' }, 
@@ -449,7 +449,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
     //   </div> */}
     // </div>
 
-    <div className='flex dark:bg-gradient-to-b from-gray-900 to-black h-screen overflow-hidden'>
+    <div className='flex bg-gradient-to-b from-gray-900 to-black h-screen overflow-hidden'>
       <Sidebar onVaultSelect={handleVaultSelect} />
 
       {/* Right section: Graphs, Distribution, Unlocks (spans 2 columns) */}
@@ -469,7 +469,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             <Plus className="w-4 h-4 mr-1" /> Create New Vault
           </Button>
           <dialog id="my_modal_4" className="modal">
-            <div className="modal-box dark:bg-gray-900">
+            <div className="modal-box bg-gray-900">
               <form method="dialog">
                 <button
                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"

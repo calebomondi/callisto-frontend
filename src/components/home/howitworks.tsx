@@ -17,7 +17,7 @@ const steps = [
   {
     icon: <Clock className="w-8 h-8" />,
     title: "Set Lock Period",
-    description: "Define your lock duration and optional unlock schedule",
+    description: "Define your lock duration and optional unlock schedule on your terms",
   },
 ];
 
@@ -70,7 +70,7 @@ export default function HowItWorks() {
           viewport={{ once: true }}
         >
           {/* Connecting Line */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-purple-200 -z-10" />
+          <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 -z-10" />
 
           {steps.map((step, index) => (
             <motion.div
@@ -78,7 +78,7 @@ export default function HowItWorks() {
               className="relative"
               variants={itemVariants}
             >
-              <div className="border dark:border-gray-800 hover:border-purple-500 rounded-xl p-8 text-center relative">
+              <div className="border border-gray-800 hover:border-purple-500 rounded-xl p-8 text-center relative">
                 <motion.div
                   className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6"
                   whileHover={{ scale: 1.1, rotate: 360 }}

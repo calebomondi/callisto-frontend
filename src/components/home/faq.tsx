@@ -23,7 +23,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </motion.h2>
           <motion.p
-            className="dark:text-gray-400"
+            className="text-gray-400"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -79,8 +79,8 @@ export default function FAQ() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="light:bg-amber-50 p-6 rounded-b-xl border-x border-b border-gray-800">
-                      <p className="dark:text-gray-400">{faq.answer}</p>
+                    <div className="p-6 rounded-b-xl border-x border-b border-gray-800">
+                      <p className="text-gray-400">{faq.answer}</p>
                     </div>
                   </motion.div>
                 )}

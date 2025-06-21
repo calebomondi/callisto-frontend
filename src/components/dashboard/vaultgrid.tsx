@@ -50,7 +50,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
     }, [subvault.endDate]);
   
     return (
-      <Card className="p-4 dark:bg-gray-900/50 border dark:border-gray-700 hover:border-purple-500 transition-colors">
+      <Card className="p-4 bg-gray-900/50 border border-gray-700 hover:border-purple-500 transition-colors">
         <div className='flex items-center justify-between '>
           <CardHeader>
             <CardTitle className="text-xl font-semibold">
@@ -65,24 +65,24 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
           <div className="space-y-4 flex flex-col items-left justify-center">
             {/* Amount and Asset */}
             <div className="flex items-center space-x-2">
-              <Wallet className="w-4 h-4 dark:text-gray-400" />
-              <p className="dark:text-gray-400">
+              <Wallet className="w-4 h-4 text-gray-400" />
+              <p className="text-gray-400">
                 {subvault.amount.toString()} {subvault.symbol}
               </p>
             </div>
   
             {/* Lock Type */}
             <div className="flex items-center space-x-2">
-              <Lock className="w-4 h-4 dark:text-gray-400" />
-              <p className="capitalize dark:text-gray-400">
+              <Lock className="w-4 h-4 text-gray-400" />
+              <p className="capitalize text-gray-400">
                 {subvault.vaultType}
               </p>
             </div>
   
             {/* Countdown Timer */}
             <div className="flex items-center space-x-2">
-              <Timer className="w-4 h-4 dark:text-gray-400" />
-              <p className="dark:text-gray-400">{timeLeft}</p>
+              <Timer className="w-4 h-4 text-gray-400" />
+              <p className="text-gray-400">{timeLeft}</p>
             </div>
           </div>
   
@@ -186,7 +186,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
   }, [searchTerm, selectedAsset, selectedLockType, showNearExpiry, showExpired, vaultData]);
 
   return (
-    <div className="space-y-8 dark:bg-gradient-to-b from-gray-900 to-black min-h-screen">
+    <div className="space-y-8 bg-gradient-to-b from-gray-900 to-black min-h-screen">
       {/* Search and Filter Section */}
       <div className="flex flex-col gap-1 sticky top-20 p-2 rounded-md bg-gray-900 z-50">
         <div className='flex flex-col md:flex-row justify-between items-center pr-10 pl-6'>
@@ -205,7 +205,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
                 placeholder="Title or Asset Symbol..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-transparent"
+                className="pl-10 w-full h-10 rounded-md border border-gray-600 bg-transparent"
               />
             </div>
           </div>
@@ -217,7 +217,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
               <select
                 value={selectedAsset}
                 onChange={(e) => setSelectedAsset(e.target.value)}
-                className="h-10 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-transparent sm:max-w-xs"
+                className="h-10 text-sm rounded-md border border-gray-600 bg-transparent sm:max-w-xs"
               >
                 <option className='bg-base-300' value="">All Assets</option>
                 {assetSymbols.map(symbol => (
@@ -229,7 +229,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
               <select
                 value={selectedLockType}
                 onChange={(e) => setSelectedLockType(e.target.value)}
-                className="h-10 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-transparent sm:max-w-xs"
+                className="h-10 text-sm rounded-md border border-gray-600 bg-transparent sm:max-w-xs"
               >
                 <option className='bg-base-300' value="">All Lock</option>
                 {lockTypes.map(type => (
@@ -246,7 +246,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
                 className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
                   ${showNearExpiry 
                     ? 'border-purple-600 text-purple-400 bg-purple-600/10' 
-                    : 'border-gray-300 dark:border-gray-600'}`}
+                    : 'border-gray-600'}`}
               >
                 <Timer className="w-4 h-4" />
                 <span className="sm:inline text-sm">Expiring Soon</span>
@@ -261,7 +261,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
                 className={`h-10 px-4 rounded-md border flex items-center justify-center gap-2 transition-colors flex-1 sm:flex-none
                   ${showExpired 
                     ? 'border-red-600 text-red-600 bg-red-600/10' 
-                    : 'border-gray-300 dark:border-gray-600'}`}
+                    : 'border-gray-600'}`}
               >
                 <Lock className="w-4 h-4" />
                 <span className="sm:inline text-sm">Expired</span>
@@ -284,7 +284,7 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
             <Plus className="w-4 h-4 mr-1" /> Create New Vault
           </Button>
           <dialog id="my_modal_vaultgrid" className="modal">
-            <div className="modal-box dark:bg-gray-900">
+            <div className="modal-box bg-gray-900">
               <form method="dialog">
                 <button
                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"

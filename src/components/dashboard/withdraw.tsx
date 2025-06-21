@@ -94,7 +94,7 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
                 <span className="text-sm text-gray-500">Balance: {vaultData.amount} {vaultData.symbol}</span>
                 <form onSubmit={handleSubmit} className="w-full p-1">
                     <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
-                        <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-gray-500">
+                        <label className="bg-base-800 input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-gray-500">
                             Amount
                             <input 
                                 type="text" 
@@ -102,7 +102,7 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
                                 name="amount"
                                 value={formValues.amount}
                                 onChange={handleChange}
-                                className="md:w-5/6 p-2 dark:text-white text-gray-700" 
+                                className="md:w-5/6 p-2 text-white" 
                                 placeholder={vaultData.symbol === 'ETH' ? "> 0.001" : "1"} 
                                 required
                             />
@@ -111,7 +111,7 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
                     <div className="p-1 flex justify-center mt-2">
                         <button 
                             type="submit" 
-                            className="btn bg-gradient-to-r from-purple-500 to-pink-500 w-1/2 text-white text-base hover:scale-95"
+                            className="btn border-none bg-gradient-to-r from-purple-500 to-pink-500 w-1/2 text-white text-base hover:scale-95"
                         >
                             {isLoading ? 
                                 <>

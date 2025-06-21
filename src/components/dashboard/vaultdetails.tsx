@@ -306,25 +306,25 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
   }
 
   return (
-    <div className='h-screen'>
+    <div className='h-full'>
       {showNavbar && <ConnectedNavbar />}
 
       <div>
-        <div className='dark:bg-gray-900'>
+        <div className='bg-gray-900'>
           <div className="flex items-center text-gray-400 text-sm py-4 pl-12">
             <button onClick={handleNavigateToVaults} className='hover:text-gray-300'>Vaults</button>
             <ArrowRight className="w-4 h-4 mx-2" />
             <span className="text-purple-400">{vaultData.title}</span>
           </div>
-          <h1 className="text-3xl font-bold dark:text-white pb-2 pl-12">{vaultData.title}</h1>
-          <div className="flex items-center dark:text-gray-300 pl-12">
+          <h1 className="text-3xl font-bold text-white pb-2 pl-12">{vaultData.title}</h1>
+          <div className="flex items-center text-gray-300 pl-12">
             <Clock className="w-4 h-4 mr-2" />
             <span>
               Time remaining - {timeLeft}
             </span>
           </div>
         </div>
-        <div className="px-6 py-6 grid grid-cols-1 xl:grid-cols-3 gap-8 md:h-full dark:bg-gradient-to-b from-gray-900 to-black">
+        <div className="px-6 py-6 grid grid-cols-1 xl:grid-cols-3 gap-8 md:h-full bg-gradient-to-b from-gray-900 to-black">
         {/*LEFT COLUMN */}
         <div className="xl:col-span-2 space-y-6">
           {/**Vault Stats */}
@@ -334,39 +334,39 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                   <div className="grid grid-cols-1 place-items-center md:place-items-start md:grid-cols-4 gap-6 mb-8">
                     {/* Locked Amount */}
                     <div className="space-y-2 grid place-items-center md:place-items-start">
-                      <h4 className="dark:text-gray-400 text-sm">Total Locked</h4>
-                      <div className="text-xl font-bold dark:text-white">{vaultData.amount} {vaultData.symbol}</div>
-                      <div className="dark:text-gray-500 text-sm">≈ {formatCurrency(Number(Number(vaultData.amount)) * priceData.currentPrice)}</div>
+                      <h4 className="text-gray-400 text-sm">Total Locked</h4>
+                      <div className="text-xl font-bold text-white">{vaultData.amount} {vaultData.symbol}</div>
+                      <div className="text-gray-500 text-sm">≈ {formatCurrency(Number(Number(vaultData.amount)) * priceData.currentPrice)}</div>
                     </div>
 
                     {/* Vault Type */}
                     <div className="space-y-2">
-                      <h4 className="dark:text-gray-400 text-sm">Vault Type</h4>
-                      <div className="text-lg dark:text-white font-medium capitalize">{vaultData.vaultType}</div>
+                      <h4 className="text-gray-400 text-sm">Vault Type</h4>
+                      <div className="text-lg text-white font-medium capitalize">{vaultData.vaultType}</div>
                       {/* <div className="text-purple-400 text-sm">APY: 12%</div> */}
                     </div>
                     {vaultData.vaultType === 'schedule' && (
                       <div className=''>
-                        <p className="text-sm dark:text-gray-400">Unlock Schedule</p>
+                        <p className="text-sm text-gray-400">Unlock Schedule</p>
                         <p className="font-bold text-xl">{vaultData.unLockDuration === 0 ? 'None' : `every ${vaultData.unLockDuration} days`}</p>
                       </div>
                     )}
                     {vaultData.unLockDuration > 0 && (
                       <div className=''>
-                          <p className="dark:text-gray-300 text-sm">Unlock Amount</p>
+                          <p className="text-gray-300 text-sm">Unlock Amount</p>
                           <p className="font-bold text-xl">{vaultData.unLockAmount} {vaultData.symbol}</p>
                       </div>
                     )}
                     {Number(vaultData.unLockGoal) > 0 && (
                       <div className=''>
-                          <p className="text-sm dark:text-gray-400">Goal Amount</p>
+                          <p className="text-sm text-gray-400">Goal Amount</p>
                           <p className="font-bold text-xl">{formatCurrency(Number(vaultData.unLockGoal))}</p>
                       </div>
                     )}
 
                     {/**Value Change */}
                     <div className="space-y-1">
-                      <h3 className="text-sm dark:text-gray-400">Value Change</h3>
+                      <h3 className="text-sm text-gray-400">Value Change</h3>
                       <div className="flex items-center space-x-2">
                           <TrendingUp className="w-5 h-5" />
                           <span className={` ${
@@ -377,34 +377,34 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                           {((priceData.currentPrice - priceData.lockedPrice) / priceData.lockedPrice * 100).toFixed(2)}%
                           </span>
                       </div>
-                      <p className="dark:text-gray-500 text-sm">
+                      <p className="text-gray-500 text-sm">
                           Initial: {formatCurrency(Number(vaultData.amount) * priceData.lockedPrice)}
                       </p>
                     </div>
                   </div>
 
                 {/**Date Information */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 dark:bg-black/20 rounded-lg border dark:border-purple-500/10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 bg-black/20 rounded-lg border border-purple-500/10">
                   <div className="text-center md:text-left">
-                    <div className="dark:text-gray-400 text-xs uppercase tracking-wide mb-1">Start Date</div>
-                    <div className="dark:text-white font-medium">{formatDate(new Date(vaultData.startDate).getTime())}</div>
+                    <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Start Date</div>
+                    <div className="text-white font-medium">{formatDate(new Date(vaultData.startDate).getTime())}</div>
                   </div>
 
                   <div className="text-center">
-                    <div className="dark:text-gray-400 text-xs uppercase tracking-wide mb-1">End Date</div>
-                    <div className="dark:text-white font-medium">{formatDate(new Date(vaultData.endDate).getTime())}</div>
+                    <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">End Date</div>
+                    <div className="text-white font-medium">{formatDate(new Date(vaultData.endDate).getTime())}</div>
                   </div>
                   
                   <div className="text-center md:text-right">
-                    <div className="dark:text-gray-400 text-xs uppercase tracking-wide mb-1">Time Remaining</div>
-                    <div className="flex items-center justify-center md:justify-end gap-2 dark:text-purple-300 font-medium">
+                    <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">Time Remaining</div>
+                    <div className="flex items-center justify-center md:justify-end gap-2 text-purple-300 font-medium">
                       <Clock className='w-4 h-4' /> {timeLeft}
                     </div>
                   </div>
                 </div>
 
           {/* Timeline of Unlock Events */}
-          <div className={`space-y-4 border dark:border-gray-800 shadow-md my-4 rounded-md p-2 ${vaultData.vaultType !== 'schedule' && 'hidden'}`}>
+          <div className={`space-y-4 border border-gray-800 shadow-md my-4 rounded-md p-2 ${vaultData.vaultType !== 'schedule' && 'hidden'}`}>
             <h3 className="text-xl md:text-2xl  font-semibold text-purple-400 m-2">Unlock Schedule</h3>
             <div className="h-auto overflow-x-auto flex justify-center">
               {
@@ -412,7 +412,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                   <ul className="timeline overflow-x-auto">
                       {unlockDays.map((event, index) => (
                           <li key={index} className="space-x-4 flex flex-col items-center justify-center">                            
-                              <div className="timeline-start timeline-box dark:bg-gray-900">{formatDate(event.date * 1000)}</div>
+                              <div className="timeline-start timeline-box bg-gray-900 border-none">{formatDate(event.date * 1000)}</div>
                               <div className="timeline-middle">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -441,10 +441,10 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
           </div>
 
           {/*Transactions Table */}
-          <div className="rounded-xl p-6 border dark:border-purple-500/20">
+          <div className="rounded-xl p-6 border border-purple-500/20">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-purple-400 text-xl md:text-2xl font-medium">Transaction History</h3>
-              <button className="dark:text-purple-300 text-sm dark:hover:text-purple-200 transition-colors">
+              <button className="text-purple-300 text-sm hover:text-purple-200 transition-colors">
                 View All
               </button>
             </div>
@@ -455,8 +455,8 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
         {/* RIGHT COLUMN - Actions */}
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className=" rounded-xl p-6 border dark:border-purple-500/20">
-              <h3 className="dark:text-white text-lg font-medium mb-6">Quick Actions</h3>
+          <div className=" rounded-xl p-6 border border-purple-500/20">
+              <h3 className="text-white text-lg font-medium mb-6">Quick Actions</h3>
               <div className="space-y-2">
                 <Button 
                   onClick={() => (document.getElementById('my_modal_14') as HTMLDialogElement).showModal()}
@@ -466,7 +466,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                   <span>Add Funds</span>
                 </Button>
                 <dialog id="my_modal_14" className="modal">
-                  <div className="modal-box dark:bg-gray-900">
+                  <div className="modal-box bg-gray-900">
                     <form method="dialog">
                       <button 
                         onClick={handleAddFundsModalClose}
@@ -490,7 +490,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                    <span>Withdraw</span>
                  </Button>
                  <dialog id="my_modal_15" className="modal">
-                   <div className="modal-box dark:bg-gray-900">
+                   <div className="modal-box bg-gray-900">
                      <form method="dialog">
                        <button 
                         className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -660,7 +660,7 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
 
           {/*vaultData.vaultType === "goal" &&(
             <div className="rounded-xl p-6 border border-purple-500/20">
-            <h3 className="dark:text-white text-lg font-medium mb-4">Performance</h3>
+            <h3 className="text-white text-lg font-medium mb-4">Performance</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="dark:text-gray-300">Current APY</span>

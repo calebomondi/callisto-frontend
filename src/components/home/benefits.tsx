@@ -60,7 +60,7 @@ export default function Benefits() {
             Why Choose <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">FVP</span>
           </motion.h2>
           <motion.p
-            className="dark:text-gray-400 max-w-2xl mx-auto"
+            className="text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -98,7 +98,7 @@ export default function Benefits() {
                 </div>
 
                 <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
-                <p className="dark:text-gray-400">{benefit.description}</p>
+                <p className="text-gray-400">{benefit.description}</p>
 
                 <motion.div
                   className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-purple-300 rounded-b-xl"
@@ -117,7 +117,7 @@ export default function Benefits() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <p className="dark:text-gray-400 italic">
+          <p className="text-gray-400 italic">
             {`Join thousands of users who have already secured their crypto
             assets with FVKRY PRVNTA`}
           </p>

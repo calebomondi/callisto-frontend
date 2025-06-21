@@ -121,7 +121,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
   };
 
   return (
-    <div className={`sticky top-0 h-screen border-r dark:border-gray-800 shadow-md dark:bg-gray-900/50 p-4 flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? "w-20" : "w-80"}`}>
+    <div className={`sticky top-0 h-screen border-r border-gray-800 shadow-md bg-gray-900/50 p-4 flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? "w-20" : "w-80"}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className={`text-lg font-semibold transition-opacity duration-300 ${isCollapsed ? "hidden" : "inline"}`}>
@@ -144,7 +144,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
             <Button
               variant="outline"
               size="sm"
-              className={`dark:border-gray-700 shadow-sm bg-white text-gray-500 hover:bg-white  ${isCollapsed ? "hidden" : ""}`}
+              className={`border-gray-700 shadow-sm bg-white text-gray-500 hover:bg-white  ${isCollapsed ? "hidden" : ""}`}
             >
               <Filter className="w-4 h-4 mr-1" />
               Status
@@ -175,7 +175,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className={`p-3 rounded-lg border ${
-            selectedSection === "overview" ? "border-purple-500" : "dark:border-gray-800 shadow-md hover:border-purple-500/50"
+            selectedSection === "overview" ? "border-purple-500" : "border-gray-800 shadow-md hover:border-purple-500/50"
           } cursor-pointer transition-all`}
           onClick={handleOverviewClick}
         >
@@ -204,7 +204,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
               className={`ml-4 p-3 rounded-lg border ${
                 selectedSection === "vault" && selectedVaultId === vault.vaultId
                   ? "border-purple-500"
-                  : "dark:border-gray-800 shadow-sm hover:border-purple-500/50"
+                  : "border-gray-800 shadow-sm hover:border-purple-500/50"
               } cursor-pointer transition-all`}
               onClick={() => handleVaultClick(vault)}
             >
@@ -225,7 +225,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className={`p-3 rounded-lg border ${
-            selectedSection === "assets" ? "border-purple-500" : "dark:border-gray-800 shadow-md hover:border-purple-500/50"
+            selectedSection === "assets" ? "border-purple-500" : "border-gray-800 shadow-md hover:border-purple-500/50"
           } cursor-pointer transition-all`}
           onClick={handleAssetsClick}
         >
@@ -243,7 +243,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className={`p-3 rounded-lg border ${
-            selectedSection === "analytics" ? "border-purple-500" : "dark:border-gray-800 shadow-md hover:border-purple-500/50"
+            selectedSection === "analytics" ? "border-purple-500" : "border-gray-800 shadow-md hover:border-purple-500/50"
           } cursor-pointer transition-all`}
           onClick={handleAnalyticsClick}
         >
@@ -258,7 +258,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
       </div>
 
       {/* Settings */}
-      <div className="pt-4 mt-4 border-t dark:border-gray-800">
+      <div className="pt-4 mt-4 border-t border-gray-800">
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-500 hover:bg-transparent"

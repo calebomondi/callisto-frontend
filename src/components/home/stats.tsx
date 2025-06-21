@@ -12,7 +12,7 @@ const stats = [
   {
     title: "Active Users",
     value: "20+",
-    description: "Trusted by thousands of crypto savers worldwide",
+    description: "Trusted by thousands of crypto savers",
     icon: <Users className="w-6 h-6" />,
   },
   {
@@ -36,7 +36,7 @@ export default function Stats() {
         <h2 className="text-3xl font-bold text-navy mb-6">
           Platform Statistics
         </h2>
-        <p className="dark:text-gray-400 max-w-2xl mx-auto">
+        <p className="text-gray-400 max-w-2xl mx-auto">
           Our platform's growth and performance metrics showcase our commitment to providing a secure and reliable savings solution for the crypto community.
         </p>
       </div>
@@ -93,7 +93,7 @@ export default function Stats() {
                 >
                   {stat.value}
                 </motion.p>
-                <p className="dark:text-gray-400">{stat.description}</p>
+                <p className="text-gray-400">{stat.description}</p>
               </div>
 
               <motion.div

@@ -24,10 +24,10 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
   };
   
   return (
-    <div className="overflow-x-auto rounded-lg border dark:border-gray-800 dark:bg-gray-900/50 overflow-hidden">
+    <div className="overflow-x-auto rounded-lg border border-gray-800 bg-gray-900/50 overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="dark:border-gray-800 hover:bg-gray-800/20">
+          <TableRow className="border-gray-800 hover:bg-gray-800/20">
             <TableHead className="text-gray-400 font-medium">Depositor</TableHead>
             <TableHead className="text-gray-400 font-medium">Amount</TableHead>
             <TableHead className="text-gray-400 font-medium">Type</TableHead>
@@ -44,7 +44,7 @@ export default function TransactionsTable({transactions}:{transactions:VaultTran
           ) : (
             transactions.map((transaction, index) => (
               <TableRow key={`${transaction.depositor}-${transaction.timestamp}-${index}`} 
-                  className="dark:border-gray-800 hover:bg-gray-800/20">
+                  className="border-gray-800 hover:bg-gray-800/20">
                 <TableCell className="font-medium py-4">
                   <div className="text-sm font-medium " title={transaction.depositor}>
                     {truncateAddress(transaction.depositor)}
