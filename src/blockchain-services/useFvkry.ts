@@ -28,7 +28,7 @@ const supportedChains: { [key: number]: {chain: any, rpc:string} } = {
     84532: {chain: baseSepolia, rpc: import.meta.env.VITE_BASE_SEP_RPC_URL},
 }
 
-//set up public cient
+// set up public cient
 function getPublicClient() {
     const chainId = currentChainId();
     const thisChain = supportedChains[chainId];
@@ -127,11 +127,6 @@ export async function getWalletClient() {
         console.error('Failed to connect wallet:', error);
         throw new Error('Failed to connect wallet. Please try again.');
     }
-}
-
-//Write Functions
-export async function createEthVault() {
-    
 }
 
 async function approveToken({symbol, amount}: ApproveTokenParams) {

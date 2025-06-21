@@ -212,18 +212,20 @@ export default function LockAsset() {
                 throw new Error('Token Decimals Not Retrieved!')
             }
 
+            const deposit = Math.floor(Number(formValues.totalAmount))
+
             //lock asset
             let tx = await createTokenVault(
                 {
                     symbol: formValues.symbol, 
                     title: formValues.title, 
-                    totalAmount: formValues.totalAmount, 
+                    totalAmount: deposit.toString(), 
                     vaultType: formValues.vaultType, 
                     lockPeriod: days, 
                     slip: 0, 
-                    unLockDuration: formValues.unLockDuration.length > 0 ? Number(formValues.unLockDuration) : 0,
-                    unLockAmount: formValues.unLockAmount.length > 0 ? Number(parseUnits(formValues.unLockAmount, tokenDecimals.decimals)) : 0,
-                    unLockGoal: formValues.unLockGoal.length > 0 ? Number(formValues.unLockGoal) : 0
+                    unLockDuration: formValues.unLockDuration.length > 0 ? Math.floor(Number(formValues.unLockDuration)) : 0,
+                    unLockAmount: formValues.unLockAmount.length > 0 ? Math.floor(Number(parseUnits(formValues.unLockAmount, tokenDecimals.decimals))) : 0,
+                    unLockGoal: formValues.unLockGoal.length > 0 ? Math.floor(Number(formValues.unLockGoal)) : 0
                 }
             )
             if(tx) {
@@ -263,6 +265,7 @@ export default function LockAsset() {
                 title: "ERROR",
                 description: error.message
             })
+            setShowConfirmModal(false)
         } finally {
             //clear form
             setFormValues({
@@ -518,7 +521,7 @@ export default function LockAsset() {
 
                 <div className="w-full text-center flex flex-col items-center">
                     <span className={`text-sm text-gray-400 my-3 ${!amountFine && 'text-red-600'} ${!notShow && 'hidden'} ${formValues.vaultType !== 'schedule' && 'hidden'}`}>
-                        {`Unlock ${formValues.unLockAmount} ${formValues.symbol} After Every ${formValues.unLockDuration} days, Total Amount: ${toUnlockTotal}`}
+                        {`Unlock ${Math.floor(Number(formValues.unLockAmount))} ${formValues.symbol} After Every ${Math.floor(Number(formValues.unLockDuration))} days, Total Amount: ${Math.floor(Number(toUnlockTotal))}`}
                     </span>
                 </div>
                 <div className="p-1 flex justify-center mt-2">
@@ -549,33 +552,33 @@ export default function LockAsset() {
                         </div>
                         <div className="flex justify-between">
                             <p>Initial Amount:</p>
-                            <p>{formValues.totalAmount} {formValues.symbol}</p>
+                            <p>{Math.floor(Number(formValues.totalAmount))} {formValues.symbol}</p>
                         </div>
                         {formValues.vaultType === "goal" && (
                             <>
                             <div className="flex justify-between">
                                 <p>Goal Amount:</p>
-                                <p>{formValues.unLockGoal} {formValues.symbol}</p>
+                                <p>{Math.floor(Number(formValues.unLockGoal))} {formValues.symbol}</p>
                             </div>
                             </>
                         )}
                         <div className="flex justify-between">
                             <p>Lock Period:</p>
-                            <p> {formValues.lockPeriod} {formValues.durationType}</p>
+                            <p> {Math.floor(Number(formValues.lockPeriod))} {formValues.durationType}</p>
                         </div>
                         {formValues.vaultType === "schedule" && (
                             <>
                             <div className="flex justify-between">
                                 <p>Unlock Amount:</p>
-                                <p>{formValues.unLockAmount} {formValues.symbol}</p>
+                                <p>{Math.floor(Number(formValues.unLockAmount))} {formValues.symbol}</p>
                             </div>
                             <div className="flex justify-between">
                                 <p>After Every:</p>
-                                <p> {formValues.unLockDuration} days</p>
+                                <p> {Math.floor(Number(formValues.unLockDuration))} days</p>
                             </div>
                             <div className="flex justify-between">
                                 <p>Amount per unlock:</p>
-                                <p> ${toUnlockTotal}</p>
+                                <p> ${Math.floor(Number(toUnlockTotal))}</p>
                             </div>
                             </>
                         )}
@@ -588,17 +591,17 @@ export default function LockAsset() {
                         </div>
                         <div className="flex justify-between">
                             <p>Points to earn</p>
-                            <p>{Number(formValues.totalAmount) + Math.floor(convertToDays(formValues.durationType,Number(formValues.lockPeriod)) * 0.5)} points</p>
+                            <p>{Math.floor(Number(formValues.totalAmount)) + Math.floor(convertToDays(formValues.durationType,Math.floor(Number(formValues.lockPeriod))) * 0.5)} points</p>
                         </div>
                     </div>
                     <div>
                         <div className="flex justify-between text-sm">
                             <p>Service Fee</p>
-                            <p>{0.005 * Number(formValues.totalAmount)} {formValues.symbol}</p>
+                            <p>{0.005 * Math.floor(Number(formValues.totalAmount))} {formValues.symbol}</p>
                         </div>
                         <div className="flex justify-between text-sm">
                             <p>To Lock</p>
-                            <p>{Number(formValues.totalAmount) - 0.005 * Number(formValues.totalAmount)} {formValues.symbol}</p>
+                            <p>{Math.floor(Number(formValues.totalAmount)) - 0.005 * Math.floor(Number(formValues.totalAmount))} {formValues.symbol}</p>
                         </div>
                     </div>
                 </div>
