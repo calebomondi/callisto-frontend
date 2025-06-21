@@ -55,8 +55,9 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
         <div>
           <h2 className="text-2xl font-bold text-white mb-2">You Are A, {character?.name}</h2>
           <p className="text-gray-300 mb-4">{character?.description}</p>
-          <div className={`text-4xl font-bold bg-gradient-to-r ${character?.color} bg-clip-text text-transparent mb-4`}>
-            {score}
+          <div className={`flex flex-col font-bold bg-gradient-to-r ${character?.color} bg-clip-text text-transparent mb-4`}>
+            <span className='text-xl'>Wallet Score</span>
+            <span className='text-4xl'>{score}</span>
           </div>
           <p className="text-purple-200 text-lg font-medium mb-4">"{character?.message}"</p>
           <div className="flex flex-wrap justify-center gap-2">
@@ -76,6 +77,9 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
               <span className='font-bold text-lg font-mono'>{impulsiveTxs || 0}</span>
             </p>
           </div>
+          <p className="py-1 text-gray-500 italic text-sm">
+            Wallet Score = (Frequent Txs * 2) + (Impulsive Txs * 3)
+          </p>
         </div>
       </div>
     </Card>

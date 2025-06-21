@@ -148,7 +148,11 @@ const TransactionDashboard = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-4">
+        <div className="flex items-center justify-center">
+          <p className="text-center">*Based on your wallet's immediate previous <span className="font-bold text-pink-500">{analysisData.summary.totalTransactions}</span> transactions.</p>
+        </div>
+
         <div className='grid grid-cols-1 gap-4'>
           {/**first grid */}
           <div>
@@ -171,7 +175,10 @@ const TransactionDashboard = () => {
           {/* Monthly Activity Line Chart */}
           <div className="rounded-lg p-6 border dark:border-gray-800 shadow-md">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Monthly Activity Trend</h3>
+              <div>
+                <h3 className="text-lg font-semibold">Monthly Activity Trend</h3>
+                <p className="text-sm text-gray-500 italic">Total Transactions and Gas Fees per month</p>
+              </div>
               <LineChartIcon className="h-5 w-5 text-gray-500" />
             </div>
             <div className="h-80">
@@ -208,7 +215,10 @@ const TransactionDashboard = () => {
           {/* Transaction Categories Pie Chart */}
           <div className="p-6 border dark:border-gray-800 rounded-lg shadow-md">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Transaction Distribution</h3>
+              <div>
+                <h3 className="text-lg font-semibold">Transaction Categories</h3>
+                <p className="text-sm text-gray-500 italic">Distribution of transactions across categories</p>
+              </div>
               <PieChartIcon className="h-5 w-5 text-gray-500" />
             </div>
             <div className='flex flex-col'>
@@ -263,6 +273,7 @@ const TransactionDashboard = () => {
           <Card className="border dark:border-gray-800 shadow-md">
               <CardHeader>
                 <CardTitle className='text-lg font-semibold'>Top Tokens By Volume</CardTitle>
+                <p className="text-sm text-gray-500 italic">Total amount sent and received</p>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig}>
