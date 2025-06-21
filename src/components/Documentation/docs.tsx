@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Book, Wallet, LockKeyhole } from 'lucide-react';
-import banner from "/fp_banner.png"
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
