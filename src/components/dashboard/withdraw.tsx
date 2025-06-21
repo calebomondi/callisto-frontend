@@ -90,7 +90,7 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
     return (
         <div className="flex justify-center items-center">
             <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
-                <h2 className="text-center text-lg font-semibold">Withdraw From Lock ({vaultData.symbol})</h2>
+                <h2 className="text-center text-lg font-semibold">Withdraw From Vault ({vaultData.symbol})</h2>
                 <span className="text-sm text-gray-500">Balance: {vaultData.amount} {vaultData.symbol}</span>
                 <form onSubmit={handleSubmit} className="w-full p-1">
                     <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
@@ -111,7 +111,7 @@ export default function Withdraw({vaultData, chainId}:{vaultData:VaultData, chai
                     <div className="p-1 flex justify-center mt-2">
                         <button 
                             type="submit" 
-                            className="btn border-none bg-gradient-to-r from-purple-500 to-pink-500 w-1/2 text-white text-base hover:scale-95"
+                            className="btn border-none bg-gradient-to-r from-purple-500 to-pink-500 w-3/4 text-white text-base hover:scale-95"
                         >
                             {isLoading ? 
                                 <>

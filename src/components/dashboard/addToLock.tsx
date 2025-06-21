@@ -97,7 +97,7 @@ export default function AddToLock({vaultData, chainId}:{vaultData:VaultData, cha
     return (
         <div className="flex justify-center items-center">
             <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
-                <h2 className="text-center text-lg font-semibold">Add To Lock ({vaultData.symbol})</h2>
+                <h2 className="text-center text-lg font-semibold">Add To Vault ({vaultData.symbol})</h2>
                 <form onSubmit={handleSubmit} className="w-full p-1">
                     <div className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-2 space-x-0 items-center justify-center">
                         <label className="input input-bordered flex items-center justify-between gap-2 mb-1 font-semibold text-gray-500">

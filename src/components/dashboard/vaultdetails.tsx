@@ -514,20 +514,20 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
                       <span className="loading loading-ring loading-xs"></span>
                       <span>Deleting...</span>
                     </> 
-                  : "Delete Lock"}
+                  : "Delete Vault"}
                   </Button>
                   <dialog id="my_modal_16" className="modal modal-bottom sm:modal-middle">
                     <div className="modal-box bg-gray-900">
-                      <h3 className="font-semibold text-lg text-red-500">Deleting Lock!</h3>
+                      <h3 className="font-semibold text-lg text-red-500">Deleting Vault!</h3>
                       <p className="py-4">{vaultData.title.toUpperCase()}</p>
                       <div className="modal-action">
                         <form method="dialog">
-                          <button className="btn btn-sm btn-error m-1" onClick={async () => {
+                          <button className="btn btn-md btn-error m-1" onClick={async () => {
                             if (vaultData.vaultId !== undefined && vaultData.vaultType !== undefined) {
                               await deleteVault(vaultData.vaultId);
                             }
                           }} >Proceed</button>
-                          <button className="btn btn-sm btn-success m-1">Cancel</button>
+                          <button className="btn btn-md btn-success m-1">Cancel</button>
                         </form>
                       </div>
                     </div>

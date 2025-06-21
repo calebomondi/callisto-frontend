@@ -463,7 +463,7 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
             {selectedView.type === "analytics" && <span className='text-sm text-amber-500'>  *Only on mainnet</span>}
           </h1>
           <Button
-            className={`btn btn-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
+            className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
             onClick={() => (document.getElementById('my_modal_4') as HTMLDialogElement).showModal()}
           >
             <Plus className="w-4 h-4 mr-1" /> Create New Vault
