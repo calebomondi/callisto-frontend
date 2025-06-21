@@ -604,7 +604,7 @@ export default function LockAsset() {
                 </div>
                     <div className={`bg-red-400 flex flex-col items-center justify-start p-4 rounded-lg mt-4 text-md ${currentChainId() !== 8453 && 'hidden' }`}>
                         <div className="flex items-center justify-between w-full">
-                            <span className="font-bold">🛡️ Security Notice</span>
+                            <span className="font-bold">🛡️ MetaMask Security Notice</span>
                             <span>
                                 {
                                     showSecurityNotice ? 
@@ -615,7 +615,7 @@ export default function LockAsset() {
                         </div>
                         <div className={`${showSecurityNotice ? 'block' : 'hidden'} flex flex-col items-start justify-start mt-2`}>
                             <span>
-                                Your wallet might show a warning about this transaction because we're 
+                                MetaMask might show a warning about this transaction because we're 
                                 requesting token approval. This is standard for DEX operations.
                             </span>
                             <span className="mt-2 flex flex-col">

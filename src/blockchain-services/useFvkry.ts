@@ -39,10 +39,76 @@ function getPublicClient() {
     });
 }
 
+// Enhanced wallet detection function
+function detectAvailableWallets() {
+    const wallets = {
+        rabby: null as any,
+        metamask: null as any,
+        rainbow: null as any,
+        coinbase: null as any,
+        generic: null as any
+    };
+
+    if (typeof window !== 'undefined' && window.ethereum) {
+        // Check for Rabby
+        if (window.ethereum.isRabby) {
+            wallets.rabby = window.ethereum;
+        }
+
+        // Check for MetaMask
+        if (window.ethereum.isMetaMask) {
+            wallets.metamask = window.ethereum;
+        }
+        
+        // Check for Rainbow
+        if (window.ethereum.isRainbow) {
+            wallets.rainbow = window.ethereum;
+        }
+        
+        // Check for Coinbase
+        if (window.ethereum.isCoinbaseWallet) {
+            wallets.coinbase = window.ethereum;
+        }
+        
+        // Check for multiple providers
+        if (window.ethereum.providers && Array.isArray(window.ethereum.providers)) {
+            window.ethereum.providers.forEach((provider: any) => {
+                if (provider.isRabby) wallets.rabby = provider;
+                if (provider.isMetaMask) wallets.metamask = provider;
+                if (provider.isRainbow) wallets.rainbow = provider;
+                if (provider.isCoinbaseWallet) wallets.coinbase = provider;
+            });
+        }
+        
+        // Fallback to generic ethereum if no specific wallet detected
+        if (!wallets.rabby && !wallets.metamask && !wallets.rainbow && !wallets.coinbase) {
+            wallets.generic = window.ethereum;
+        }
+    }
+
+    return wallets;
+}
+
+// Get preferred wallet provider
+function getPreferredWalletProvider() {
+    const wallets = detectAvailableWallets();
+    
+    // Priority order: Rainbow > MetaMask > Coinbase > Generic
+    if (wallets.metamask) return wallets.metamask;
+    if (wallets.rabby) return wallets.rabby; 
+    if (wallets.rainbow) return wallets.rainbow;
+    if (wallets.coinbase) return wallets.coinbase;
+    if (wallets.generic) return wallets.generic;
+    
+    return null;
+}
+
 //get the wallet client using browser wallet
 export async function getWalletClient() {
-    if(!window.ethereum) {
-        throw new Error('Please install MetaMask or another web3 wallet');
+    const provider = getPreferredWalletProvider();
+
+    if (!provider) {
+        throw new Error('No supported wallet found. Please install MetaMask, Rainbow, or Coinbase Wallet.');
     }
 
     const chainId = currentChainId();
@@ -53,10 +119,14 @@ export async function getWalletClient() {
         transport: custom(window.ethereum)
     })
 
-    const [address] = await walletClient.requestAddresses(); 
-    console.log('Connected Address: ', address, 'ChainID: ', chainId);
-
-    return {walletClient, address}
+    try {
+        const [address] = await walletClient.requestAddresses(); 
+        console.log('Connected Address: ', address, 'ChainID: ', chainId);
+        return {walletClient, address};
+    } catch (error) {
+        console.error('Failed to connect wallet:', error);
+        throw new Error('Failed to connect wallet. Please try again.');
+    }
 }
 
 //Write Functions

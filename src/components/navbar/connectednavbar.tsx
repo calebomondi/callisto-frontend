@@ -15,6 +15,7 @@ import { getWalletClient } from "@/blockchain-services/useFvkry";
 export default function ConnectedNavbar() {
   const { isConnected } = useAccount();
   const location = useLocation();
+
   const [path,setPath] = useState<string>('dashboard');
   const [tokensData, setTokensData] = useState<TokenBalances[]>([]);
   
