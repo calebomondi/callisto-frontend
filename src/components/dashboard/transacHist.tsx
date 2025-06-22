@@ -60,7 +60,7 @@ const TransactionDashboard = () => {
   const [duration, setDuration] = useState<number>(0);
 
   useEffect(() => {
-    const timer: NodeJS.Timeout = setTimeout(() => {
+    const timer = window.setTimeout(() => {
     if (chainID !== currentChainId() || userAddress !== address) {
       setChainID(currentChainId());
       setUserAddress(address);
