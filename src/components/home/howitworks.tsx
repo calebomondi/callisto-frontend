@@ -107,7 +107,7 @@ export default function HowItWorks() {
           ))}
         </motion.div>
         <div className="flex justify-end mt-2">
-          <Button onClick={handleDocumentation} className="bg-transaprent hover:bg-gray-600">
+          <Button onClick={handleDocumentation} className="bg-transaprent hover:bg-purple-600">
               Learn More <ArrowRight />
           </Button>
         </div>
