@@ -74,7 +74,7 @@ export default function Navbar() {
                 className="md:px-5 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-base font-semibold hover:scale-105 transition-all flex items-center"
                 onClick={handleDash}
               >
-                Connect Wallet
+                Launch App
                 <LockKeyhole className="ml-2 w-5 h-5 animate-pulse" />
               </motion.button>
             </div>
@@ -108,7 +108,7 @@ export default function Navbar() {
                 className="md:px-5 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-base font-semibold hover:scale-105 transition-all flex items-center"
                 onClick={handleDash}
               >
-                Connect Wallet
+                Launch App
                 <LockKeyhole className="ml-2 w-5 h-5 animate-pulse" />
               </motion.button>
             </div>
