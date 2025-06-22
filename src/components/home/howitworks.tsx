@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Wallet, Lock, Clock, ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -40,6 +41,12 @@ const itemVariants = {
 };
 
 export default function HowItWorks() {
+  const navigate = useNavigate()
+
+  const handleDocumentation = () => {
+    navigate("/documentation");
+  }
+
   return (
     <section className="py-20 " id="how-it-works">
       <div className="container mx-auto px-6">
@@ -99,12 +106,10 @@ export default function HowItWorks() {
             </motion.div>
           ))}
         </motion.div>
-        <div className="flex justify-end ">
-            <a href="/documentation">
-                <Button className="bg-transaprent hover:bg-gray-600">
-                    Learn More <ArrowRight />
-                </Button>
-            </a>
+        <div className="flex justify-end mt-2">
+          <Button onClick={handleDocumentation} className="bg-transaprent hover:bg-gray-600">
+              Learn More <ArrowRight />
+          </Button>
         </div>
       </div>
       
