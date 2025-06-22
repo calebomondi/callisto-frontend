@@ -30,19 +30,19 @@ const Documentation: React.FC = () => {
             </div>
             <h2 className="text-3xl font-bold mb-4">What Is FVP?</h2>
             <p className='mb-4'>
-                FVP is a self-custodial financial management tool that allows users to manage their crypto assets by locking them in virtual with an aim to foster financial discipline and promote long term investment. 
+                FVP is a self-custodial financial management tool that allows users to manage their crypto assets by locking them in virtual vaults with an aim to foster financial discipline and promote long term investment. 
             </p>
-            <hr className='mb-4 bg-slate-300'/>
+            <hr className='mb-4 h-0.5 border-0 bg-purple-300'/>
             <h2 className="text-3xl font-bold mb-4">Key Features</h2>
             <div className='space-y-2 mb-4'>
-                <p>• A dashboard that show a summary of yout locked assets in details</p>
+                <p>• A dashboard that shows a summary of your locked assets in details</p>
                 <p>• Lock ETH and ERC-20 tokens for a specified duration or goal.</p>
                 <p>• Add unlock schedule to a vault to unlock portions of the locked asset over a given period of time.</p>
                 <p>• Add more assets to an existing locked vault.</p>
                 <p>• Withdraw assets upon lock period expiration.</p>
                 <p>• Partial and full withdrawal options</p>
             </div>
-            <hr className='mb-4'/>
+            <hr className='mb-4 h-0.5 border-0 bg-purple-300'/>
             <h2 className="text-3xl font-bold mb-4">Use Cases</h2>
             <div className='space-y-2 mb-4'>
                 <p><span className='font-semibold text-purple-600'>• Short and Long Term Savings:</span> You can lock your assets for days, weeks, months and upto years</p>
@@ -60,7 +60,7 @@ const Documentation: React.FC = () => {
           <h2 className="text-3xl font-bold mb-4">Connecting Your Wallet</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Install a Web3 wallet (MetaMask, WalletConnect).</li>
-            <li>Ensure you're on the correct network (Base Sepolia | Base Mainnet).</li>
+            <li>Ensure you're on the correct network (Base Sepolia or Base Mainnet).</li>
             <li>Click "Connect Wallet" in the main interface.</li>
             <li>Approve the connection in your wallet.</li>
             <div className="max-w-4xl mx-auto">
@@ -75,26 +75,26 @@ const Documentation: React.FC = () => {
             <li>Click the Create Vault button on the form to initiate the asset transfer.</li>
             <li>Confirm the transaction on your wallet.</li>
             <li>Check 'My Vaults' for the vault you have created.</li>
-            <li>Check 'Transaction' for the transaction of the new vault.</li>
+            <li>Check the Transactions table for the transaction of the new vault.</li>
             <div className="max-w-4xl mx-auto">
               <img src="/lock_modal.png" alt="" className="object-contain" />
             </div>
           </ol>
-          <hr className='mb-4'/>
+          <hr className='mb-4 h-0.5 border-0 bg-purple-300'/>
           <h2 className="text-3xl font-bold mb-4">Adding More Assets</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Navigate to the 'My Vaults' section.</li>
             <li>Search and select the vault you want to add to and click the 'View Details' button.</li>
-            <li>Click the 'Add To Lock' button to open the form modal.</li>
+            <li>Click the 'Add To Vault' button to open the form modal.</li>
             <li>Enter the amount of the asset you want to add and click the 'ADD' button</li>
-            <li>Confirm the transfer transaction on your wallet.</li>
+            <li>Confirm the transaction on your wallet.</li>
             <li>View your vault for the added asset</li>
-            <li>Check 'Transaction' for the transaction of the added asset.</li>
+            <li>Check the Transactions table for the transaction of the added asset.</li>
             <div className="max-w-4xl mx-auto">
               <img src="/addtolockpic.png" alt="" className="object-contain" />
             </div>
           </ol>
-          <hr className='mb-4'/>
+          {/* <hr className='mb-4'/>
           <h2 className="text-3xl font-bold mb-4">Adding Unlock Schedule</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Navigate to the 'My Vaults' section <span className='italic'>(The Vault should be fixed-based)</span>.</li>
@@ -106,8 +106,8 @@ const Documentation: React.FC = () => {
             <div className="max-w-4xl mx-auto">
               <img src="/vault_dashboard.png" alt="" className="object-contain" />
             </div>
-          </ol>
-          <hr className='mb-4'/>
+          </ol> */}
+          <hr className='mb-4 h-0.5 border-0 bg-purple-300'/>
           <h2 className="text-3xl font-bold mb-4">Withdrawing Your Asset</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Navigate to the 'My Vaults' section.</li>
@@ -117,17 +117,17 @@ const Documentation: React.FC = () => {
             <li>Confirm the withdrawal transaction on your wallet.</li>
             <li>View your vault for the new balance.</li>
             <li>Check your wallet balance.</li>
-            <li>Check 'Transaction' for the transaction of the withdrawal.</li>
+            <li>Check the Transaction table for the transaction of the withdrawal.</li>
             <div className="max-w-4xl mx-auto">
               <img src="/withdrawpic.png" alt="" className="object-contain" />
             </div>
           </ol>
-          <hr className='mb-4'/>
+          <hr className='mb-4 h-0.5 border-0 bg-purple-300'/>
           <h2 className="text-3xl font-bold mb-4">Delete A Vault</h2>
           <ol className="list-decimal pl-6 space-y-2 mb-4">
             <li>Navigate to the 'My Vaults' section.</li>
             <li>Search and select the vault you want to delete and click the 'View Details' button.</li>
-            <li>Make sure the vault has no asset, if so, withdraw all the assets.</li>
+            <li>Make sure the vault has no assets, if so, withdraw all the assets.</li>
             <li>Click the 'Delete' button </li>
             <li>Confirm the deletion transaction on your wallet.</li>
             <div className="max-w-4xl mx-auto">
@@ -148,7 +148,7 @@ const Documentation: React.FC = () => {
   return (
     <div className="md:flex h-screen">
       {/* Sidebar */}
-      <div className="md:w-64 p-4 shadow-md sticky top-0 left-0 dark:bg-black/50 bg-white/90 md:bg-transparent">
+      <div className="md:w-64 p-4 shadow-md sticky top-0 left-0 bg-black/50 md:bg-transparent">
         <div className="flex items-center md:justify-evenly mb-6">
             <a href="/">
                 <img
@@ -159,7 +159,7 @@ const Documentation: React.FC = () => {
             </a>
             <h1 className="text-xl font-bold">Documentation</h1>
         </div>
-        <nav className='flex md:flex-col'>
+        <nav className='flex flex-col'>
           {docSections.map((section) => (
             <button
               key={section.id}
@@ -182,7 +182,7 @@ const Documentation: React.FC = () => {
                 className="md:px-5 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-base font-semibold hover:scale-105 transition-all flex items-center"
                 onClick={handleDash}
             >
-                Start Locking
+                Launch Wallet
                 <LockKeyhole className="ml-2 w-5 h-5 animate-pulse" />
             </motion.button>
         </div>
