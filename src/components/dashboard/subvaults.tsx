@@ -16,7 +16,25 @@ export default function SubVaultsContainer() {
   const [loading, setLoading] = useState(false)
 
   const [error, setError] = useState<string | null>(null)
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
+  const chainId = currentChainId();
+
+  const [chainID, setChainID] = useState<number>(chainId);
+  const [userAddress, setUserAddress] = useState<string | undefined>(address);
+  const [duration, setDuration] = useState<number>(0);
+
+  useEffect(() => {
+    const timer: NodeJS.Timeout = setTimeout(() => {
+    if (chainID !== currentChainId() || userAddress !== address) {
+      setChainID(currentChainId());
+      setUserAddress(address);
+      setDuration(0);
+    }
+      setDuration(prevDuration => prevDuration + 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [duration]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +75,7 @@ export default function SubVaultsContainer() {
     }
 
     fetchData()
-  }, [location, isConnected])
+  }, [location, isConnected, chainID, userAddress]);
 
   const renderContent = () => {
     if (loading) {

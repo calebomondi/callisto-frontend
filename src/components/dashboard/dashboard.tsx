@@ -9,9 +9,27 @@ import Skeletun from '../skeletons/skeleton';
 import { currentChainId, getWalletClient } from '@/blockchain-services/useFvkry';
 
 export default function Dashboard() {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [loading, setLoading] = useState<boolean>(false)
   const [dashData, setDashData] = useState<DashboardData | null>(null)
+  const chainId = currentChainId();
+
+  const [chainID, setChainID] = useState<number>(chainId);
+  const [userAddress, setUserAddress] = useState<string | undefined>(address);
+  const [duration, setDuration] = useState<number>(0);
+
+  useEffect(() => {
+    const timer: NodeJS.Timeout = setTimeout(() => {
+    if (chainID !== currentChainId() || userAddress !== address) {
+      setChainID(currentChainId());
+      setUserAddress(address);
+      setDuration(0);
+    }
+      setDuration(prevDuration => prevDuration + 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [duration]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +72,7 @@ export default function Dashboard() {
     }
 
     fetchData()
-  }, [isConnected])
+  }, [isConnected, chainID, userAddress]);
 
   if (loading) {
     return (

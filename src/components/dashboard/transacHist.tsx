@@ -35,8 +35,7 @@ import { useAccount } from 'wagmi';
 import { CustomTooltipProps, AnalysisData } from '@/types/index.types';
 import { sampleAnalyzedData } from './mockplatformdata';
 import apiService from '@/backendServices/apiservices';
-import { currentChainId } from '@/blockchain-services/useFvkry';
-import { getWalletClient } from '@/blockchain-services/useFvkry';
+import { currentChainId, getWalletClient } from '@/blockchain-services/useFvkry';
 import WalletCharacter from './walletcharacter';
 const chartConfig = {
   desktop: {
@@ -52,8 +51,26 @@ const chartConfig = {
 const COLORS = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#6366F1', '#14B8A6', '#F97316'];
 
 const TransactionDashboard = () => {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  const chainId = currentChainId();
   const [analysisData, setAnalysisData] = useState<AnalysisData>(sampleAnalyzedData);
+
+  const [chainID, setChainID] = useState<number>(chainId);
+  const [userAddress, setUserAddress] = useState<string | undefined>(address);
+  const [duration, setDuration] = useState<number>(0);
+
+  useEffect(() => {
+    const timer: NodeJS.Timeout = setTimeout(() => {
+    if (chainID !== currentChainId() || userAddress !== address) {
+      setChainID(currentChainId());
+      setUserAddress(address);
+      setDuration(0);
+    }
+      setDuration(prevDuration => prevDuration + 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [duration]);
 
   useEffect(() => {
     if(isConnected) {
@@ -71,7 +88,7 @@ const TransactionDashboard = () => {
     } else {
       setAnalysisData(sampleAnalyzedData);
     }
-  }, [isConnected]);
+  }, [isConnected, chainID, userAddress]);
 
   const formatCurrency = (value:number, currency = 'ETH') => {
     if (Math.abs(value) > 1000000) {

@@ -153,6 +153,9 @@ const VaultDetails = ({ showNavbar = true, vault }: VaultDetailsProps) => {
             throw new Error(`Error ${error} occurred!`)
           }
         } 
+        if(!isConnected) {
+          navigate("/myvaults");
+        }
     }
     fetchVaultData();
   }, [vault, isConnected, vaultId, address, lockAsset, chainId, update]);

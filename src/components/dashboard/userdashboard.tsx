@@ -417,38 +417,6 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
   };
   
   return (
-    // <div className=" px-2 sm:px-2 lg:px-8 py-2 min-h-screen bg-[#1a1122]">
-    //   <Sidebar onVaultSelect={handleVaultSelect} />
-    //   {/* Navigation tabs */}
-    //   {/* <div className="border-b border-gray-600 border-gray-300 mb-6 sticky top-20 dark:bg-black bg-white shadow-md dark:bg-opacity-70 px-3 rounded-sm z-10">
-    //     <nav className="-mb-px flex space-x-8">
-    //       {[
-    //         { id: 'overview' as const, label: 'Overview' }, 
-    //         { id: 'assets' as const, label: 'Assets' }, 
-    //       ].map((tab) => (
-    //         <button
-    //           key={tab.id}
-    //           onClick={() => setSelectedTab(tab.id)}
-    //           className={`
-    //             py-4 px-1 border-b-2 font-medium text-sm
-    //             ${selectedTab === tab.id
-    //               ? 'border-amber-500 text-amber-600'
-    //               : 'border-transparent text-amber-400  hover:dark:text-gray-600 hover:border-gray-300'}
-    //           `}
-    //         >
-    //           {tab.label}
-    //         </button>
-    //       ))}
-    //     </nav>
-    //   </div> */}
-      
-    //   {/* Tab content */}
-    //   {/* <div className="mt-6">
-    //     {selectedTab === 'overview' && renderOverview()}
-    //     {selectedTab === 'assets' && renderAssets()}
-    //   </div> */}
-    // </div>
-
     <div className='flex bg-gradient-to-b from-gray-900 to-black h-screen overflow-hidden'>
       <Sidebar onVaultSelect={handleVaultSelect} />
 

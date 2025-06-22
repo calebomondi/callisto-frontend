@@ -13,11 +13,28 @@ import { currentChainId } from "@/blockchain-services/useFvkry";
 import { getWalletClient } from "@/blockchain-services/useFvkry";
 
 export default function ConnectedNavbar() {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const location = useLocation();
+  const chainId = currentChainId();
 
   const [path,setPath] = useState<string>('dashboard');
   const [tokensData, setTokensData] = useState<TokenBalances[]>([]);
+  const [chainID, setChainID] = useState<number>(chainId);
+  const [userAddress, setUserAddress] = useState<string | undefined>(address);
+  const [duration, setDuration] = useState<number>(0);
+
+  useEffect(() => {
+    const timer: NodeJS.Timeout = setTimeout(() => {
+    if (chainID !== currentChainId() || userAddress !== address) {
+      setChainID(currentChainId());
+      setUserAddress(address);
+      setDuration(0);
+    }
+      setDuration(prevDuration => prevDuration + 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [duration]);
   
   useEffect(() => {
     const path = location.pathname.substring(1);
@@ -39,7 +56,7 @@ export default function ConnectedNavbar() {
       fetchTokensData();
     }
 
-  }, [isConnected, location.pathname]);
+  }, [isConnected, chainID, userAddress]);
 
   return (
     <>
@@ -116,7 +133,7 @@ export default function ConnectedNavbar() {
     </div>
     {isConnected && (
       <div className="flex justify-center items-center p-2 text-md gap-2 font-semibold">
-        <span className="text-gray-300">Balances:</span>
+        <span className="text-gray-300">Balance:</span>
         {
           tokensData.map((asset, index) => (
             <p key={index} className="flex gap-1">

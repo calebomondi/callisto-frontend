@@ -22,7 +22,7 @@ export default function LockAsset() {
         symbol: "", 
         title: "", 
         totalAmount: "", 
-        vaultType: "schedule", 
+        vaultType: "schedule",
         lockPeriod: "", 
         slip: "", 
         unLockDuration: "", 
@@ -36,6 +36,7 @@ export default function LockAsset() {
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false)
     const [showSecurityNotice, setShowSecurityNotice] = useState<boolean>(false)
     const [tokensData, setTokensData] = useState<TokenBalances[]>([])
+    
 
     const handleConfirmCreationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -319,6 +320,17 @@ export default function LockAsset() {
     <div className="bg-gray-900">
         <div className="m-2 p-2 flex flex-col justify-center items-center rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-left">Create New Vault</h2>
+            <div className="flex justify-center items-center p-2 text-md gap-2 font-semibold">
+                <span className="text-gray-300">Balance:</span>
+                {
+                    tokensData.map((asset, index) => (
+                        <p key={index} className="flex gap-1">
+                        <span>{asset.symbol}</span>
+                        (<span>{Math.floor(parseFloat(asset.balance))}</span>)
+                        </p>
+                    ))
+                }
+            </div>
             <form onSubmit={handleSubmit} className="w-full p-1">
                 <div className="mb-2">
                     <Label className="mb-2">Vault Name</Label>
