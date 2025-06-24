@@ -82,7 +82,7 @@ const VaultCard: React.FC<VaultCardProps> = ({ subvault, chainId, lockAsset }) =
             {/* Countdown Timer */}
             <div className="flex items-center space-x-2">
               <Timer className="w-4 h-4 text-gray-400" />
-              <p className="text-gray-400">{timeLeft}</p>
+              <p className={`${timeLeft === 'Expired' ? 'text-red-400' : 'text-gray-400'}`}>{timeLeft}</p>
             </div>
           </div>
   
@@ -177,9 +177,17 @@ const VaultGrid: React.FC<VaultGridProps> = ({ vaultData}) => {
       const matchesAsset = selectedAsset ? vault.symbol === selectedAsset : true;
       const matchesLockType = selectedLockType ? vault.vaultType === selectedLockType : true;
       const matchesExpiry = showNearExpiry ? isExpiringSoon(vault.endDate) : true;
-      const matchesExpired = showExpired ? isExpired(vault.endDate) : !isExpired(vault.endDate);
+      const matchesExpired = showExpired ? isExpired(vault.endDate) : true;
 
       return matchesSearch && matchesAsset && matchesLockType && matchesExpiry && matchesExpired;
+    });
+
+    // Sort: non-expired first, then expired
+    filtered.sort((a, b) => {
+      const aExpired = isExpired(a.endDate);
+      const bExpired = isExpired(b.endDate);
+      if (aExpired === bExpired) return 0;
+      return aExpired ? 1 : -1; // non-expired first
     });
 
     setFilteredVaults(filtered);
