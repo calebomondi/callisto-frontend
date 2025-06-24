@@ -1,8 +1,9 @@
 import { Card } from '@/components/ui/card';
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ScreenshotCard from './screenshotcard';
 import domtoimage from 'dom-to-image-more';
 import { useToast } from "@/hooks/use-toast";
+import { CircleCheckBigIcon } from 'lucide-react';
 
 interface WalletCharacterProps {
   score: number;
@@ -47,6 +48,9 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
 
   const character = getCharacter(score);
   const { toast } = useToast()
+  const [ showModal, setShowModal ] = useState<boolean>(false)
+  const [countdown, setCountdown] = useState(3);
+
 
   const screenshotRef = useRef<HTMLDivElement>(null);
   
@@ -62,20 +66,9 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
         link.download = `${character.name}-wallet-score.png`;
         link.click();
 
-        toast({
-          title: "Image downloaded.",
-          description: "Ready to post on X!"
-        })
+        setCountdown(3);
+        setShowModal(true)
 
-        await new Promise((res) => setTimeout(res, 1000));
-
-        const tweetText = encodeURIComponent(
-          `Just got my Wallet Score from fvp.finance 💸\n\n I'm a ${character.name}${character.tweetEmoji}! \n Find out your crypto trading personality today!\n`
-        );
-        const hashtags = "FVP,WalletScore,DeFi";
-        const twitterUrl = `https://x.com/intent/tweet?text=${tweetText}&hashtags=${hashtags}`;
-        window.open(twitterUrl, "_blank");
-        
       } catch (error) {
         console.error("Failed to download and share:", error)
         toast({
@@ -85,6 +78,27 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
       }
     }
   };
+
+  useEffect(() => {
+    if(!showModal) return;
+
+    if(countdown === 0){
+      const tweetText = encodeURIComponent(
+        `Just got my Wallet Score from fvp.finance 💸\n\n I'm a ${character.name}${character.tweetEmoji}! \n Find out your crypto trading personality today!\n`
+      );
+      const hashtags = "FVP,WalletScore,DeFi";
+      const tweetUrl = `https://x.com/intent/tweet?text=${tweetText}&hashtags=${hashtags}`;
+      window.open(tweetUrl, "_blank");
+      setShowModal(false);
+      return
+    }
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [showModal, countdown])
 
 
   return (
@@ -129,7 +143,7 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
             Wallet Score = (Frequent Txs * 2) + (Impulsive Txs * 3)
           </p>
           <button
-           className="px-4 py-2 mt-2 bg-purple-500 rounded-md hover:scale-95 font-semibold"
+           className="px-8 py-2 mt-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-md hover:scale-95 font-semibold"
            onClick={handleShare}
           >
             Share on X
@@ -145,6 +159,27 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
       score={score}
       message={character.message}
     />
+    {showModal && (
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+        <div className="bg-gray-900 p-6 rounded-lg max-w-sm w-full">
+          <div className='flex flex-col items-center gap-y-3 justify-center'>
+            <CircleCheckBigIcon className='text-green-500' size={36}/>
+            <h3 className="font-bold text-lg">Image Downloaded!</h3>
+          </div>
+          <p className="py-4 text-gray-400">
+            You're being redirected to X (Twitter) to share your wallet score in {countdown}.
+          </p>
+          {/* <div className="flex justify-end">
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </button>
+          </div> */}
+        </div>
+      </div>
+    )}
     </>
   );
 };
