@@ -1,4 +1,8 @@
 import { Card } from '@/components/ui/card';
+import { useRef } from "react";
+import ScreenshotCard from './screenshotcard';
+import domtoimage from 'dom-to-image-more';
+import { useToast } from "@/hooks/use-toast";
 
 interface WalletCharacterProps {
   score: number;
@@ -15,7 +19,8 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
         description: "Disciplined and wise with money",
         color: "from-green-500 to-emerald-600",
         message: "You're crushing it! Your patience is paying off.",
-        traits: ["Diamond Hands", "Risk Aware", "Long-term Thinker"]
+        traits: ["Diamond Hands", "Risk Aware", "Long-term Thinker"],
+        tweetEmoji: "🧘‍♂️"
       };
     } else if (score <= 80) {
       return {
@@ -24,7 +29,8 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
         description: "Learning and improving",
         color: "from-yellow-500 to-orange-500",
         message: "You're on the right track! Small changes = big gains.",
-        traits: ["Quick Learner", "Adaptable", "Growth Mindset"]
+        traits: ["Quick Learner", "Adaptable", "Growth Mindset"],
+        tweetEmoji: "🧐"
       };
     } else {
       return {
@@ -33,14 +39,56 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
         description: "Needs guidance and discipline",
         color: "from-red-500 to-pink-500",
         message: "Time to level up! Every expert was once a beginner.",
-        traits: ["High Energy", "Risk Taker", "Potential for Growth"]
+        traits: ["High Energy", "Risk Taker", "Potential for Growth"],
+        tweetEmoji: "🤪"
       };
     }
   };
 
   const character = getCharacter(score);
+  const { toast } = useToast()
+
+  const screenshotRef = useRef<HTMLDivElement>(null);
+  
+  const handleShare = async () => {
+    if(screenshotRef.current){
+      try {
+        const dataUrl = await domtoimage.toPng(screenshotRef.current, {
+        quality: 1,
+        backgroundColor: "#1a1a2e",
+      });
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `${character.name}-wallet-score.png`;
+        link.click();
+
+        toast({
+          title: "Image downloaded.",
+          description: "Ready to post on X!"
+        })
+
+        await new Promise((res) => setTimeout(res, 1000));
+
+        const tweetText = encodeURIComponent(
+          `Just got my Wallet Score from fvp.finance 💸\n\n I'm a ${character.name}${character.tweetEmoji}! \n Find out your crypto trading personality today!\n`
+        );
+        const hashtags = "FVP,WalletScore,DeFi";
+        const twitterUrl = `https://x.com/intent/tweet?text=${tweetText}&hashtags=${hashtags}`;
+        window.open(twitterUrl, "_blank");
+        
+      } catch (error) {
+        console.error("Failed to download and share:", error)
+        toast({
+          title: "Something went wrong while sharing",
+          description: "Please try again"
+        })
+      }
+    }
+  };
+
 
   return (
+    <>
     <Card className={`border-purple-500/20 p-6 text-center`}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="flex justify-center items-center">
@@ -80,9 +128,24 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
           <p className="py-1 text-gray-500 italic text-sm">
             Wallet Score = (Frequent Txs * 2) + (Impulsive Txs * 3)
           </p>
+          <button
+           className="px-4 py-2 mt-2 bg-purple-500 rounded-md hover:scale-95 font-semibold"
+           onClick={handleShare}
+          >
+            Share on X
+          </button>
         </div>
       </div>
     </Card>
+     {/* Hidden screenshot card */}
+    <ScreenshotCard
+      ref={screenshotRef}
+      emoji={character.emoji}
+      name={character.name}
+      score={score}
+      message={character.message}
+    />
+    </>
   );
 };
 
