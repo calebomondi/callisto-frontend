@@ -1,9 +1,10 @@
 import { Card } from '@/components/ui/card';
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import ScreenshotCard from './screenshotcard';
 import domtoimage from 'dom-to-image-more';
 import { useToast } from "@/hooks/use-toast";
-import { CircleCheckBigIcon } from 'lucide-react';
+//import axios from "axios";
+//import { CircleCheckBigIcon } from 'lucide-react'; useState useEffect
 
 interface WalletCharacterProps {
   score: number;
@@ -48,27 +49,49 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
 
   const character = getCharacter(score);
   const { toast } = useToast()
-  const [ showModal, setShowModal ] = useState<boolean>(false)
-  const [countdown, setCountdown] = useState(3);
+  // const [ showModal, setShowModal ] = useState<boolean>(false)
+  // const [countdown, setCountdown] = useState(3);
 
 
   const screenshotRef = useRef<HTMLDivElement>(null);
   
-  const handleShare = async () => {
+  // const handleShare = async () => {
+  //   if(screenshotRef.current){
+  //     try {
+  //       const dataUrl = await domtoimage.toPng(screenshotRef.current, {
+  //       quality: 1,
+  //       backgroundColor: "#1a1a2e",
+  //     });
+  //       const link = document.createElement("a");
+  //       link.href = dataUrl;
+  //       link.download = `${character.name}-wallet-score.png`;
+  //       link.click();
+
+  //       setCountdown(3);
+  //       setShowModal(true)
+
+  //     } catch (error) {
+  //       console.error("Failed to download and share:", error)
+  //       toast({
+  //         title: "Something went wrong while sharing",
+  //         description: "Please try again"
+  //       })
+  //     }
+  //   }
+  // };
+
+    const handleShare = async () => {
     if(screenshotRef.current){
       try {
         const dataUrl = await domtoimage.toPng(screenshotRef.current, {
         quality: 1,
         backgroundColor: "#1a1a2e",
       });
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = `${character.name}-wallet-score.png`;
-        link.click();
+        localStorage.setItem("fvp-wallet-tweet-image", dataUrl);
+        localStorage.setItem("fvp-wallet-tweet-pending", "true");
 
-        setCountdown(3);
-        setShowModal(true)
-
+        // Start OAuth login
+        window.location.href = "http://fvp.finance/api/twitter/login";
       } catch (error) {
         console.error("Failed to download and share:", error)
         toast({
@@ -79,26 +102,58 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
     }
   };
 
-  useEffect(() => {
-    if(!showModal) return;
+  // useEffect(() => {
+  //   if(!showModal) return;
 
-    if(countdown === 0){
-      const tweetText = encodeURIComponent(
-        `Just got my Wallet Score from fvp.finance 💸\n\n I'm a ${character.name}${character.tweetEmoji}! \n Find out your crypto trading personality today!\n`
-      );
-      const hashtags = "FVP,WalletScore,DeFi";
-      const tweetUrl = `https://x.com/intent/tweet?text=${tweetText}&hashtags=${hashtags}`;
-      window.open(tweetUrl, "_blank");
-      setShowModal(false);
-      return
-    }
+  //   if(countdown === 0){
+  //     const tweetText = encodeURIComponent(
+  //       `Just got my Wallet Score from fvp.finance 💸\n\n I'm a ${character.name}${character.tweetEmoji}! \n Find out your crypto trading personality today!\n`
+  //     );
+  //     const hashtags = "FVP,WalletScore,DeFi";
+  //     const tweetUrl = `https://x.com/intent/tweet?text=${tweetText}&hashtags=${hashtags}`;
+  //     window.open(tweetUrl, "_blank");
+  //     setShowModal(false);
+  //     return
+  //   }
 
-    const interval = setInterval(() => {
-      setCountdown((prev) => prev - 1);
-    }, 1000);
+  //   const interval = setInterval(() => {
+  //     setCountdown((prev) => prev - 1);
+  //   }, 1000);
 
-    return () => clearInterval(interval);
-  }, [showModal, countdown])
+  //   return () => clearInterval(interval);
+  // }, [showModal, countdown])
+
+    // useEffect(() => {
+    //   const image = localStorage.getItem("fvp-wallet-tweet-image");
+    //   const shouldPost = localStorage.getItem("fvp-wallet-tweet-pending") === "true";
+
+    //   if (!image || !shouldPost) return;
+
+    //   const postTweet = async () => {  
+    //     const text = `Just got my Wallet Score from fvp.finance 💸\n\n I'm a ${character.name}${character.tweetEmoji}! \n Find out your crypto trading personality today!\n #FVP #DeFi`;
+    //     const base64Image = image.split(",")[1];
+  
+    //     try {
+    //       const res = await axios.post("http://fvp.finance/api/twitter/tweet", {
+    //         text,
+    //         image: base64Image,
+    //       }, {
+    //           withCredentials: true,
+    //       });
+  
+    //     if (res.data?.tweet?.data?.id && res.data?.screen_name) {
+    //       localStorage.removeItem("fvp-wallet-tweet-image");
+    //       localStorage.removeItem("fvp-wallet-tweet-pending");
+    //       const tweetUrl = `https://twitter.com/${res.data.screen_name}/status/${res.data.tweet.data.id}`;
+    //       window.location.href = tweetUrl;
+    //     }
+    //     } catch (err) {
+    //       console.error("Failed to post tweet", err);
+    //     }
+    //   };
+  
+    //   postTweet();
+    // }, []);
 
 
   return (
@@ -159,29 +214,30 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
       score={score}
       message={character.message}
     />
-    {showModal && (
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
-        <div className="bg-gray-900 p-6 rounded-lg max-w-sm w-full">
-          <div className='flex flex-col items-center gap-y-3 justify-center'>
-            <CircleCheckBigIcon className='text-green-500' size={36}/>
-            <h3 className="font-bold text-lg">Image Downloaded!</h3>
-          </div>
-          <p className="py-4 text-gray-400">
-            You're being redirected to X (Twitter) to share your wallet score in {countdown}.
-          </p>
-          {/* <div className="flex justify-end">
-            <button
-              className="btn btn-sm btn-primary"
-              onClick={() => setShowModal(false)}
-            >
-              Close
-            </button>
-          </div> */}
-        </div>
-      </div>
-    )}
     </>
   );
 };
 
 export default WalletCharacter;
+
+    // {showModal && (
+    //   <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+    //     <div className="bg-gray-900 p-6 rounded-lg max-w-sm w-full">
+    //       <div className='flex flex-col items-center gap-y-3 justify-center'>
+    //         <CircleCheckBigIcon className='text-green-500' size={36}/>
+    //         <h3 className="font-bold text-lg">Image Downloaded!</h3>
+    //       </div>
+    //       <p className="py-4 text-gray-400">
+    //         You're being redirected to X (Twitter) in <strong>{countdown}</strong>.
+    //       </p>
+    //       {/* <div className="flex justify-end">
+    //         <button
+    //           className="btn btn-sm btn-primary"
+    //           onClick={() => setShowModal(false)}
+    //         >
+    //           Close
+    //         </button>
+    //       </div> */}
+    //     </div>
+    //   </div>
+    // )}
