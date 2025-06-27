@@ -31,7 +31,7 @@ export default function ConnectedNavbar() {
       setDuration(0);
     }
       setDuration(prevDuration => prevDuration + 1);
-      console.log(`timer: ${duration}`)
+      //console.log(`timer: ${duration}`)
     }, 1000);
 
     return () => clearTimeout(timer);
