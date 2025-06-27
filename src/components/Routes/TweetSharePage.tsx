@@ -5,11 +5,13 @@ import Footer from "../home/footer";
 
 const TweetSharePage = () => {
   useEffect(() => {
-    const postTweet = async () => {
-      const image = localStorage.getItem("fvp-wallet-tweet-image");
-      if (!image) return;
+    const image = localStorage.getItem("fvp-wallet-tweet-image");
+    const shouldPost = localStorage.getItem("fvp-wallet-tweet-pending") === "true";
 
-      const text = `Just got my Wallet Score from fvp.finance 💸\n\nCome see what kind of crypto holder you are!`;
+    if (!image || !shouldPost) return;
+
+    const postTweet = async () => {
+      const text = `Just got my Wallet Score from fvp.finance 💸\\n Find out your crypto trading personality today!\n #FVP #DeFi`;
       const base64Image = image.split(",")[1];
 
       try {
@@ -21,6 +23,8 @@ const TweetSharePage = () => {
         });
 
       if (res.data?.tweet?.data?.id && res.data?.screen_name) {
+        localStorage.removeItem("fvp-wallet-tweet-image");
+        localStorage.removeItem("fvp-wallet-tweet-pending");
         const tweetUrl = `https://twitter.com/${res.data.screen_name}/status/${res.data.tweet.data.id}`;
         window.location.href = tweetUrl;
       }
