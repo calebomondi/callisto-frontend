@@ -4,6 +4,7 @@ import About from '../Documentation/about';
 import Dashboard from '../dashboard/dashboard';
 import SubVaultsContainer from '../dashboard/subvaults';
 import VaultDetails from '../dashboard/vaultdetails';
+import TweetSharePage from './TweetSharePage';
 
 export default function MyRoutes() {
   return (
@@ -28,6 +29,10 @@ export default function MyRoutes() {
             <Route
                 path="/vault"
                 element={ <VaultDetails /> }
+            /> 
+            <Route
+                path="/tweet-share"
+                element={ <TweetSharePage /> }
             /> 
         </Routes>
     </Router>
