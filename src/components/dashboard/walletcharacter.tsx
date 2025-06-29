@@ -198,7 +198,7 @@ const WalletCharacter = ({ score, frequentTxs, impulsiveTxs }: WalletCharacterPr
             Wallet Score = (Frequent Txs * 2) + (Impulsive Txs * 3)
           </p>
           <button
-           className="px-8 py-2 mt-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-md hover:scale-95 font-semibold"
+           className="px-8 hidden py-2 mt-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-md hover:scale-95 font-semibold"
            onClick={handleShare}
           >
             Share on X

@@ -121,7 +121,6 @@ export async function getWalletClient() {
 
     try {
         const [address] = await walletClient.requestAddresses(); 
-        console.log('Connected Address: ', address, 'ChainID: ', chainId);
         return {walletClient, address};
     } catch (error) {
         console.error('Failed to connect wallet:', error);

@@ -29,22 +29,21 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
   const location = useLocation()
   
   const [vaultData, setVaultData] = useState<VaultData[]>([])
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
   
   const [error, setError] = useState<string | null>(null)
   const { isConnected } = useAccount()
   
     useEffect(() => {
       const fetchData = async () => {
-        setLoading(true)
-        console.log(loading)
+        // setLoading(true)
         if(isConnected) {
           try {
             //from ls
             const cachedData = localStorage.getItem('vault_data')
             if(cachedData) {
               setVaultData(JSON.parse(cachedData))
-              setLoading(false)
+              // setLoading(false)
             }
             //
             const chainId = currentChainId()
@@ -64,12 +63,12 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
             setError(err instanceof Error ? err.message : 'Failed to fetch vault data')
             console.log("Error", error)
           } finally {
-            setLoading(false)
+            // setLoading(false)
           }
         } else {
           // If not connected, show mock or public data
           setVaultData(mockVaultsData)
-          setLoading(false)
+          // setLoading(false)
           localStorage.removeItem('vault_data')
         }
       }
