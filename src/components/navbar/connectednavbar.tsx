@@ -12,7 +12,11 @@ import apiService from "@/backendServices/apiservices";
 import { currentChainId } from "@/blockchain-services/useFvkry";
 import { getWalletClient } from "@/blockchain-services/useFvkry";
 
-export default function ConnectedNavbar() {
+interface ConnectedNavbarProps{
+  isMobileOpen?: boolean;
+  setIsMobileOpen?: (isOpen: boolean) => void;
+}
+export default function ConnectedNavbar({ setIsMobileOpen }: ConnectedNavbarProps) {
   const { isConnected, address } = useAccount();
   const location = useLocation();
   const chainId = currentChainId();
@@ -61,8 +65,8 @@ export default function ConnectedNavbar() {
 
   return (
     <>
-    <div className="navbar bg-gray-900 border-b border-gray-800 sticky top-0 shadow-lg z-50">
-      <div className="navbar-start">
+    <div className="navbar bg-gray-900 border-b border-gray-800 sticky top-0 shadow-lg z-30">
+      {/* <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <Menu />
@@ -87,7 +91,21 @@ export default function ConnectedNavbar() {
             />
           </a>
         </div>
-      </div>
+      </div> */}
+      <div className="navbar-start">
+        {/* Modified Hamburger Button */}
+        <button 
+          className="btn btn-ghost lg:hidden"
+          onClick={() => setIsMobileOpen?.(true)}
+        >
+          <Menu />
+        </button>
+        <div className="flex items-center md:ml-4">
+          <a href="/">
+            <img src="/new_logo.png" alt="" className='md:w-6 w-6' />
+          </a>
+        </div>
+    </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 font-semibold">
           <li className={path === 'dashboard' ? 'text-purple-400' : ''}>
@@ -133,7 +151,7 @@ export default function ConnectedNavbar() {
       </div>
     </div>
     {isConnected && (
-      <div className="flex justify-center items-center p-2 text-md gap-2 font-semibold">
+      <div className="flex justify-center bg-gray-900 items-center p-2 text-md gap-2 font-semibold">
         <span className="text-gray-300">Balance:</span>
         {
           tokensData.map((asset, index) => (

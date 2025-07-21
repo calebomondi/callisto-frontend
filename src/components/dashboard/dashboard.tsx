@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [chainID, setChainID] = useState<number>(chainId);
   const [userAddress, setUserAddress] = useState<string | undefined>(address);
   const [duration, setDuration] = useState<number>(0);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -77,7 +78,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="bg-gradient-to-b from-gray-900 to-black h-screen">
-        <ConnectedNavbar />
+        <ConnectedNavbar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen}  />
         <Skeletun />
       </div>
     )
@@ -85,11 +86,11 @@ export default function Dashboard() {
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-black">
-      <ConnectedNavbar />
+      <ConnectedNavbar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen}  />
       <p className={`text-center my-2 text-purple-500 ${isConnected ? 'hidden' : ''}`}>
         Connect your wallet to view your dashboard
       </p>
-      {dashData && <UserVaultDashboard data={dashData} />}
+      {dashData && <UserVaultDashboard data={dashData} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen}  />}
     </div>
   )
 }

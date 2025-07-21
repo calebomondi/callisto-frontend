@@ -105,7 +105,7 @@ export default function Navbar() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="md:px-5 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-base font-semibold hover:scale-105 transition-all flex items-center"
+                className="md:px-5 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-semibold hover:scale-105 transition-all flex items-center"
                 onClick={handleDash}
               >
                 Launch App

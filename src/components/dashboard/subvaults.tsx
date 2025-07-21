@@ -8,8 +8,14 @@ import Skeletun from "../skeletons/skeleton"
 import apiService from "@/backendServices/apiservices"
 import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
 import { useLocation } from "react-router-dom"
+import Sidebar from "./sidebar"
 
-export default function SubVaultsContainer() {
+interface SubVaultsProps {
+  isMobileOpen: boolean;
+  setIsMobileOpen: (isOpen: boolean) => void;
+}
+
+export default function SubVaultsContainer({isMobileOpen, setIsMobileOpen}: SubVaultsProps) {
   const location = useLocation()
 
   const [vaultData, setVaultData] = useState<VaultData[]>([])
@@ -98,9 +104,12 @@ export default function SubVaultsContainer() {
 
   return (
     <>
-      <ConnectedNavbar />
-      <div className="container mx-auto">
-        {renderContent()}
+      <ConnectedNavbar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen}/>
+      <div className="flex">
+        <Sidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} ifOnVaultsPage={true} showOnDesktop={false} />
+        <div className="container mx-auto">
+          {renderContent()}
+        </div>
       </div>
     </>
   )

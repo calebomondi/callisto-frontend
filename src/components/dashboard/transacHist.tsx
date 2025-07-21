@@ -166,9 +166,7 @@ const TransactionDashboard = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto space-y-4">
-        <div className="flex items-center justify-center">
-          <p className="text-center">*Based on your wallet's immediate previous <span className="font-bold text-pink-500">{analysisData.summary.totalTransactions}</span> transactions.</p>
-        </div>
+        <p className="text-gray-400 text-sm leading-relaxed">*Based on your wallet's immediate previous <span className="font-medium text-red-400">{analysisData.summary.totalTransactions}</span> transactions.</p>
 
         <div className='grid grid-cols-1 gap-4'>
           {/**first grid */}

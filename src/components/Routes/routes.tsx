@@ -5,8 +5,10 @@ import Dashboard from '../dashboard/dashboard';
 import SubVaultsContainer from '../dashboard/subvaults';
 import VaultDetails from '../dashboard/vaultdetails';
 import TweetSharePage from './TweetSharePage';
+import { useState } from 'react';
 
 export default function MyRoutes() {
+const [isMobileOpen, setIsMobileOpen] = useState(false);
   return (
     <Router>
         <Routes>
@@ -24,7 +26,7 @@ export default function MyRoutes() {
             />     
             <Route
                 path="/myvaults"
-                element={ <SubVaultsContainer /> }
+                element={ <SubVaultsContainer isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} /> }
             /> 
             <Route
                 path="/vault"

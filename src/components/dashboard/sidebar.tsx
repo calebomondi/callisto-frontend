@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Filter, Settings, ChevronDown, ChevronUp, ChevronRight, ChevronLeft, LayoutDashboard, DollarSign, BarChart3 } from "lucide-react";
+import { Filter, Settings, ChevronDown, ChevronUp, ChevronRight, ChevronLeft, LayoutDashboard, DollarSign, BarChart3, X, Vault } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,15 +17,20 @@ import { currentChainId, getWalletClient } from "@/blockchain-services/useFvkry"
 import { mockVaultsData } from "./mockplatformdata"
 
 interface SidebarProps {
-  onVaultSelect: (selection: { type: "overview" | "assets" | "analytics" | "vault"; vault?: VaultData }) => void;
+  onVaultSelect?: (selection: { type: "overview" | "assets" | "analytics" | "vault"; vault?: VaultData }) => void;
+  isMobileOpen: boolean;
+  setIsMobileOpen: (isOpen: boolean) => void;
+  ifOnVaultsPage?: boolean;
+  showOnDesktop?: boolean;
 }
 
-const Sidebar = ({ onVaultSelect }: SidebarProps) => {
+const Sidebar = ({ onVaultSelect, isMobileOpen, setIsMobileOpen, ifOnVaultsPage = false, showOnDesktop = true }: SidebarProps) => {
   const [selectedSection, setSelectedSection] = useState<"overview" | "assets" | "analytics" | "vault" >("analytics");
   const [selectedVaultId, setSelectedVaultId] = useState<number | null>(null);
   const [showVaults, setShowVaults] = useState<boolean>(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const navigate  = useNavigate();
 
   const location = useLocation()
   
@@ -98,31 +104,53 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
   const handleOverviewClick = () => {
     setSelectedSection("overview");
     setSelectedVaultId(null);
-    onVaultSelect({ type: "overview" });
+    onVaultSelect?.({ type: "overview" });
   };
 
   const handleAssetsClick = () => {
     setSelectedSection("assets");
     setSelectedVaultId(null);
-    onVaultSelect({ type: "assets" });
+    onVaultSelect?.({ type: "assets" });
   };
 
   const handleVaultClick = (vault: VaultData) => {
     setSelectedSection("vault");
     setSelectedVaultId(vault.vaultId);
-    onVaultSelect({ type: "vault", vault });
+    onVaultSelect?.({ type: "vault", vault });
   };
 
   const handleAnalyticsClick = () => {
     setSelectedSection("analytics");
     setSelectedVaultId(null);
-    onVaultSelect({ type: "analytics" });
+    onVaultSelect?.({ type: "analytics" });
   };
 
   return (
-    <div className={`sticky top-0 h-screen border-r border-gray-800 shadow-md bg-gray-900/50 p-4 flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? "w-20" : "w-80"}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+    <>
+    {/* Mobile Overlay */}
+    {isMobileOpen && (
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+        onClick={() => setIsMobileOpen(false)}
+      />
+    )}
+    <div
+      className={`
+        border-r border-gray-800 shadow-md bg-gray-900 p-4 flex flex-col overflow-hidden z-50
+        
+        /* Mobile first approach */
+        fixed top-0 left-0 w-80 h-screen
+        transform transition-transform duration-300 ease-in-out
+        ${isMobileOpen ? 'translate-x-0'  : '-translate-x-full'}
+        
+        /* Desktop override */
+        lg:sticky lg:translate-x-0 lg:min-h-screen 
+        ${isCollapsed ? 'lg:w-20' : 'lg:w-80'}
+        ${!showOnDesktop ? 'md:hidden' : ''}
+      `}
+    >
+      {/* Desktop Header - only show on desktop */}
+      <div className="hidden lg:flex items-center justify-between mb-6">
         <h2 className={`text-lg font-semibold transition-opacity duration-300 ${isCollapsed ? "hidden" : "inline"}`}>
           Dashboard
         </h2>
@@ -136,39 +164,59 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
         </Button>
       </div>
 
-      {/* Filters */}
-      <div className="flex gap-2 mb-6">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className={`border-gray-700 shadow-sm bg-white text-gray-500 hover:bg-white  ${isCollapsed ? "hidden" : ""}`}
-            >
-              <Filter className="w-4 h-4 mr-1" />
-              Status
-              <ChevronDown className="w-4 h-4 ml-1" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white hover:bg-transparent">
-            <DropdownMenuItem onClick={() => setSelectedStatus("all")} className="bg-white text-gray-500 hover:bg-white">
-              All Statuses
-            </DropdownMenuItem>
-            {statuses.map((status) => (
-              <DropdownMenuItem
-                key={status}
-                onClick={() => setSelectedStatus(status)}
-                className="bg-white text-gray-500 hover:bg-transparent"
-              >
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {/* Mobile Header - only show on mobile */}
+      <div className="flex lg:hidden items-center justify-between mb-6">
+        <h2 className="text-lg font-semibold text-white">Menu</h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsMobileOpen(false)}
+          className="text-gray-400 hover:text-white hover:bg-gray-600"
+        >
+          <X className="w-4 h-4" />
+        </Button>
       </div>
+
+      {/* Filters */}
+      {!ifOnVaultsPage && (
+        <>
+          <div className="flex gap-2 mb-6">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border-gray-700 shadow-sm bg-white text-gray-500 hover:bg-white  ${isCollapsed ? "hidden" : ""}`}
+                >
+                  <Filter className="w-4 h-4 mr-1" />
+                  Status
+                  <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white hover:bg-white">
+                <DropdownMenuItem onClick={() => setSelectedStatus("all")} className="bg-white text-gray-500 hover:bg-gray-200 cursor-pointer">
+                  All Statuses
+                </DropdownMenuItem>
+                {statuses.map((status) => (
+                  <DropdownMenuItem
+                    key={status}
+                    onClick={() => setSelectedStatus(status)}
+                    className="bg-white text-gray-500 hover:bg-gray-200 cursor-pointer"
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </>
+      )}
+
 
       {/* Navigation List */}
       <div className="flex-1 overflow-y-auto space-y-2">
+        {!ifOnVaultsPage && (
+        <>
         {/* Overview Card */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -254,6 +302,41 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
             <div className="text-sm text-gray-400">View your wallet analytics</div>
           )}
         </motion.div>
+        </>)}
+
+        {ifOnVaultsPage && (
+          <>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className={`p-3 rounded-lg border ${
+              selectedSection === "assets" ? "border-purple-500" : "border-gray-800 shadow-md hover:border-purple-500/50"
+            } cursor-pointer transition-all`}
+            onClick={() => navigate("/dashboard/")}
+          >
+          <div className="flex items-center gap-2">
+              <LayoutDashboard className="w-4 h-4" />
+              {!isCollapsed && <span className="font-medium">Dashboard</span>}
+            </div>
+          </motion.div>
+          </>
+        )}
+
+        {isMobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className={`p-3 rounded-lg border ${
+              selectedSection === "assets" ? "border-purple-500" : "border-gray-800 shadow-md hover:border-purple-500/50"
+            } cursor-pointer transition-all`}
+            onClick={() => navigate("/myvaults/")}
+          >
+          <div className="flex items-center gap-2">
+              <Vault className="w-4 h-4" />
+              {!isCollapsed && <span className="font-medium">Vaults</span>}
+            </div>
+          </motion.div>
+        )}
       </div>
 
       {/* Settings */}
@@ -267,6 +350,7 @@ const Sidebar = ({ onVaultSelect }: SidebarProps) => {
         </Button>
       </div>
     </div>
+    </>
   );
 };
 

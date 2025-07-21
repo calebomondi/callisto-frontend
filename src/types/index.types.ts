@@ -168,6 +168,8 @@ export interface DashboardData {
 
 export interface UserVaultDashboardProps {
     data: DashboardData;
+    isMobileOpen: boolean;
+    setIsMobileOpen: (isOpen: boolean) => void;
 }
 
 interface DateRange {

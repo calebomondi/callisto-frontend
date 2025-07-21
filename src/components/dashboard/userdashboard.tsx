@@ -80,7 +80,7 @@ const formatCurrency = (value: number): string => {
 
 const COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
-const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
+const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data, isMobileOpen, setIsMobileOpen }) => {
   const { isConnected } = useAccount();
   const [selectedView, setSelectedView] = useState<{
     type: "overview" | "assets" | "analytics" | "vault";
@@ -414,21 +414,22 @@ const UserVaultDashboard: React.FC<UserVaultDashboardProps> = ({ data }) => {
 
   const handleVaultSelect = (selection: { type: "overview" | "assets" | "analytics" | "vault"; vault?: VaultData })  => {
     setSelectedView(selection);
+    setIsMobileOpen(false);
   };
   
   return (
-    <div className='flex bg-gradient-to-b from-gray-900 to-black h-screen overflow-hidden'>
-      <Sidebar onVaultSelect={handleVaultSelect} />
+    <div className='flex bg-gradient-to-b from-gray-900 to-black h-screen'>
+      <Sidebar onVaultSelect={handleVaultSelect} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
 
       {/* Right section: Graphs, Distribution, Unlocks (spans 2 columns) */}
-      <div className="flex-1 p-4 space-y-8 overflow-y-auto">
-        <div className="flex justify-between items-center ">
-          <h1 className="text-xl md:text-3xl font-bold">
+      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <h1 className="text-xl md:text-3xl font-bold block md:inline-block">
             {selectedView.type === "overview" && "Overall Dashboard"}
             {selectedView.type === "assets" && "Assets Dashboard"}
             {selectedView.type === "vault" && "Vault Dashboard"}
             {selectedView.type === "analytics" && "Wallet Analytics  "}
-            {selectedView.type === "analytics" && <span className='text-sm text-amber-500'>  *Only on mainnet</span>}
+            {selectedView.type === "analytics" && <span className="block md:inline-block text-orange-400 text-sm font-medium px-3 py-1 bg-orange-500/20 rounded-full w-fit">*Only on mainnet</span>}
           </h1>
           <Button
             className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white  transform transition-transform duration-150 hover:scale-95 ${!isConnected && 'hidden'}`}
